@@ -1,18 +1,18 @@
 <view class="body">
     <view class="content">
         <view class="program-write">
-            <textarea class="program-write-main" placeholder="前24字将作为标题显示在缩略纸条上"></textarea>
+            <textarea class="program-write-main" placeholder="前24字将作为标题显示在缩略纸条上" bindinput="inputMsg"></textarea>
             <view class="program-write-img-group">
-                <image   class="program-write-img"
-                        mode="scaleToFill" src="/pages/images/test.png">
+                <image bindtap="previewImages"  class="program-write-img" wx:for="{{message.images}}"  data-img-index="{{index}}"
+                        mode="aspectFill" src="{{item}}">
                 </image> 
                 <view class="program-write-add" bindtap="chooseImage">+</view>
                 <view class="clear"></view>
             </view>
-            <view class="program-write-local">侨鑫国际生活圈</view>
+            <view class="program-write-local" bindtap="chooseLocation">{{message.address.name}}</view>
         </view>
         <view class="program-write-btn-group">
-            <view class="program-write-btn">贴纸片</view>
+            <view class="program-write-btn" bindtap="sendMessage"  >贴纸片</view>
         </view>
     </view>
 </view>

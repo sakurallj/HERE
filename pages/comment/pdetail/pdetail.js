@@ -1,8 +1,23 @@
 // pages/comment/pdetail/pdetail.js
+var app = getApp();
 Page({
   data:{},
   onLoad:function(options){
-    // 页面初始化 options为页面跳转所带来的参数
+    console.log(options);
+    wx.request({
+      url:app.globalData.url.api.infoDetail,
+      method:"GET",
+      data:{
+        id:options.id
+      },
+      fail:function(res){
+        console.log(res);
+      },
+      success: function(res) {
+        console.log(res);
+        wx.hideNavigationBarLoading();
+      }
+    });
   },
   onReady:function(){
     // 页面渲染完成

@@ -1,11 +1,11 @@
 //app.js
+var util = require('/utils/util.js');
+var md5 = require('/utils/MD5.js');
+var apiDomain = "https://note900.com";
 App({
   onLaunch: function () {
-    //调用API从本地缓存中获取数据
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
   },
+  util:util,//注入工具类
   getUserInfo:function(cb){
     var that = this
     if(this.globalData.userInfo){
@@ -25,7 +25,13 @@ App({
     }
   },
   globalData:{
-    userInfo:null
+    userInfo:null,
+    url:{
+      api:{
+        infoDetail:apiDomain+"/noteapi/infodetail",//纸条详情
+        noteList:apiDomain+"/noteapi/infolist"//纸条列表
+      }
+    }
   },
   //获得当前点击元素的dataset value by key
   getValueFormCurrentTargetDataSet:function(event,key){
@@ -48,5 +54,30 @@ App({
       }
     }
     return str;
-  }
+  },
+  //获得接口签名
+  getAPISign:function(params){
+    var pos = parseInt(Math.random()*31)+1;
+    var key = util.getRandomKey(6);
+    var query = "",i=0;
+    //first
+    for(var pKey in params){
+      if(i==0){
+        query+=pKey+"="+params[pKey];
+      }
+      else{
+        query+="&"+pKey+"="+params[pKey];
+      }
+      i++;
+    }
+    //second
+    var b=query.substring(0,pos),e=query.substring(pos,query.length);
+    query = b+key+e;
+    query = md5.md5(query);
+    return {
+      sign:query,
+      pos:pos,
+      key:key
+    };
+  } 
 })
