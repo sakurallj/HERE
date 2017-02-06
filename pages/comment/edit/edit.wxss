@@ -1,0 +1,63 @@
+.content{
+    padding: 44rpx 32rpx 44rpx 32rpx;
+    width: 750rpx;
+    box-sizing: border-box;
+}
+.program-write{
+    background-color: rgba(255, 255, 255, 0.9);
+    min-height: 600rpx;
+    padding: 36rpx 20rpx 24rpx 20rpx;
+    box-shadow:0 1rpx 2rpx 0 rgba(0,0,0,0.30), inset 0 -1rpx 0 0 #ffffff;
+}
+.program-write-main{
+    -webkit-appearance: none;
+    border: none;
+    resize: none;
+    outline: none;
+    width: 100%;
+    height: 265rpx;
+    font-size: 28rpx;
+    background: transparent;
+}
+.program-write-img-group{
+    margin-top: 32rpx;
+}
+.program-write-img{
+    width: 199rpx;
+    height: 199rpx;
+    float: left;
+    margin: 5rpx;
+    margin-bottom: 10rpx;
+}
+.program-write-add{
+    width: 199rpx;
+    height: 199rpx;
+    text-align: center;
+    line-height: 199rpx;
+    border: 2rpx solid #666;
+    font-size: 40rpx;
+    color: #999;
+    float: left;
+    margin: 5rpx;
+    margin-bottom: 13rpx;
+}
+.program-write-local{
+    background: url("/pages/images/program-local.png")no-repeat left;
+    background-size: 30rpx 38rpx;
+    line-height: 38rpx;
+    padding-left: 50rpx;
+    color: #b8b8b8;
+    font-size: 24rpx;
+}
+.program-write-btn-group{
+    padding-top: 50rpx;
+}
+.program-write-btn{
+    background:#a98b59;
+    border:2rpx solid rgba(4,4,4,0.08);
+    width: 100%;
+    line-height:90rpx;
+    text-align: center;
+    color: #fff;
+    font-size: 32rpx;
+}

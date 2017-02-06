@@ -1,0 +1,14 @@
+<!--pages/shop/map/map.wxml-->
+<map longitude="{{shop.longitude}}" class="map"
+    latitude="{{shop.latitude}}"     show-location="true"
+     scale="{{shop.scale}}" style="height:{{mapHeight}}px" >
+</map>
+<view class="footer">
+    <view class="left">
+        <view class="title">{{shop.name}}</view>
+        <view class="desc">{{shop.address}}</view>
+    </view>
+    <view class="right">
+        <view class="nav">导航</view>
+    </view>
+</view>

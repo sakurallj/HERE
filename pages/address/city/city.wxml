@@ -1,0 +1,25 @@
+<view class="body">
+    <view class="content">
+        <view class="citylist-header">
+            <view class="citylist-header-local">
+                <view class="citylist-header-local-font">呼和浩特呼和浩特</view>
+                <view class="citylist-header-arrow">（当前城市）</view>
+            </view>
+            <view class="citylist-header-input-bg">
+                <input class="citylist-header-input" type="text" placeholder="输入城市名称"></input>
+            </view>
+            <view class="citylist-header-cancel" bindtap="cancelSelect">取消</view>
+        </view>
+        <scroll-view style="height: {{scollViewHeight}}px;"   class="citylist-main"  scroll-y="true"  scroll-into-view="{{scrollIntoViewId}}">
+            <block wx:for="{{citys}}"  wx:key="unique"  wx:for-item="item">
+                <view class="citylist-main-title" id="city_fc_{{item.name}}">{{item.name}}</view>
+                <view class="citylist-main-list">
+                    <view class="citylist-main-list-option"  wx:for="{{item.list}}" wx:for-item="sItem" bindtap="selectedCity" data-city="{{sItem.name}}">{{sItem.name}}</view>
+                </view>
+            </block>
+        </scroll-view>
+        <view class="citylist-head-list">
+            <view  wx:for="{{citys}}"  wx:key="unique"  wx:for-item="item" bindtap="clickFirstChar" data-char="{{item.name}}">{{item.name}}</view>
+        </view>
+    </view>
+</view>

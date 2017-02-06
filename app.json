@@ -1,0 +1,19 @@
+{
+  "pages":[
+    "pages/index/index" ,
+    "pages/shop/detail/detail" ,
+    "pages/shop/map/map" ,
+    "pages/comment/pdetail/pdetail" ,
+    "pages/comment/edit/edit" ,
+    "pages/message/message" ,
+    "pages/search/search" ,
+    "pages/address/city/city" 
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#000",
+    "navigationBarTitleText": "HERE.就近",
+    "navigationBarTextStyle":"white",
+    "backgroundColor":"#F0F0F0"
+  }
+}

@@ -1,0 +1,169 @@
+<!--index.wxml-->
+<import src="../template/header/header.wxml"/>
+<view class="body"> 
+  <view class="header" >
+    <view class="title" >HERE.就近</view>
+    <view class="search">
+      <image   class="warn-icon" bindtap="clickWarn"
+          mode="scaleToFill" src="/pages/images/warn.png">
+      </image> 
+      <view class="input-rect" bindtap="clickSearch">
+        <image   class="search-icon"
+          mode="scaleToFill" src="/pages/images/search.png">
+        </image> 
+        <input class="input" placeholder="输入地名、商家"  placeholder-class="placeholder-class" />
+        <image   class="close-icon"
+          mode="scaleToFill" src="/pages/images/close.png">
+        </image> 
+      </view>
+    </view>
+ 
+    <image   class="edit-icon" bindtap="clickEdit"
+          mode="scaleToFill" src="/pages/images/edit.png">
+    </image> 
+  </view>
+  <view class="clear"></view>
+  <view class="items">
+    <view class="column">
+      <view class="item" bindtap="clickItem" data-type="person">
+        <view class="item-header">
+          <image   class="person-header-img"
+              mode="scaleToFill" src="/pages/images/h1.png">
+          </image> 
+          <view class="person-nickname">刘健身房</view>
+          <view class="person-distanct">500m</view>
+        </view>
+        <view class="clear"></view>
+        <view class="item-body">
+          <image   class="item-body-img"
+              mode="scaleToFill" src="/pages/images/test.png">
+          </image> 
+          <view class="item-body-text">
+            邀请三个以上好友办会员，享受三个月的免费健身服务。  
+          </view>
+        </view>
+      </view>
+      <view class="item" bindtap="clickItem" data-type="person">
+        <view class="item-header">
+          <image   class="person-header-img"
+              mode="scaleToFill" src="/pages/images/h1.png">
+          </image> 
+          <view class="person-nickname">刘健身房</view>
+          <view class="person-distanct">500m</view>
+        </view>
+        <view class="clear"></view>
+        <view class="item-body">
+          <view class="item-body-text">
+            邀请三个以上好友办会员，享受三个月的免费健身服务。  
+          </view>
+        </view>
+      </view>
+      <view class="item" bindtap="clickItem" data-type="person">
+        <view class="item-header">
+          <image   class="person-header-img"
+              mode="scaleToFill" src="/pages/images/h1.png">
+          </image> 
+          <view class="person-nickname">刘健身房</view>
+          <view class="person-distanct">500m</view>
+        </view>
+        <view class="clear"></view>
+        <view class="item-body">
+          <image   class="item-body-img"
+              mode="scaleToFill" src="/pages/images/test.png">
+          </image> 
+        </view>
+      </view>
+      <view class="item" bindtap="clickItem" data-type="person">
+        <view class="item-header">
+          <image   class="person-header-img"
+              mode="scaleToFill" src="/pages/images/h1.png">
+          </image> 
+          <view class="person-nickname">刘健身房</view>
+          <view class="person-distanct">500m</view>
+        </view>
+        <view class="clear"></view>
+        <view class="item-body">
+          <image   class="item-body-img"
+              mode="scaleToFill" src="/pages/images/shop.png">
+          </image> 
+        </view>
+      </view>
+    </view>
+    <view class="column">
+      <view class="item shop" bindtap="clickItem" data-type="shop" >
+        <view class="distanct">
+          500m
+        </view>
+        <image   class="item-img"
+              mode="scaleToFill" src="/pages/images/shop.png">
+        </image> 
+        <view class="footer">
+        </view>
+        <text class="title">刘得华健身体验房</text>
+      </view>
+      <view class="item" bindtap="clickItem" data-type="person">
+        <view class="item-header">
+          <image   class="person-header-img"
+              mode="scaleToFill" src="/pages/images/h1.png">
+          </image> 
+          <view class="person-nickname">刘健身房</view>
+          <view class="person-distanct">500m</view>
+        </view>
+        <view class="clear"></view>
+        <view class="item-body">
+          <image   class="item-body-img"
+              mode="scaleToFill" src="/pages/images/test.png">
+          </image> 
+          <view class="item-body-text">
+            邀请三个以上好友办会员，享受三个月的免费健身服务。邀请三个以上好友办会员，享受三个月的免费健身服务。邀请三个以上好友办会员，享受三个月的免费健身服务。邀请三个以上好友办会员，享受三个月的免费健身服务。  
+          </view>
+        </view>
+      </view>
+      <view class="item" bindtap="clickItem" data-type="person">
+        <view class="item-header">
+          <image   class="person-header-img"
+              mode="scaleToFill" src="/pages/images/h1.png">
+          </image> 
+          <view class="person-nickname">刘健身房</view>
+          <view class="person-distanct">500m</view>
+        </view>
+        <view class="clear"></view>
+        <view class="item-body">
+          <view class="item-body-text">
+            邀请三个以上好友办会员，享受三个月的免费健身服务。  
+          </view>
+        </view>
+      </view>
+      <view class="item" bindtap="clickItem" data-type="person">
+        <view class="item-header">
+          <image   class="person-header-img"
+              mode="scaleToFill" src="/pages/images/h1.png">
+          </image> 
+          <view class="person-nickname">刘健身房</view>
+          <view class="person-distanct">500m</view>
+        </view>
+        <view class="clear"></view>
+        <view class="item-body">
+          <image   class="item-body-img"
+              mode="scaleToFill" src="/pages/images/test.png">
+          </image> 
+        </view>
+      </view>
+      <view class="item" bindtap="clickItem" data-type="person">
+        <view class="item-header">
+          <image   class="person-header-img"
+              mode="scaleToFill" src="/pages/images/h1.png">
+          </image> 
+          <view class="person-nickname">刘健身房</view>
+          <view class="person-distanct">500m</view>
+        </view>
+        <view class="clear"></view>
+        <view class="item-body">
+          <image   class="item-body-img"
+              mode="scaleToFill" src="/pages/images/shop.png">
+          </image> 
+        </view>
+      </view>
+    </view>    
+  </view>
+</view>

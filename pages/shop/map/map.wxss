@@ -1,0 +1,57 @@
+/* pages/shop/map/map.wxss */
+page{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.map{
+    width: 100%;
+    height: 100%;
+}
+.footer{
+    position: absolute;
+    opacity:0.9;
+    background:#ffffff;
+    width:750rpx;
+    height:160rpx;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.footer .left{
+    width: 526rpx;
+    float: left;
+    padding: 32rpx 22rpx;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.footer .right{
+    width: 224rpx;
+    float: left;
+    padding: 45rpx 23rpx 0 0;
+    box-sizing: border-box;
+}
+.footer .left .title{
+    font-size:32rpx;
+    color:#333333;
+    letter-spacing:0;
+    text-align:left;
+}
+.footer .left .desc{
+    font-size:24rpx;
+    color:#b8b8b8;
+    letter-spacing:0;
+    text-align:left;
+}
+.footer .right .nav{
+    background:#a98b59;
+    width:201rpx;
+    height:64rpx;
+    font-size:28rpx;
+    color:#ffffff;
+    letter-spacing:12rpx;
+    text-align:center;
+    padding-top: 18rpx;
+    box-sizing: border-box;
+}

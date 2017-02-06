@@ -1,0 +1,31 @@
+<view class="body">
+    <view class="content">
+        <view class="search-header">
+            <view class="search-header-local">
+                <view class="search-header-local-font" bindtap="selectCity">{{city}}</view>
+                <view class="search-header-arrow"></view>
+            </view>
+            <view class="search-header-input-bg">
+                <input class="search-header-input" type="text" placeholder="输入地址">
+                </input>
+            </view>
+            <view class="search-header-cancel" bindtap="cancelSearch" >取消</view>
+        </view>
+        <view class="search-push">
+            <view class="search-push-option">《长城》这么烂，去国师家贴个条喷一下吧<view class="search-push-option-close"></view></view>
+            <view class="search-push-option">Bigbang来中国啦，快去接驾！<view class="search-push-option-close"></view></view>
+        </view>
+        <view class="search-main">
+            <view class="search-main-option">
+                <view class="search-main-option-name">广州南站</view>
+                <view class="search-main-option-description">番禺区石壁街</view>
+                <view class="search-main-option-star active"></view>
+            </view>
+            <view class="search-main-option">
+                <view class="search-main-option-name">广州南站</view>
+                <view class="search-main-option-description">番禺区石壁街</view>
+                <view class="search-main-option-star"></view>
+            </view>
+        </view>
+    </view>
+</view>

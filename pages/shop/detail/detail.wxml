@@ -1,0 +1,43 @@
+<view class="body">
+    <view class="content">
+        <view class="store-head">
+            <view class="store-head-main">
+                <view class="store-head-main-first">{{shop.name}}</view>
+                <view class="store-head-main-second">
+                    <view class="store-head-main-second-font">{{shop.desc}}</view>
+                </view>
+            </view>
+            <view class="store-head-bottom">
+                <view class="store-head-bottom-local"  bindtap="gotoMap">
+                    {{shop.address}}
+                    <view class="store-head-bottom-local-range">{{shop.distanct}}</view>
+                </view>
+                <view class="store-head-bottom-phone"  >
+                    <image src="/pages/images/store-phone.png" bindtap="callPhone" style="width:42rpx;height:46rpx;margin: 6rpx 42.5rpx;" mode="scaleToFill" ></image>
+                </view>
+                
+            </view>
+        </view>
+        <view class="store-main">
+            <view class="store-main-title">商家环境</view>
+            <view class="store-main-content">
+                <scroll-view class="store-main-img-group" scroll-x="true" style="width:{{scrollViewXWidth}}px">
+                    <image   class="store-main-im" wx:for="{{images}}" bindtap="previewEnvImages" data-env-img-index="{{index}}"
+                        mode="scaleToFill" src="{{item}}" style="width:225rpx;height:225rpx;margin-right: 35rpx;">
+                    </image> 
+                </scroll-view>
+            </view>
+        </view>
+        <view class="store-bottom">
+            <view class="store-bottom-title">商家公告</view>
+            <view class="store-bottom-content">
+                <view class="store-bottom-option" wx:for="{{shop.announcement}}">
+                    <image style="width:42rpx;height:42rpx"  
+                        mode="scaleToFill" src="{{item.image}}">
+                    </image> 
+                    {{item.content}}
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

@@ -1,0 +1,70 @@
+.reply-main{
+    background-color: #fff;
+    padding: 0 30rpx;
+}
+.reply-option{
+    padding: 26rpx 0 17rpx 0;
+    border-bottom:2rpx solid rgba(184, 184, 184, 0.3);
+}
+.reply-option:nth-last-of-type(1){
+    border-bottom: none;
+}
+.reply-option-head{
+    width:90rpx;
+    height:90rpx;
+    border-radius: 90rpx;
+    float: left;
+    margin-right: 25rpx;
+}
+.reply-option-content{
+    float: left;
+    width: 570rpx;
+}
+.reply-option-content.with-img{
+    width: 450rpx;
+}
+.reply-option-content-name-name{
+    float: left;
+    font-size:28rpx;
+    color:#a98b59;
+    letter-spacing:0;
+    text-align:left;
+    margin-right: 30rpx;
+}
+.reply-option-content-name-name-tips{
+    padding-top: 4rpx;
+    font-size:24rpx;
+    color:#999999;
+    letter-spacing:0;
+    text-align:left;
+}
+.reply-option-content-content{
+    padding-top: 28rpx;
+    white-space: nowrap;
+    font-size:24rpx;
+    color:#333333;
+    letter-spacing:0;
+    text-align:left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.reply-option-content-date{
+    font-size:24rpx;
+    color:#999999;
+    letter-spacing:0;
+    text-align:left;
+    padding-top: 24rpx;
+}
+.reply-option-img{
+    background:#ffffff;
+    width:120rpx;
+    height:120rpx;
+    float: right;
+}
+.reply-more{
+    padding: 57rpx 0 40rpx 0;
+    font-size:24rpx;
+    color:#666666;
+    letter-spacing:0;
+    text-align:center;
+}
