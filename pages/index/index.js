@@ -10,7 +10,7 @@ Page({
       coloums2Heigth:0//列高
     }
   },
-  pageNum:-1,
+  pageNum:0,
   //事件处理函数
   bindViewTap: function() {
     wx.navigateTo({
@@ -28,9 +28,18 @@ Page({
     });
   },
   onLoad: function () {
-    console.log("onload");
+    
+    wx.showToast({
+      title: '加载中',
+      icon: 'loading',
+      duration: 10000
+    });
     var that = this;
     wx.showNavigationBarLoading();
+    //获得用户信息
+    //调用登录接口
+    app.doLogin();
+    //获得地理位置
     wx.getLocation({
       type: 'wgs84',
       success: function(res) {
@@ -38,21 +47,21 @@ Page({
         var longitude = res.longitude;
         var speed = res.speed;
         var accuracy = res.accuracy;
-        var sign = app.getAPISign({
-          page:++this.pageNum,
+        app.globalData.location = res;
+        that.pageNum +=1;
+        var data = {
+          page:that.pageNum,
           lat:latitude,
           lng:longitude
-        });
+        }, data = app.getAPISign(data);
+        console.log(data);
+        //获得首页数据
         wx.request({
           url:app.globalData.url.api.noteList,
           method:"GET",
-          data:{
-            sign:sign.sign,
-            pos:sign.pos,
-            key:sign.key,
-            page:this.pageNum,
-            lat:latitude,
-            lng:longitude
+          data:data,
+          header: {
+            'content-type': 'application/json'
           },
           fail:function(res){
             console.log(res);
@@ -91,16 +100,16 @@ Page({
               if(coloums1Heigth<=coloums2Heigth){
                 coloums1.push(note);
                 if(note.photo){
-                  coloums1Heigth+=150+textHeight;
+                  coloums1Heigth+=150;//图片高度
                 }
-                coloums1Heigth+= textHeight;
+                coloums1Heigth+= textHeight+119;//119为item最小高度 textHeight为文字高度
               }
               else{
                 coloums2.push(note);
                 if(note.photo){
-                  coloums2Heigth+=150+textHeight;
+                  coloums2Heigth+=150;
                 }
-                coloums2Heigth+= textHeight;
+                coloums2Heigth+= textHeight+119;
               }
             }
             that.setData({
@@ -111,7 +120,7 @@ Page({
                 coloums2Heigth:coloums2Heigth//列高
               }
             });
-            
+            wx.hideToast();
             wx.hideNavigationBarLoading();
           }
         });

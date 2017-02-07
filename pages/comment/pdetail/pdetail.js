@@ -1,9 +1,15 @@
 // pages/comment/pdetail/pdetail.js
 var app = getApp();
 Page({
-  data:{},
+  data:{
+    message:{
+
+    },
+    app:app
+  },
   onLoad:function(options){
-    console.log(options);
+    var that = this;
+    wx.showNavigationBarLoading();
     wx.request({
       url:app.globalData.url.api.infoDetail,
       method:"GET",
@@ -15,6 +21,15 @@ Page({
       },
       success: function(res) {
         console.log(res);
+        res.data.data.content = app.util.decodeUTF8(res.data.data.content);
+        res.data.data.showTimeText = app.util.formatShowTimeText(res.data.data.addTime);
+        var len = res.data.data.resp.length;
+        for(var i=0;i<len;i++){
+          res.data.data.resp[i].showTimeText = app.util.formatShowTimeText(res.data.data.resp[i].addTime)
+        }
+        that.setData({
+          message:res.data.data
+        });
         wx.hideNavigationBarLoading();
       }
     });

@@ -4,79 +4,58 @@
         <view class="detail-main">
             <view class="detail-main-header">
                 <image   class="detail-main-header-head"
-                    mode="scaleToFill" src="/pages/images/test.png">
+                    mode="scaleToFill" src="{{message.avatar}}">
                 </image> 
                 <view class="detail-main-header-name-date">
-                    <view class="detail-main-header-name">花无缺234</view>
-                    <view class="detail-main-header-date">1天前发布</view>
+                    <view class="detail-main-header-name">{{message.nickName}}</view>
+                    <view class="detail-main-header-date">{{message.showTimeText}}</view>
                 </view>
                 <view class="detail-main-header-range">30m</view>
                 <view class="clear"></view>
             </view>
             <!--单图时候-->
-            <view class="detail-main-image-group">
-                <view class="detail-main-image-bg" style="width: 100%;height: auto">
+            <view class="detail-main-image-group" wx:if="{{message.photos.length==1}}">
+                <view class="detail-main-image-bg" wx:for="{{message.photos}}"  
+                 style="width: 100%;height: auto">
                     <image   class="detail-main-image-bg"
-                        mode="scaleToFill" src="/pages/images/test2.png">
+                        mode="scaleToFill" src="{{item.fdURL}}">
                     </image> 
                 </view>
                 <view class="clear"></view>
             </view>
             <!--多图时候-->
-            <!--<view class="detail-main-image-group">
-                <image   class="detail-main-image-bg"
-                    mode="scaleToFill" src="/pages/images/test2.png">
-                </image> 
-                <image   class="detail-main-image-bg"
-                    mode="scaleToFill" src="/pages/images/test2.png">
-                </image> 
-                <image   class="detail-main-image-bg"
-                    mode="scaleToFill" src="/pages/images/test2.png">
-                </image> 
-                <image   class="detail-main-image-bg"
-                    mode="scaleToFill" src="/pages/images/test2.png">
+            <view class="detail-main-image-group" wx:if="{{message.photos.length>1}}">
+                <image   class="detail-main-image-bg"  wx:for="{{message.photos}}"    mode="scaleToFill" src="{{item.fdURL}}">
                 </image> 
                 <view class="clear"></view>
-            </view>-->
+            </view>
             <view class="detail-main-content">
-                我已经是第二次在你们这里充值了，还介绍了好几个朋友
-                过来办卡，能不能再给一些优惠啊亲~
+                {{message.content}}
             </view>
         </view>
-        <view class="detail-reply">
-            <view class="detail-reply-title">2条回应</view>
+        <view class="detail-reply" wx:if="{{message.resp.length>0}}">
+            <view class="detail-reply-title">{{message.resp.length}}条回应</view>
             <view class="detail-reply-group">
-                <view class="detail-reply-option">
+                <view class="detail-reply-option" wx:for="{{message.resp}}">
                     <view class="detail-reply-option-header">
                         <image   class="detail-reply-option-head"
-                            mode="scaleToFill" src="/pages/images/test.png">
+                            mode="scaleToFill" src="{{item.avatar}}">
                         </image> 
                         <view class="detail-reply-option-name-date">
-                            <view class="detail-reply-option-name">花无缺234</view>
-                            <view class="detail-reply-option-date">1天前发布</view>
+                            <view class="detail-reply-option-name">{{item.nickname}}</view>
+                            <view class="detail-reply-option-date">{{item.showTimeText}}</view>
                         </view>
                         <view class="clear"></view>
                     </view>
                     <view class="detail-reply-option-content">
-                        亲是老客户了，谢谢对我们店的支持！我们针对VIP客户定期都会提供不同程度的优惠，比如赠送私教课程，亲要多留意我们发布的公告喔。
-                    </view>
-                </view>
-                <view class="detail-reply-option">
-                    <view class="detail-reply-option-header">
-                        <image   class="detail-reply-option-head"
-                            mode="scaleToFill" src="/pages/images/test.png">
-                        </image> 
-                        <view class="detail-reply-option-name-date">
-                            <view class="detail-reply-option-name">花无缺234</view>
-                            <view class="detail-reply-option-date">1天前发布</view>
-                        </view>
-                        <view class="clear"></view>
-                    </view>
-                    <view class="detail-reply-option-content">
-                        亲是老客户了，谢谢对我们店的支持！我们针对VIP客户定期都会提供不同程度的优惠，比如赠送私教课程，亲要多留意我们发布的公告喔。
+                        {{item.content}}
                     </view>
                 </view>
             </view>
+        </view>
+        <view class="detail-bottom">
+            <input class="detail-input" placeholder="你也回复点什么吧"  placeholder-class="placeholder-class" />
+            <view class="detail-input-submit">发送</view>
         </view>
     </view>
 </view>

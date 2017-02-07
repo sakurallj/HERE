@@ -44,9 +44,21 @@ function getAscllLength(str){
     }
     return 0;
 }
+function formatShowTimeText(second){
+    var nT = parseInt(new Date().getTime()/1000),
+    second=second?parseInt(second):0;
+    if(second+24*60*60<=nT){
+        return "1天前发布";
+    }
+    else{
+        var t = new Date(second);
+        return t.getHours()+":"+t.getMinutes();
+    }
+}
 module.exports = {
   formatTime: formatTime,
   getRandomKey:getRandomKey,
   decodeUTF8:decodeUTF8,
-  getAscllLength:getAscllLength
+  getAscllLength:getAscllLength,
+  formatShowTimeText:formatShowTimeText
 }
