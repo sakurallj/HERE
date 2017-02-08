@@ -140,3 +140,27 @@
     float: right;
     box-sizing: border-box;
 }
+.store-main-img-group{
+    white-space: nowrap;
+    padding: 30rpx;
+    box-sizing: border-box;
+}
+.store-main-img{
+    float: left;
+    width:225rpx;
+    height:225rpx;
+    margin-right: 35rpx;
+    box-sizing: border-box;
+    background-size: cover;
+    overflow: hidden;
+}
+.store-main-im::last-child{
+    margin-right: 0;
+}
+.reply-more{
+    padding: 57rpx 0 40rpx 0;
+    font-size:24rpx;
+    color:#666666;
+    letter-spacing:0;
+    text-align:center;
+}

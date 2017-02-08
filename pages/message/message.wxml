@@ -20,7 +20,7 @@
                 <view class="clear"></view>
             </view>
         </view>
-        <view class="reply-more"  bindtap="loadMore">
+        <view class="reply-more"  bindtap="loadMore" wx:if="{{isShowLoadMore}}">
             点击加载更多
         </view>
     </view>

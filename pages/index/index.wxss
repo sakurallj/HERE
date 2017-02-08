@@ -2,11 +2,10 @@
 .header{
   background-image:linear-gradient(0deg, #2c2c30 1%, #0f1012 100%);
   width:750rpx;
-  height:158rpx;
+  height:90rpx;
 }
 .search{
-   margin-top: 48rpx;
-   margin-bottom: 15rpx;
+   padding-top: 10rpx;
 }
 .warn-icon{
   margin-top: 8rpx;
@@ -23,33 +22,46 @@
   margin: 10rpx 26rpx 10rpx 0;
 }
 .edit-icon{
-  float: left;
+  float: right;
   margin-right: 25rpx;
   margin-left: 37rpx;
   margin-top: 10rpx;
 }
-.search .input-rect{
-  background:#ffffff;
-  border:1rpx solid #e6e6ea;
-  border-radius:10rpx;
-  width:551rpx;
-  height:55rpx;
+.circle{
   float: left;
-}
-.search .input-rect .input{
-  height: 38rpx;
-  width: 411rpx;
+  padding-top : 10rpx ;
+  width:531rpx;
   overflow: hidden;
+  height:55rpx;
+  text-align: center;
+}
+.circle-text{
+  background:#939395;
+  border-radius:27.5rpx;
+  min-width:200rpx;
+  height:100%;
+  box-sizing: border-box;
+  padding: 14rpx 55rpx 14rpx 55rpx;
+  color: #fff;
+  font-size:30rpx ;
+  display: inline-block;
+  overflow: hidden;
+}
+.circle-text-in{
+  max-width:350rpx;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break:break-all;
+  height:100%;
+  border: 1px solid red;
+  word-wrap:break-word;
   float: left;
 }
-.search .input-rect .placeholder-class{
-  font-size:26rpx;
-  color:#999999;
-  letter-spacing:0.27rpx;
-  text-align:left;
+.location-icon{
+  float: left;
 }
 .items{
-  margin: 39rpx 21rpx 0 21rpx;
+  margin: 39rpx 11rpx 0 31rpx;
 }
 .items .item{
   box-sizing: border-box;
@@ -61,6 +73,7 @@
   padding: 22rpx 17rpx 22rpx 17rpx;
   margin-bottom: 21rpx;
   overflow: hidden;
+  z-index: 99;
 }
 .items .item.shop{
   padding: 0;
@@ -145,4 +158,13 @@
   line-height:44rpx;
   text-align:left;
   margin-top: 16rpx;
+}
+.item-groups{
+  position: relative;
+}
+.item-after{
+  position: absolute;
+  left: -9rpx;
+  top:-9rpx;
+  z-index: 1;
 }

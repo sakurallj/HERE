@@ -16,8 +16,8 @@
             <!--单图时候-->
             <view class="detail-main-image-group" wx:if="{{message.photos.length==1}}">
                 <view class="detail-main-image-bg" wx:for="{{message.photos}}"  
-                 style="width: 100%;height: auto">
-                    <image   class="detail-main-image-bg"
+                 style="width: 100%;height: auto" >
+                    <image   class="detail-main-image-bg"  bindtap="previewImages" data-img-index="{{index}}"
                         mode="scaleToFill" src="{{item.fdURL}}">
                     </image> 
                 </view>
@@ -25,8 +25,11 @@
             </view>
             <!--多图时候-->
             <view class="detail-main-image-group" wx:if="{{message.photos.length>1}}">
-                <image   class="detail-main-image-bg"  wx:for="{{message.photos}}"    mode="scaleToFill" src="{{item.fdURL}}">
-                </image> 
+                <scroll-view class="store-main-img-group" scroll-x="true" style="width:750rpx">
+                    <image   class="store-main-im" wx:for="{{message.photos}}" bindtap="previewImages" data-img-index="{{index}}"
+                        mode="scaleToFill" src="{{item.fdURL}}" style="width:225rpx;height:225rpx;margin-right: 35rpx;">
+                    </image> 
+                </scroll-view>
                 <view class="clear"></view>
             </view>
             <view class="detail-main-content">
@@ -34,15 +37,15 @@
             </view>
         </view>
         <view class="detail-reply" wx:if="{{message.resp.length>0}}">
-            <view class="detail-reply-title">{{message.resp.length}}条回应</view>
+            <view class="detail-reply-title">{{message.commentnum}}条回应</view>
             <view class="detail-reply-group">
                 <view class="detail-reply-option" wx:for="{{message.resp}}">
                     <view class="detail-reply-option-header">
                         <image   class="detail-reply-option-head"
-                            mode="scaleToFill" src="{{item.avatar}}">
+                            mode="scaleToFill" src="{{item.authoravatar}}">
                         </image> 
                         <view class="detail-reply-option-name-date">
-                            <view class="detail-reply-option-name">{{item.nickname}}</view>
+                            <view class="detail-reply-option-name">{{item.author}}</view>
                             <view class="detail-reply-option-date">{{item.showTimeText}}</view>
                         </view>
                         <view class="clear"></view>
@@ -52,10 +55,13 @@
                     </view>
                 </view>
             </view>
+            <view class="reply-more"  bindtap="loadMore" wx:if="{{isShowLoadMore}}">
+                点击加载更多
+            </view>
         </view>
         <view class="detail-bottom">
-            <input class="detail-input" placeholder="你也回复点什么吧"  placeholder-class="placeholder-class" />
-            <view class="detail-input-submit">发送</view>
+            <input class="detail-input" placeholder="你也回复点什么吧"  placeholder-class="placeholder-class" focus="true" value="wwe" bindinput="commentInput" />
+            <view class="detail-input-submit"  bindtap="sendComment">发送</view>
         </view>
     </view>
 </view>

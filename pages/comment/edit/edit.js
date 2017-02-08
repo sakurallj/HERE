@@ -1,67 +1,93 @@
 var app = getApp();
-function uploadImages(images){
-  console.log(images);
+//保存服务端图片的路径
+var serverImagePaths = []; 
+/**
+ * 上传图片
+ */
+function uploadImages(images,callback){
   if(images.length>0){
     var imagePath = images.shift();
     wx.uploadFile({
-      url: app.globalData.url.api.uploadImage, //仅为示例，非真实的接口地址
+      url: app.globalData.url.api.uploadImage+"?token="+app.globalData.userToken, //仅为示例，非真实的接口地址
       filePath:imagePath,
       name: 'avatar',
       formData:{
-        'token': app.globalData.userToken
       },
       success: function(res){
+        console.log(res);
+        var data = JSON.parse(res.data);
+        serverImagePaths[serverImagePaths.length] = data.data;
+        wx.hideToast();
+        wx.showToast({
+          title: '上传图片中',
+          icon: 'loading',
+          duration: 10000
+        });
+        return uploadImages(images,callback);
+      },
+      fail:function(res){
         console.log(res);
       }
     });
   }
+  else{
+    if(typeof callback == "function")callback(serverImagePaths);
+    return 1;
+  }
 }
 function sendMessage(message){
-  wx.showToast({
-    title: '发表中',
-    icon: 'loading',
-    duration: 10000
-  });
-  //上传图片
+  
   app.doLogin(function(){
-    uploadImages(message.images);
-  });
-  return;
-  //发送纸条
-  var data={
-    token:app.globalData.userToken,
-    content:message.content,
-    images:JSON.stringify(message.images),
-    latitude:message.address.latitude,
-    longitude:message.address.longitude,
-    address:message.address.name,
-  },data = app.getAPISign(data); 
-  wx.request({
-    url:app.globalData.url.api.addNote,
-    method:"GET",
-    data:data,
-    fail:function(res){
-      console.log(res);
-    },
-    success: function(res) {
-      console.log(res);
-      if(res.data.errcode==1002){//登录过期重新登录后再发布
-        app.doLogin(function(){
-          sendMessage(message);
-        });
-      }
-      else{
-        var str = JSON.stringify(message);
-        wx.setStorage({
-          key:"comment_edit_message",
-          data:str,
-          success:function(){
-            wx.hideToast();
-            wx.navigateBack();
+    //上传图片
+    wx.hideToast();
+    wx.showToast({
+      title: '上传图片中',
+      icon: 'loading',
+      duration: 10000
+    });
+    uploadImages(message.images,function(images){
+      //发送纸条
+      wx.hideToast();
+      wx.showToast({
+        title: '发表中',
+        icon: 'loading',
+        duration: 10000
+      });
+      
+      var data={
+        token:app.globalData.userToken,
+        content:app.util.formatContentForServer(message.content),
+        imageUrls:JSON.stringify(images),
+        latitude:message.address.latitude,
+        longitude:message.address.longitude,
+        address:message.address.name,
+      },data = app.getAPISign(data); 
+      wx.request({
+        url:app.globalData.url.api.addNote,
+        method:"GET",
+        data:data,
+        fail:function(res){
+          console.log(res);
+        },
+        success: function(res) {
+          console.log(res);
+          if(res.data.errcode==1002){//登录过期重新登录后再发布
+            console.log(res);
           }
-        });
-      }
-    }
+          else{
+            var str = JSON.stringify(message);
+            wx.setStorage({
+              key:"comment_edit_message",
+              data:str,
+              success:function(){
+                wx.hideToast();
+                wx.navigateBack();
+              }
+            });
+          }
+        }
+      });
+    });
   });
 }
 Page({
@@ -102,6 +128,7 @@ Page({
       success: function (res) {
         var tempFilePaths = res.tempFilePaths;
         var m = that.data.message;
+        console.log(tempFilePaths);
         m.images=tempFilePaths;
         that.setData({
           message:m
@@ -148,16 +175,22 @@ Page({
     var that = this,message = that.data.message;
      //数据校验
     //判断是否有图片或评论
+    message.content = app.util.trim(message.content);
     if(!message.content&&message.images.length==0){
       wx.showModal({
         title: '',
         content: '请输入要发表的文字或图片',
         showCancel:false,
-        confirmColor:"#a98b59",
+        confirmColor:app.globalData.confirmColor,
         success: function(res) {}
       });
       return;
     }
+    wx.showToast({
+      title: '发表中',
+      icon: 'loading',
+      duration: 10000
+    });
     //判断是否选择了位置
     if(!message.address.longitude){
       app.getLocation(function(res){

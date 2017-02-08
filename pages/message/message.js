@@ -1,39 +1,66 @@
 // pages/message/message.js
+var app = getApp();
+function loadMessage(that){
+  wx.hideToast();
+  wx.showToast({
+    title: '加载中',
+    icon: 'loading',
+    duration: 10000
+  });
+  app.doLogin(function(){
+    that.pageNum +=1;
+    var data = {
+      page:that.pageNum,
+      token:app.globalData.userToken
+    }, data = app.getAPISign(data);
+    console.log(data);
+    //获得首页数据
+    wx.request({
+      url:app.globalData.url.api.notice,
+      method:"GET",
+      data:data,
+      fail:function(res){
+        console.log(res);
+      },
+      success: function(res) {
+        console.log(res);
+        var data = res.data.data,len = data.length,messages=[];
+        for(var i=0;i<len;i++){
+          var m = data[i];
+          messages[i] = {
+            name:m["nickname"],
+            headerImage:m["avatar"],
+            type:m["action"]==0?"reply":"like",//0 回复 1点赞
+            typeText:m["action"]==0?"回应了你的纸条":"摁了你的纸条",//0 回复 1点赞,
+            time:app.util.formatShowTimeText(m["addTime"]),
+            contentImage:m["infosrc"],
+            content:m["nickname"]
+          };
+        }
+        if(res.data.total&&res.data.total-(that.pageNum*app.globalData.noticePageSize)>0){
+            that.setData({
+            isShowLoadMore:true
+          });
+        }
+        var oldMessages = that.data.messages;
+        Array.prototype.push.apply(oldMessages, messages);
+        that.setData({
+          messages:oldMessages
+        });
+        wx.hideToast();
+      }
+    });
+  });
+}
 Page({
   data:{
     messages:[
-      {
-        name:"琪琪",
-        headerImage:"/pages/images/test.png",
-        type:"reply",
-        typeText:"回应了你的纸条",
-        time:"11:57",
-        contentImage:"/pages/images/test2.png",
-        content:"这周末你们要不要一起去自驾游娄源呢？这周末你们要不要一起去自驾游娄源呢？"
-      },
-      {
-        name:"琪琪",
-        headerImage:"/pages/images/test.png",
-        type:"reply",
-        typeText:"回应了你的纸条",
-        time:"11:04",
-        contentImage:"",
-        content:"这周末你们要不要一起去自驾游娄源呢？这周末你们要不要一起去自驾游娄源呢？"
-      },
-      {
-        name:"琪琪",
-        headerImage:"/pages/images/test.png",
-        type:"reply",
-        typeText:"回应了你的纸条",
-        time:"01:56",
-        contentImage:"/pages/images/test.png",
-        content:"这周末你们要不要一起去自驾游娄源呢？这周末你们要不要一起去自驾游娄源呢？"
-      }
-    ]
+    ],
+    isShowLoadMore:false
   },
-  pageIndex:1,
+  pageNum:0,
   onLoad:function(options){
-    // 页面初始化 options为页面跳转所带来的参数
+    loadMessage(this);
   },
   onReady:function(){
     // 页面渲染完成
@@ -48,11 +75,6 @@ Page({
     // 页面关闭
   },
   loadMore:function(){
-    var messages = this.data.messages;
-    Array.prototype.push.apply(messages, messages);
-    console.log(messages);
-    this.setData({
-      messages:messages
-    });
+    loadMessage(this);
   }
 })

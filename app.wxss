@@ -35,8 +35,8 @@ page{
   text-align:center;
 }
 .warn-icon{
-  width:40rpx;
-  height:41rpx;
+  width:50rpx;
+  height:60rpx;
 }
 .search-icon{
   width:31rpx;
@@ -47,8 +47,12 @@ page{
   height:37rpx;
 }
 .edit-icon{
-  width:37rpx;
-  height:36rpx;
+  width:50rpx;
+  height:60rpx;
+}
+.location-icon{
+  width:32rpx;
+  height:32rpx;
 }
 
  

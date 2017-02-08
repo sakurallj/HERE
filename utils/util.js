@@ -45,20 +45,39 @@ function getAscllLength(str){
     return 0;
 }
 function formatShowTimeText(second){
-    var nT = parseInt(new Date().getTime()/1000),
-    second=second?parseInt(second):0;
-    if(second+24*60*60<=nT){
-        return "1天前发布";
+    var nT = new Date(),nY = nT.getFullYear(),nM = nT.getMonth()
+    ,nD = nT.getDay(),nH = nT.getHours(),nm = nT.getMinutes();
+    var t = new Date(second*1000),Y = t.getFullYear(),M = t.getMonth()
+    ,D = t.getDay(),H = t.getHours(),m = t.getMinutes();
+    if(nY!=Y||nM!=M||nD!=D){
+        return "1天前";
     }
     else{
-        var t = new Date(second);
-        return t.getHours()+":"+t.getMinutes();
+        var t = new Date(second*1000);
+        console.log(t);
+        return H+":"+m;
     }
+}
+/**
+ * 把content format 成不敏感的 主要是替换特殊字符
+ */
+function formatContentForServer(content){
+    return content.replace(/\(/g, "%28").replace(/\)/g, "%29").replace(/\~/g, "%7E")
+    .replace(/\!/g, "%21").replace(/\*/g, "%2A").replace(/\'/g, "%27");
+}
+/**
+ * 去掉前后的空格
+ */
+function trim(str)
+{ 
+    return str.replace(/(^\s*)|(\s*$)/g, ""); 
 }
 module.exports = {
   formatTime: formatTime,
   getRandomKey:getRandomKey,
   decodeUTF8:decodeUTF8,
   getAscllLength:getAscllLength,
-  formatShowTimeText:formatShowTimeText
+  formatShowTimeText:formatShowTimeText,
+  formatContentForServer:formatContentForServer,
+  trim:trim
 }

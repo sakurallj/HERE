@@ -64,6 +64,9 @@ App({
     appVersion:"0.0.1",//本小程序版本
     url:{
       api:{
+        responInfo:apiDomain+"/noteapi/responinfo",//回复纸条
+        resp:apiDomain+"/noteapi/getresponlist",//回复列表
+        notice:apiDomain+"/noticeapi/gettrendlist",//通知动态列表
         uploadImage:apiDomain+"/noteapi/uploadpic",//上传图片
         addNote:apiDomain+"/noteapi/addinfo",//添加纸条
         ologin:apiDomain+"/memberapi/ologin",//微信qq微博登录
@@ -71,7 +74,9 @@ App({
         infoDetail:apiDomain+"/noteapi/infodetail",//纸条详情
         noteList:apiDomain+"/noteapi/infolist"//纸条列表
       }
-    }
+    },
+    confirmColor:"#a98b59",//确定按钮文字颜色
+    noticePageSize:20//通知页每次加载数据的条数
   },
   //获得当前点击元素的dataset value by key
   getValueFormCurrentTargetDataSet:function(event,key){
@@ -148,12 +153,16 @@ App({
   //登录
   doLogin:function(callback){
     var that = this;
+    //判断是否有token
+    if(that.globalData.userToken){
+      if(typeof callback == "function")callback(that.globalData.userToken);
+    }
     //判断是否有openid
-    if(that.globalData.userOpenId){
+    else if(that.globalData.userOpenId){
       //重新向服务器登录
       loginForServer(that,that.globalData.userInfo).then(function(res){
         console.log(res);
-        if(typeof callback == "function")callback(res);
+        if(typeof callback == "function")callback(that.globalData.userToken);
       },function(res){});
     }
     else{
@@ -182,7 +191,7 @@ App({
                   //登录服务器
                   loginForServer(that,res.userInfo).then(function(res){
                     console.log(res);
-                    if(typeof callback == "function")callback(res);
+                    if(typeof callback == "function")callback(that.globalData.userToken);
                   },function(res){console.log(res);});
                 }
               });

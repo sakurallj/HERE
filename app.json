@@ -1,9 +1,10 @@
 {
   "pages":[
+    "pages/comment/pdetail/pdetail" ,
     "pages/index/index" ,
     "pages/shop/detail/detail" ,
     "pages/shop/map/map" ,
-    "pages/comment/pdetail/pdetail" ,
+    
     "pages/comment/edit/edit" ,
     "pages/message/message" ,
     "pages/search/search" ,
