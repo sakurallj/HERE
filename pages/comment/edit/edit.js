@@ -36,7 +36,7 @@ function uploadImages(images,callback){
   }
 }
 function sendMessage(message){
-  
+  serverImagePaths = [];//serverImagePaths是此js的全局变量，这里要清空 服务端图片的路径 如果不清空会把上次发表的图片也加进来
   app.doLogin(function(){
     //上传图片
     wx.hideToast();
@@ -53,7 +53,6 @@ function sendMessage(message){
         icon: 'loading',
         duration: 10000
       });
-      
       var data={
         token:app.globalData.userToken,
         content:app.util.formatContentForServer(message.content),

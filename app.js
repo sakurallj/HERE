@@ -28,6 +28,7 @@ function loginForServer(app,userInfo){
       success: function(res) {
         console.log(res);
         app.globalData.userToken = res.data.token;
+        app.globalData.userServerOpenId = res.data.data.openid;
         resolve(res);
       }
     });
@@ -58,12 +59,16 @@ App({
   globalData:{
     //userInfo.gender  性别 0：未知、1：男、2：女 
     userInfo:{},
-    userOpenId:"",
+    userOpenId:"",//微信的openid
+    userServerOpenId:"",//服务器上的openid
     userToken:"",
     location:{},
     appVersion:"0.0.1",//本小程序版本
     url:{
       api:{
+        otherInfoList:apiDomain+"/noteapi/otherinfolist",//查看其他用户纸条
+        delNote:apiDomain+"/noteapi/delinfo",//删除纸条
+        myInfoList:apiDomain+"/noteapi/myinfolist",//我的纸条
         responInfo:apiDomain+"/noteapi/responinfo",//回复纸条
         resp:apiDomain+"/noteapi/getresponlist",//回复列表
         notice:apiDomain+"/noticeapi/gettrendlist",//通知动态列表

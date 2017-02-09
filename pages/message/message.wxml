@@ -1,7 +1,7 @@
 <view class="body">
     <view class="content">
         <view class="reply-main">
-            <view class="reply-option" wx:for="{{messages}}">
+            <view class="reply-option" wx:for="{{messages}}" bindtap="clickItem" data-item="{{item}}">
                 <image   class="reply-option-head"
                     mode="scaleToFill" src="{{item.headerImage}}">
                 </image> 

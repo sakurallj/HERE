@@ -34,7 +34,8 @@ function loadMessage(that){
             typeText:m["action"]==0?"回应了你的纸条":"摁了你的纸条",//0 回复 1点赞,
             time:app.util.formatShowTimeText(m["addTime"]),
             contentImage:m["infosrc"],
-            content:m["nickname"]
+            content:m["nickname"],
+            infoId:m["infoid"]
           };
         }
         if(res.data.total&&res.data.total-(that.pageNum*app.globalData.noticePageSize)>0){
@@ -45,7 +46,8 @@ function loadMessage(that){
         var oldMessages = that.data.messages;
         Array.prototype.push.apply(oldMessages, messages);
         that.setData({
-          messages:oldMessages
+          messages:oldMessages,
+          isShowLoadMore:res.data.more&&res.data.more==1
         });
         wx.hideToast();
       }
@@ -76,5 +78,12 @@ Page({
   },
   loadMore:function(){
     loadMessage(this);
+  },
+  clickItem:function(event){
+    var item = app.getValueFormCurrentTargetDataSet(event,"item");
+    console.log(item);
+    wx.navigateTo({
+      url: '/pages/comment/pdetail/pdetail?id='+item.infoId
+    });
   }
 })

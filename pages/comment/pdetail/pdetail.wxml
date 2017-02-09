@@ -3,18 +3,18 @@
     <view class="content">
         <view class="detail-main">
             <view class="detail-main-header">
-                <image   class="detail-main-header-head"
-                    mode="scaleToFill" src="{{message.avatar}}">
+                <image   class="detail-main-header-head" catchtap="clickHeader"
+                    mode="scaleToFill" src="{{message.avatar}}" data-sopenid="{{message.fdNoteOpenID}}">
                 </image> 
-                <view class="detail-main-header-name-date">
+                <view class="detail-main-header-name-date" catchtap="clickHeader" data-sopenid="{{message.fdNoteOpenID}}">
                     <view class="detail-main-header-name">{{message.nickName}}</view>
-                    <view class="detail-main-header-date">{{message.showTimeText}}</view>
+                    <view class="detail-main-header-date">{{message.addTimestr}}</view>
                 </view>
                 <view class="detail-main-header-range">30m</view>
                 <view class="clear"></view>
             </view>
             <!--单图时候-->
-            <view class="detail-main-image-group" wx:if="{{message.photos.length==1}}">
+            <!-- <view class="detail-main-image-group" wx:if="{{message.photos.length==1}}">
                 <view class="detail-main-image-bg" wx:for="{{message.photos}}"  
                  style="width: 100%;height: auto" >
                     <image   class="detail-main-image-bg"  bindtap="previewImages" data-img-index="{{index}}"
@@ -22,10 +22,10 @@
                     </image> 
                 </view>
                 <view class="clear"></view>
-            </view>
+            </view>-->
             <!--多图时候-->
-            <view class="detail-main-image-group" wx:if="{{message.photos.length>1}}">
-                <scroll-view class="store-main-img-group" scroll-x="true" style="width:750rpx">
+            <view class="detail-main-image-group"  >
+                <scroll-view class="store-main-img-group" scroll-x="true" style="width:690rpx">
                     <image   class="store-main-im" wx:for="{{message.photos}}" bindtap="previewImages" data-img-index="{{index}}"
                         mode="scaleToFill" src="{{item.fdURL}}" style="width:225rpx;height:225rpx;margin-right: 35rpx;">
                     </image> 
@@ -46,11 +46,11 @@
                         </image> 
                         <view class="detail-reply-option-name-date">
                             <view class="detail-reply-option-name">{{item.author}}</view>
-                            <view class="detail-reply-option-date">{{item.showTimeText}}</view>
+                            <view class="detail-reply-option-date">{{item.addTimestr}}</view>
                         </view>
                         <view class="clear"></view>
                     </view>
-                    <view class="detail-reply-option-content">
+                    <view class="detail-reply-option-content"  bindtap="clickRespContent" data-resp="{{item}}">
                         {{item.content}}
                     </view>
                 </view>
@@ -60,7 +60,7 @@
             </view>
         </view>
         <view class="detail-bottom">
-            <input class="detail-input" placeholder="你也回复点什么吧"  placeholder-class="placeholder-class" focus="true" value="wwe" bindinput="commentInput" />
+            <input class="detail-input" placeholder="{{placeholder}}"  placeholder-class="placeholder-class" focus="{{focus}}" value="{{initInputValue}}" bindinput="commentInput" bindblur="bindBlur" />
             <view class="detail-input-submit"  bindtap="sendComment">发送</view>
         </view>
     </view>

@@ -3,7 +3,7 @@ var app = getApp();
 /**
  * 获得回应
  */
-function getResp(that){
+function getResp(that,callback){
   that.pageNum +=1; 
   var data={
     id:that.data.id ,
@@ -18,10 +18,6 @@ function getResp(that){
     },
     success: function(res) {
       console.log(res);
-      var len = res.data.data?res.data.data.length:0;
-      for(var i=0;i<len;i++){
-        res.data.data[i].showTimeText = app.util.formatShowTimeText(res.data.data[i].addTime)
-      }
       var message = that.data.message;
       if(!message.resp){
         message.resp = [];
@@ -41,6 +37,7 @@ function getResp(that){
           isShowLoadMore:false
         });
       }
+      typeof callback == "function" && callback(res);
     }
   });
 }
@@ -54,10 +51,21 @@ Page({
     images:[],
     id:"",//纸条id
     app:app,
-    commentInputValue:""
+    commentInputValue:"",
+    placeholder:"你也回复点什么吧",
+    focus:false,
+    initInputValue:"",
+    isReplyResp:false,//是否是回复回应
+    currentResp:{}//当前被回复的回应
   },
   pageNum:0,//回应页码
   onLoad:function(options){
+    wx.hideToast();
+    wx.showToast({
+      title: '加载中',
+      icon: 'loading',
+      duration: 10000
+    });
     var that = this;
     that.setData({
       id:options.id
@@ -75,7 +83,6 @@ Page({
       success: function(res) {
         console.log(res);
         res.data.data.content = app.util.decodeUTF8(res.data.data.content);
-        res.data.data.showTimeText = app.util.formatShowTimeText(res.data.data.addTime);
         //
         var images=[], len = res.data.data.photos?res.data.data.photos.length:0;
         for(var i=0;i<len;i++){
@@ -85,7 +92,9 @@ Page({
           message:res.data.data,
           images:images
         });
-        getResp(that);
+        getResp(that,function(){
+          wx.hideToast();
+        });
         wx.hideNavigationBarLoading();
       }
     });
@@ -114,7 +123,15 @@ Page({
     });
   },
   loadMore:function(){
-    getResp(this);
+    wx.hideToast();
+    wx.showToast({
+      title: '加载中',
+      icon: 'loading',
+      duration: 10000
+    });
+    getResp(this,function(){
+      wx.hideToast();
+    });
   },
   commentInput:function(event){
     this.setData({
@@ -135,27 +152,81 @@ Page({
       return;
     }
     var that = this;
+    wx.hideToast();
     wx.showToast({
       title: '发表中',
       icon: 'loading',
       duration: 10000
     });
-    var data={
-      token:app.globalData.userToken,
-      content:commentInputValue,
-      infomationID:that.data.id,
-      responID:,
-      fdReplytoMemberID:,
-    },data = app.getAPISign(data); 
-    wx.request({
-      url:app.globalData.url.api.responInfo,
-      method:"GET",
-      data:data,
-      fail:function(res){
-        console.log(res);
-      },
-      success: function(res) {
-      }
+    app.doLogin(function(){
+      var data={
+        token:app.globalData.userToken,
+        content:app.util.formatContentForServer(commentInputValue),
+        infomationID:that.data.id,
+        responID:that.data.isReplyResp&&that.data.currentResp.id?that.data.currentResp.id:"",
+        fdReplytoMemberID:that.data.isReplyResp&&that.data.currentResp.memberID?that.data.currentResp.memberID:"",
+      },data = app.getAPISign(data); 
+      wx.request({
+        url:app.globalData.url.api.responInfo,
+        method:"GET",
+        data:data,
+        fail:function(res){
+          console.log(res);
+        },
+        success: function(res) {
+          console.log(res);
+          if(res.data.errcode == 0){
+            var r = [res.data.data];
+            var message = that.data.message;
+            if(!message.resp){
+              message.resp = r;
+            }
+            else{
+              Array.prototype.push.apply(r, message.resp);
+              message.resp = r;
+            }
+            if(!message.commentnum){
+              message.commentnum = 1;
+            }
+            else{
+              message.commentnum = parseInt(message.commentnum)+1;
+            }
+            that.setData({
+              message:message
+            });
+          }
+          that.setData({
+            initInputValue:""
+          });
+          wx.hideToast();
+        }
+      });
+    });
+  },
+  clickRespContent:function(event){
+    var resp = app.getValueFormCurrentTargetDataSet(event,"resp");
+    console.log(resp);
+    this.setData({
+      placeholder:"@"+resp.author,
+      focus:true,
+      isReplyResp:true,
+      currentResp:resp
+    });
+  },
+  clickHeader:function(event){
+    var sOpenId = app.getValueFormCurrentTargetDataSet(event,"sopenid");
+    var message = this.data.message;
+    wx.navigateTo({
+      url: '/pages/person/detail/detail?sOpenId='+sOpenId+"&nickName="+message.nickName+"&avatar="+message.avatar
+    });
+  },
+  bindBlur:function(){
+    this.setData({
+      placeholder:"你也回复点什么吧",
+      focus:false,
+      isReplyResp:false,
+      currentResp:{},
+      initInputValue:""
     });
   }
-})
+});

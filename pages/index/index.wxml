@@ -7,12 +7,7 @@
     </image> 
     <view class="circle">
       <view class="circle-text"  >
-          <image   class="location-icon" 
-              mode="aspectFill" src="/pages/images/location.png">
-          </image>
-        <view class="circle-text-in">
-          需要将行 
-        </view>
+          纸条墙
       </view>
     </view>
     <image   class="edit-icon" bindtap="clickEdit"
@@ -116,6 +111,10 @@
           </view>
         </view>
       </block>
-    </view>    
+    </view>  
+    <view class="clear"></view>
+    <view class="reply-more"  bindtap="loadMore" wx:if="{{isShowLoadMore}}">
+        点击加载更多
+    </view>  
   </view>
 </view>
