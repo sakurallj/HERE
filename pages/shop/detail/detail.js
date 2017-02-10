@@ -1,51 +1,131 @@
 // pages/shop/detail/detail.js
-var app = getApp()
+var app = getApp();
+
+function loadNotes(that){
+  that.pageNum+=1;
+  var data = {
+    token:app.globalData.userToken,
+    page:that.pageNum,
+    partnerid:that.data.shop.id,
+    lng:app.globalData.location.longitude,
+    lat:app.globalData.location.latitude
+  },data = app.getAPISign(data);
+  console.log(data);
+  //获得首页数据
+  wx.request({
+    url:app.globalData.url.api.pInfoList,
+    method:"GET",
+    data:data,
+    header: {
+      'content-type': 'application/json'
+    },
+    fail:function(res){
+      console.log(res);
+      wx.hideToast();
+    },
+    success: function(res) {
+      console.log(res);
+      var notes = app.util.separateNotes(that,app,res.data.data),rawNotes=that.data.rawNotes;
+      console.log(notes);
+      Array.prototype.push.apply(rawNotes, res.data.data);
+      that.setData({
+        notes:notes,
+        rawNotes:rawNotes,
+        isShowLoadMore:res.data.more&&res.data.more==1
+      });
+      if(typeof callback == "function")callback(res);
+      wx.hideToast();
+      wx.hideNavigationBarLoading();
+    }
+  });
+}
 Page({
   data:{
-    scrollViewXWidth:375,//环境图片scroll-view 宽度
-    images:[//环境图片
-      "http://img02.tooopen.com/images/20160506/tooopen_sl_161735234856.jpg",
-      "http://img02.tooopen.com/images/20160409/tooopen_sl_158839182699.jpg",
-      "http://img02.tooopen.com/images/20160430/tooopen_sl_161072421856.jpg",
-      "http://img02.tooopen.com/images/20160509/tooopen_sl_162007252717.jpg",
-      "http://img02.tooopen.com/images/20160429/tooopen_sl_161028675674.jpg",
-      "http://img02.tooopen.com/images/20160415/tooopen_sl_159426452743.jpg"
-    ],
+    notes:{
+      coloums1:[],
+      coloums2:[],
+      coloums1Heigth:0,//列高
+      coloums2Heigth:0//列高
+    },
     shop:{
-      name:"刘得华健身房",
-      desc:"健身，上瘾了，根本停不下来",
-      address:"珠江新城金穗路侨鑫国际20楼",
-      distanct:"400m",
-      longitude:113.2643635541,
-      latitude:23.1290650841,
-      scale:16,
-      phone:"13800138000",
-      announcement:[
-        {
-          image:"/pages/images/store-icon1.png",
-          id:"",
-          content:"新会员办年卡，立享6折优惠"
-        },
-        {
-          image:"/pages/images/store-icon2.png",
-          id:"",
-          content:"邀请三个以上好友办会员，享受三个月的免费健身服务。"
-        }
-      ]
-    }
+      name:"",
+      image:"",
+      id:""
+    },
+    rawNotes:[],
+    isShowLoadMore:false
   },
+  pageNum:0,
   onLoad:function(options){
-    // 页面初始化 options为页面跳转所带来的参数
+    //清楚残余的上次发表的纸条
+    wx.removeStorageSync('comment_edit_message');
+    console.log(options);
+    var shop = this.data.shop;
+    shop.name = options.name;
+    shop.image = options.image;
+    shop.id = options.id;
+    if(options.name){
+      wx.setNavigationBarTitle({
+        title: options.name
+      });
+    }
+    this.setData({
+       shop:shop
+     });
+    var that = this;
+    wx.showToast({
+      title: '加载中',
+      icon: 'loading',
+      duration: 10000
+    });
+    app.doLogin(function(){
+      app.getLocation(function(res){
+        loadNotes(that);
+      });
+    });
   },
   onReady:function(){
-    // 页面渲染完成
-     var sy = wx.getSystemInfoSync();
-     this.setData({
-       scrollViewXWidth:sy.windowWidt ?sy.windowWidt :375
-     });
+ 
   },
   onShow:function(){
-    // 页面显示
+    var res = wx.getStorageSync('comment_edit_message');
+    console.log(res);
+    if(res){
+      console.log(333);
+      var images = res.imageUrls?JSON.parse(res.imageUrls):[], note = {
+        addTime:"",
+        avatar:app.globalData.userInfo.avatarUrl,
+        commentnum:"0",
+        content:res.content,
+        fdNoteOpenID:"",
+        id:res.id,
+        latitude:app.globalData.location.latitude,
+        longitude:app.globalData.location.longitude,
+        meter:"0m",
+        nickName:app.globalData.userInfo.nickName,
+        photo:images.length>0?images[0]:""
+      };
+      console.log(images);
+      this.setData({
+        notes:{
+          coloums1:[],
+          coloums2:[],
+          coloums1Heigth:0,//列高
+          coloums2Heigth:0//列高
+        }
+      });
+      var rawNotes=this.data.rawNotes,rawNotes1=[note];
+      Array.prototype.push.apply(rawNotes1,rawNotes);
+      console.log("notes");
+      console.log(rawNotes1);
+      var notes = app.util.separateNotes(this,app,rawNotes1);
+      this.setData({
+        notes:notes,
+        rawNotes:rawNotes1
+      });
+    }
+    //清空msg缓存
+    wx.removeStorageSync('comment_edit_message');
   },
   onHide:function(){
     // 页面隐藏
@@ -68,6 +148,22 @@ Page({
   callPhone:function(){
     wx.makePhoneCall({
       phoneNumber: this.data.shop.phone
+    });
+  },
+  clickEdit:function(){
+    wx.navigateTo({
+      url: '/pages/comment/edit/edit?shopId='+this.data.shop.id
+    });
+  },
+  clickItem:function(event){
+    if(event.currentTarget&&event.currentTarget.dataset&& event.currentTarget.dataset.type){
+      var item = app.getValueFormCurrentTargetDataSet(event,"item");
+      wx.navigateTo({
+        url: '/pages/comment/pdetail/pdetail?id='+item.id+"&meter="+item.meter
+      });
+    }
+    wx.navigateTo({
+      url: '/pages/comment/pdetail/pdetail'
     });
   }
 })

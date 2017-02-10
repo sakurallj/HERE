@@ -10,7 +10,7 @@
                     <view class="detail-main-header-name">{{message.nickName}}</view>
                     <view class="detail-main-header-date">{{message.addTimestr}}</view>
                 </view>
-                <view class="detail-main-header-range">30m</view>
+                <view class="detail-main-header-range">{{message.meter}}</view>
                 <view class="clear"></view>
             </view>
             <!--单图时候-->
@@ -58,6 +58,9 @@
             <view class="reply-more"  bindtap="loadMore" wx:if="{{isShowLoadMore}}">
                 点击加载更多
             </view>
+        </view>
+        <view wx:if="{{!message.resp||message.resp.length<=0}}" class="none-resp">
+            暂时还没有回应，先发一张纸条试试吧~
         </view>
         <view class="detail-bottom">
             <input class="detail-input" placeholder="{{placeholder}}"  placeholder-class="placeholder-class" focus="{{focus}}" value="{{initInputValue}}" bindinput="commentInput" bindblur="bindBlur" />

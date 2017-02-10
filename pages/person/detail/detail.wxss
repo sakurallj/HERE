@@ -1,3 +1,4 @@
+@import "/pages/template/notes/note.wxss";
 .detail-head{
     background-color: #fff;
     padding: 0 30rpx;
@@ -54,119 +55,7 @@
 .items{
   margin: 0 11rpx 0 31rpx;
 }
-.items .item{
-  box-sizing: border-box;
-  background:#ffffff;
-  border:1rpx solid #d0d0d0;
-  box-shadow:0 1rpx 2rpx 0 rgba(153,153,153,0.40);
-  height:100%;
-  width:338rpx;
-  padding: 22rpx 17rpx 22rpx 17rpx;
-  margin-bottom: 21rpx;
-  overflow: hidden;
-  z-index: 99;
-}
-.items .item.shop{
-  padding: 0;
-  position: relative;
-}
-.items  .column{
-  height: 100%;
-  width: 50%;
-  float: left;
-}
- .person-header-img{
-  width:38rpx;
-  height:38rpx;
-  border-radius:100%;
-  float: left;
- }
- .person-nickname{
-  font-size:20rpx;
-  color:#b8b8b8;
-  letter-spacing:0;
-  text-align:left;
-  float: left;
-  margin: 8rpx 17rpx 8rpx 17rpx;
-  width: 155rpx;
- }
- .person-distanct{
-  font-size:20rpx;
-  color:#b8b8b8;
-  letter-spacing:0;
-  text-align:rigth;
-  float: left;
-  margin: 8rpx 0rpx 8rpx 22rpx;
-  width: 54rpx;
- }
- .shop .distanct{
-   position: absolute;
-   top:13rpx;
-   left: 22rpx;
-    font-size:20rpx;
-    color:#ffffff;
-    letter-spacing:0;
-    text-align:right;
- }
- .shop .footer{
-   position: absolute;
-   opacity:0.6;
-  background:#000000;
-  width:350rpx;
-  height:72rpx;
-  left: 0rpx;
-  bottom: 0;
- }
-  .shop  .title{
-    position: absolute;
-    font-size:32rpx;
-    color:#ffffff;
-    left: 0rpx;
-    bottom: 0;
-    letter-spacing:0;
-    line-height:44rpx;
-    text-align:left;
-    margin: 14rpx  47rpx;
-    width: 256rpx;
-    overflow: hidden;
-    height:44rpx;
- }
-.item-body-img{
-  background:#d8d8d8;
-  width:300rpx;
-  height:150rpx;
-  margin-top: 30rpx;
-}
-.shop .item-img{
-  margin: 0;
-  width:100%;
-  max-height: 338rpx;
-}
-.item-body-text{
-  font-size:28rpx;
-  color:#666666;
-  letter-spacing:0;
-  line-height:44rpx;
-  text-align:left;
-  margin-top: 16rpx;
-}
-.item-groups{
-  position: relative;
-}
-.item-after{
-  position: absolute;
-  left: -9rpx;
-  top:-9rpx;
-  z-index: 1;
-}
-.item-delete-text{
-  color:#0000CC;
-  font-size: 16rpx;
-  width:49rpx;
-  margin-left: -17rpx;
-  padding-left: 17rpx;
-  margin-top: 10rpx;
-}
+
 .reply-more{
     padding: 57rpx 0 40rpx 0;
     font-size:24rpx;

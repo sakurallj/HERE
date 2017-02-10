@@ -1,43 +1,122 @@
 <view class="body">
     <view class="content">
-        <view class="store-head">
-            <view class="store-head-main">
-                <view class="store-head-main-first">{{shop.name}}</view>
-                <view class="store-head-main-second">
-                    <view class="store-head-main-second-font">{{shop.desc}}</view>
+        <view class="detail-head">
+            <view class="detail-head-main">
+                <view class="detail-head-main-first">
+                    <image   class="seller-bell" 
+                        mode="aspectFill" src="/pages/images/seller-bell.png">
+                    </image> 
+                    <image   class="person-header" 
+                        mode="aspectFill" src="{{shop.image}}">
+                    </image> 
+                    <image   class="seller-edit" bindtap="clickEdit"
+                        mode="aspectFill" src="/pages/images/seller-edit.png">
+                    </image> 
                 </view>
-            </view>
-            <view class="store-head-bottom">
-                <view class="store-head-bottom-local"  bindtap="gotoMap">
-                    {{shop.address}}
-                    <view class="store-head-bottom-local-range">{{shop.distanct}}</view>
+                <view class="detail-head-main-second">
+                    <view class="detail-head-main-second-font">{{shop.name}}</view>
                 </view>
-                <view class="store-head-bottom-phone"  >
-                    <image src="/pages/images/store-phone.png" bindtap="callPhone" style="width:42rpx;height:46rpx;margin: 6rpx 42.5rpx;" mode="scaleToFill" ></image>
-                </view>
-                
             </view>
         </view>
-        <view class="store-main">
-            <view class="store-main-title">商家环境</view>
-            <view class="store-main-content">
-                <scroll-view class="store-main-img-group" scroll-x="true" style="width:{{scrollViewXWidth}}px">
-                    <image   class="store-main-im" wx:for="{{images}}" bindtap="previewEnvImages" data-env-img-index="{{index}}"
-                        mode="scaleToFill" src="{{item}}" style="width:225rpx;height:225rpx;margin-right: 35rpx;">
-                    </image> 
-                </scroll-view>
+        <view class="detail-main">
+             <view class="items">
+                <view class="column">
+                    <block  wx:key="id" wx:for="{{notes.coloums1}}">
+                        <view class="item-groups" style="display:{{item.displayType}}">
+                            <view class="item " bindtap="clickItem" data-type="person"   data-item="{{item}}" >
+                                <view class="item-header">
+                                    <image   class="person-header-img"
+                                        mode="scaleToFill" src="{{item.avatar}}">
+                                    </image> 
+                                    <view class="person-nickname">{{item.nickName}}</view>      
+                                    <view class="person-distanct">{{item.meter}}</view>
+                                    <view class="person-distanct"></view>
+                                    </view>
+                                    <view class="clear"></view>
+                                    <view class="item-body">
+                                    <image   class="item-body-img" wx:if="{{item.photo}}"
+                                        mode="scaleToFill" src="{{item.photo}}">
+                                    </image> 
+                                    <view class="item-body-text" wx:if="{{item.content}}">
+                                        {{item.content}} 
+                                    </view>
+                                    <view class="item-delete-text" data-note="{{item}}"  catchtap="deleteNote" data-colum="1" wx:if="{{isMy}}">删除</view>
+                                </view>
+                            </view>
+                            <view class="item item-after"  wx:if="{{item.commentnum>0}}" bindtap="clickItem" data-type="person"   data-item="{{item}}">
+                                <view class="item-header">
+                                    <image   class="person-header-img"
+                                        mode="scaleToFill" src="{{item.avatar}}">
+                                    </image> 
+                                    <view class="person-nickname">{{item.nickName}}</view>
+                                    <view class="person-distanct">{{item.meter}}</view>
+                                    <view class="person-distanct"></view>
+                                    </view>
+                                    <view class="clear"></view>
+                                    <view class="item-body">
+                                    <image   class="item-body-img" wx:if="{{item.photo}}"
+                                        mode="scaleToFill" src="{{item.photo}}">
+                                    </image> 
+                                    <view class="item-body-text" wx:if="{{item.content}}">
+                                        {{item.content}} 
+                                    </view>
+                                    <view class="item-delete-text" data-note="{{item}}"  catchtap="deleteNote" data-colum="1" wx:if="{{isMy}}">删除</view>
+                                </view>
+                            </view>
+                        </view>
+                    </block>
+                </view>
+                <view class="column">
+                    <block  wx:key="id" wx:for="{{notes.coloums2}}">
+                        <view class="item-groups" style="display:{{item.displayType}}">
+                            <view class="item " bindtap="clickItem" data-type="person"  data-item="{{item}}">
+                                <view class="item-header">
+                                    <image   class="person-header-img"
+                                        mode="scaleToFill" src="{{item.avatar}}">
+                                    </image> 
+                                    <view class="person-nickname">{{item.nickName}}</view>
+                                    <view class="person-distanct">{{item.meter}}</view>
+                                    <view class="person-distanct"></view>
+                                    </view>
+                                    <view class="clear"></view>
+                                    <view class="item-body">
+                                    <image   class="item-body-img" wx:if="{{item.photo}}"
+                                        mode="scaleToFill" src="{{item.photo}}">
+                                    </image> 
+                                    <view class="item-body-text" wx:if="{{item.content}}">
+                                        {{item.content}} 
+                                    </view>
+                                    <view class="item-delete-text" data-note="{{item}}"  catchtap="deleteNote" data-colum="2" wx:if="{{isMy}}">删除</view>
+                                </view>
+                            </view>
+                            <view class="item item-after" bindtap="clickItem" data-type="person"   data-item="{{item}}" wx:if="{{item.commentnum>0}}">
+                                <view class="item-header">
+                                    <image   class="person-header-img"
+                                        mode="scaleToFill" src="{{item.avatar}}">
+                                    </image> 
+                                    <view class="person-nickname">{{item.nickName}}</view>
+                                    <view class="person-distanct">{{item.meter}}</view>
+                                    <view class="person-distanct"> </view>
+                                    </view>
+                                    <view class="clear"></view>
+                                    <view class="item-body">
+                                    <image   class="item-body-img" wx:if="{{item.photo}}"
+                                        mode="scaleToFill" src="{{item.photo}}">
+                                    </image> 
+                                    <view class="item-body-text" wx:if="{{item.content}}">
+                                        {{item.content}} 
+                                    </view>
+                                    <view class="item-delete-text" data-note="{{item}}"  catchtap="deleteNote" data-colum="2" wx:if="{{isMy}}">删除</view>
+                                </view>
+                            </view>
+                        </view>
+                    </block>
+                </view>    
             </view>
         </view>
-        <view class="store-bottom">
-            <view class="store-bottom-title">商家公告</view>
-            <view class="store-bottom-content">
-                <view class="store-bottom-option" wx:for="{{shop.announcement}}">
-                    <image style="width:42rpx;height:42rpx"  
-                        mode="scaleToFill" src="{{item.image}}">
-                    </image> 
-                    {{item.content}}
-                </view>
-            </view>
+        <view class="clear"></view>
+        <view class="reply-more"  bindtap="loadMore" wx:if="{{isShowLoadMore}}">
+            点击加载更多
         </view>
     </view>
 </view>

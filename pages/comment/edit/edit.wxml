@@ -1,7 +1,7 @@
 <view class="body">
     <view class="content">
         <view class="program-write">
-            <textarea class="program-write-main" placeholder="前24字将作为标题显示在缩略纸条上" bindinput="inputMsg"></textarea>
+            <textarea class="program-write-main" placeholder="前30字将作为标题显示在缩略纸条上" bindinput="inputMsg"></textarea>
             <view class="program-write-img-group">
                 <image bindtap="previewImages"  class="program-write-img" wx:for="{{message.images}}"  data-img-index="{{index}}"
                         mode="aspectFill" src="{{item}}">
@@ -12,7 +12,7 @@
             <view class="program-write-local" bindtap="chooseLocation">{{message.address.name}}</view>
         </view>
         <view class="program-write-btn-group">
-            <view class="program-write-btn" bindtap="sendMessage"  >贴纸片</view>
+            <view class="program-write-btn" bindtap="sendMessage"  >贴纸条</view>
         </view>
     </view>
 </view>

@@ -1,14 +1,12 @@
 <!--index.wxml-->
 <import src="../template/header/header.wxml"/>
 <view class="body"> 
-  <view class="header" >
+  <view class="header" style="position: {{headerDisplayType}}">
     <image   class="warn-icon" bindtap="clickWarn"
         mode="aspectFill" src="/pages/images/warn.png">
     </image> 
     <view class="circle">
-      <view class="circle-text"  >
-          纸条墙
-      </view>
+      纸条墙
     </view>
     <image   class="edit-icon" bindtap="clickEdit"
           mode="aspectFill" src="/pages/images/edit.png">
@@ -18,37 +16,48 @@
   <view class="items">
     <view class="column">
       <block  wx:key="id" wx:for="{{notes.coloums1}}">
-        <view class="item-groups">
-          <view class="item " bindtap="clickItem" data-type="person"  data-item-id="{{item.id}}"  >
+        <view class="item shop" wx:if="{{item.ispartner==1}}" bindtap="clickItem" data-type="shop"   data-item ="{{item }}">
+          <view class="distanct">
+            {{item.meter}}
+          </view>
+          <image   class="item-img"
+                mode="scaleToFill" src="{{item.fdLogo}}">
+          </image> 
+          <view class="footer">
+          </view>
+          <text class="title">{{item.fdName}}</text>
+        </view>
+        <view class="item-groups" wx:else>
+          <view class="item " bindtap="clickItem" data-type="person" data-item ="{{item }}" >
             <view class="item-header">
               <image   class="person-header-img"
-                  mode="scaleToFill" src="{{item.avatar}}">
+                  mode="aspectFill" src="{{item.avatar}}">
               </image> 
               <view class="person-nickname">{{item.nickName}}</view>
-              <view class="person-distanct">500m</view>
+              <view class="person-distanct">{{item.meter}}</view>
             </view>
             <view class="clear"></view>
             <view class="item-body">
               <image   class="item-body-img" wx:if="{{item.photo}}"
-                  mode="scaleToFill" src="{{item.photo}}">
+                  mode="aspectFill" src="{{item.photo}}">
               </image> 
               <view class="item-body-text" wx:if="{{item.content}}">
                 {{item.content}} 
               </view>
             </view>
           </view>
-          <view class="item item-after"  wx:if="{{item.commentnum>0}}" bindtap="clickItem" data-type="person"  data-item-id="{{item.id}}" >
+          <view class="item item-after"  wx:if="{{item.commentnum>0}}" bindtap="clickItem" data-type="person" data-item ="{{item }}">
             <view class="item-header">
               <image   class="person-header-img"
-                  mode="scaleToFill" src="{{item.avatar}}">
+                  mode="aspectFill" src="{{item.avatar}}">
               </image> 
               <view class="person-nickname">{{item.nickName}}</view>
-              <view class="person-distanct">500m</view>
+              <view class="person-distanct">{{item.meter}}</view>
             </view>
             <view class="clear"></view>
             <view class="item-body">
               <image   class="item-body-img" wx:if="{{item.photo}}"
-                  mode="scaleToFill" src="{{item.photo}}">
+                  mode="aspectFill" src="{{item.photo}}">
               </image> 
               <view class="item-body-text" wx:if="{{item.content}}">
                 {{item.content}} 
@@ -59,50 +68,50 @@
       </block>
     </view>
     <view class="column">
-      <!--
-      <view class="item shop" bindtap="clickItem" data-type="shop"   data-item-id={{item.id}}>
-        <view class="distanct">
-          500m
-        </view>
-        <image   class="item-img"
-              mode="scaleToFill" src="/pages/images/shop.png">
-        </image> 
-        <view class="footer">
-        </view>
-        <text class="title">刘得华健身体验房</text>
-      </view>-->
+       
       <block  wx:key="id" wx:for="{{notes.coloums2}}">
-        <view class="item-groups">
-          <view class="item " bindtap="clickItem" data-type="person"  data-item-id="{{item.id}}"  >
+        <view class="item shop" wx:if="{{item.ispartner==1}}" bindtap="clickItem" data-type="shop"   data-item ="{{item }}">
+          <view class="distanct">
+            {{item.meter}}
+          </view>
+          <image   class="item-img"
+                mode="scaleToFill" src="{{item.fdLogo}}">
+          </image> 
+          <view class="footer">
+          </view>
+          <text class="title">{{item.fdName}}</text>
+        </view>
+        <view class="item-groups" wx:else>
+          <view class="item " bindtap="clickItem" data-type="person"  data-item ="{{item }}">
             <view class="item-header">
               <image   class="person-header-img"
-                  mode="scaleToFill" src="{{item.avatar}}">
+                  mode="aspectFill" src="{{item.avatar}}">
               </image> 
               <view class="person-nickname">{{item.nickName}}</view>
-              <view class="person-distanct">500m</view>
+              <view class="person-distanct">{{item.meter}}</view>
             </view>
             <view class="clear"></view>
             <view class="item-body">
               <image   class="item-body-img" wx:if="{{item.photo}}"
-                  mode="scaleToFill" src="{{item.photo}}">
+                  mode="aspectFill" src="{{item.photo}}">
               </image> 
               <view class="item-body-text" wx:if="{{item.content}}">
                 {{item.content}} 
               </view>
             </view>
           </view>
-          <view class="item item-after" bindtap="clickItem" data-type="person"  data-item-id="{{item.id}}" wx:if="{{item.commentnum>0}}">
+          <view class="item item-after" bindtap="clickItem" data-type="person"  data-item ="{{item }}" wx:if="{{item.commentnum>0}}">
             <view class="item-header">
               <image   class="person-header-img"
-                  mode="scaleToFill" src="{{item.avatar}}">
+                  mode="aspectFill" src="{{item.avatar}}">
               </image> 
               <view class="person-nickname">{{item.nickName}}</view>
-              <view class="person-distanct">500m</view>
+              <view class="person-distanct">{{item.meter}}</view>
             </view>
             <view class="clear"></view>
             <view class="item-body">
               <image   class="item-body-img" wx:if="{{item.photo}}"
-                  mode="scaleToFill" src="{{item.photo}}">
+                  mode="aspectFill" src="{{item.photo}}">
               </image> 
               <view class="item-body-text" wx:if="{{item.content}}">
                 {{item.content}} 

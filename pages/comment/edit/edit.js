@@ -35,7 +35,7 @@ function uploadImages(images,callback){
     return 1;
   }
 }
-function sendMessage(message){
+function sendMessage(that,message){
   serverImagePaths = [];//serverImagePaths是此js的全局变量，这里要清空 服务端图片的路径 如果不清空会把上次发表的图片也加进来
   app.doLogin(function(){
     //上传图片
@@ -60,7 +60,11 @@ function sendMessage(message){
         latitude:message.address.latitude,
         longitude:message.address.longitude,
         address:message.address.name,
-      },data = app.getAPISign(data); 
+      },rawData=data;
+      if(that.data.shopId){
+        data.fdPartnerID = that.data.shopId;
+      }
+      data = app.getAPISign(data); 
       wx.request({
         url:app.globalData.url.api.addNote,
         method:"GET",
@@ -74,15 +78,12 @@ function sendMessage(message){
             console.log(res);
           }
           else{
-            var str = JSON.stringify(message);
-            wx.setStorage({
-              key:"comment_edit_message",
-              data:str,
-              success:function(){
-                wx.hideToast();
-                wx.navigateBack();
-              }
-            });
+            console.log(11212221);
+            rawData.id = res.data.id;
+            console.log(rawData);
+            wx.setStorageSync("comment_edit_message",rawData);
+            wx.hideToast();
+            wx.navigateBack();
           }
         }
       });
@@ -102,11 +103,16 @@ Page({
         latitude:"",
         longitude:""
       }
-    }
+    },
+    shopId:""
   },
   onLoad:function(options){
-    
     // 页面初始化 options为页面跳转所带来的参数
+    if(options.shopId){
+      this.setData({
+        shopId:options.shopId
+      });
+    }
   },
   onReady:function(){
     // 页面渲染完成
@@ -195,11 +201,11 @@ Page({
       app.getLocation(function(res){
         message.address.latitude=res.latitude;
         message.address.longitude=res.longitude;
-        sendMessage(message);
+        sendMessage(that,message);
       });
     }
     else{
-      sendMessage(message);
+      sendMessage(that,message);
     }
   }
 })

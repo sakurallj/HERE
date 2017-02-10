@@ -29,52 +29,18 @@ function loadNotes(that){
       wx.hideToast();
     },
     success: function(res) {
-      console.log(res);
-      var data = res.data.data,length = data.length,
-      coloums1Heigth=that.data.notes.coloums1Heigth,
-      coloums2Heigth=that.data.notes.coloums2Heigth,
-      coloums1=that.data.notes.coloums1,
-      coloums2=that.data.notes.coloums2;           
-      for(var i=0;i<length;i++){
-        var note = data[i];
-        if(note.content&&note.content.indexOf("\\u")>=0){
-            note.content = app.util.decodeUTF8(note.content);
-        }
-        var textHeight = 0;
-        if(note.content){
-          var rawLen = note.content.length
-            ,ascllLen = app.util.getAscllLength(note.content);
-          var trueLen = rawLen-ascllLen+Math.ceil(ascllLen/2);
-          var line = Math.ceil((trueLen*28)/304);
-          textHeight = line*44;
-        }
-        note.displayType = "block";
-        if(coloums1Heigth<=coloums2Heigth){
-          coloums1.push(note);
-          if(note.photo){
-            coloums1Heigth+=150;//图片高度
-          }
-          coloums1Heigth+= textHeight+119;//119为item最小高度 textHeight为文字高度
-        }
-        else{
-          coloums2.push(note);
-          if(note.photo){
-            coloums2Heigth+=150;
-          }
-          coloums2Heigth+= textHeight+119;
-        }
-      }
+      console.log(res);          
+      var notes = app.util.separateNotes(that,app,res.data.data),rawNotes=that.data.rawNotes;
+      console.log(notes);
+      Array.prototype.push.apply(rawNotes, res.data.data);
       that.setData({
-        notes:{
-          coloums1:coloums1,
-          coloums2:coloums2,
-          coloums1Heigth:coloums1Heigth,//列高
-          coloums2Heigth:coloums2Heigth//列高
-        },
+        notes:notes,
+        rawNotes:rawNotes,
         isShowLoadMore:res.data.more&&res.data.more==1
       });
-      console.log(that.data.notes);
+      if(typeof callback == "function")callback(res);
       wx.hideToast();
+      wx.hideNavigationBarLoading();
     }
   });
 }
@@ -89,6 +55,7 @@ Page({
     userInfo:{
 
     },
+    rawNotes:[],
     isShowLoadMore:false,
     isMy:false//是否 我的动态
   },
@@ -109,8 +76,8 @@ Page({
         that.setData({
           isMy:true,
         });
-        nickName=nickName?nickName:app.globalData.nickName;
-        avatar=avatar?avatar:app.globalData.avatarUrl;
+        nickName=nickName?nickName:app.globalData.userInfo.nickName;
+        avatar=avatar?avatar:app.globalData.userInfo.avatarUrl;
       }
       else{
         wx.setNavigationBarTitle({
@@ -208,17 +175,10 @@ Page({
   },
   clickItem:function(event){
     if(event.currentTarget&&event.currentTarget.dataset&& event.currentTarget.dataset.type){
-      if(event.currentTarget.dataset.type=="shop"){
-        wx.navigateTo({
-          url: '/pages/shop/detail/detail'
-        });
-      }
-      else{
-        var itemId = app.getValueFormCurrentTargetDataSet(event,"itemId");
-        wx.navigateTo({
-          url: '/pages/comment/pdetail/pdetail?id='+itemId
-        });
-      }
+      var item = app.getValueFormCurrentTargetDataSet(event,"item");
+      wx.navigateTo({
+        url: '/pages/comment/pdetail/pdetail?id='+item.id+"&meter="+item.meter
+      });
     }
     wx.navigateTo({
       url: '/pages/comment/pdetail/pdetail'

@@ -1,5 +1,41 @@
 <template name="header">
-  <view class="header" >
-       <view class="title" >{{title}}</view>
+  <view >
+       22222
+  </view>
+   <view >
+       22222
+  </view>
+   <view >
+       22222
+  </view>
+   <view >
+       22222
+  </view>
+   <view >
+       22222
+  </view>
+   <view >
+       22222
+  </view>
+   <view >
+       22222
+  </view>
+   <view >
+       22222
+  </view>
+   <view >
+       22222
+  </view>
+   <view >
+       22222
+  </view>
+   <view >
+       22222
+  </view>
+   <view >
+       22222
+  </view>
+   <view >
+       22222
   </view>
 </template>

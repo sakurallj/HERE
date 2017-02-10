@@ -1,7 +1,7 @@
 //app.js
 var util = require('/utils/util.js');
 var md5 = require('/utils/MD5.js');
-var apiDomain = "https://note900.com";
+var apiDomain = "https://api.900here.com";
 /**
  * 登录服务器
  * 返回 Promise 
@@ -66,6 +66,7 @@ App({
     appVersion:"0.0.1",//本小程序版本
     url:{
       api:{
+        pInfoList:apiDomain+"/noteapi/pinfolist",//商家纸条列表
         otherInfoList:apiDomain+"/noteapi/otherinfolist",//查看其他用户纸条
         delNote:apiDomain+"/noteapi/delinfo",//删除纸条
         myInfoList:apiDomain+"/noteapi/myinfolist",//我的纸条

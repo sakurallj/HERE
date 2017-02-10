@@ -13,8 +13,9 @@
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#000",
-    "navigationBarTitleText": "HERE.就近",
+    "navigationBarTitleText": "HERE小纸条",
     "navigationBarTextStyle":"white",
-    "backgroundColor":"#F0F0F0"
+    "backgroundColor":"#000",
+    "enablePullDownRefresh":"true"
   }
 }

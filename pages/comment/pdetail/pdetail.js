@@ -88,6 +88,7 @@ Page({
         for(var i=0;i<len;i++){
           images[i]=res.data.data.photos[i].fdURL ;
         }
+        res.data.data.meter = options.meter;
         that.setData({
           message:res.data.data,
           images:images
@@ -115,10 +116,10 @@ Page({
   onUnload:function(){
     // 页面关闭
   },
-  previewImages:function(){
+  previewImages:function(event){
     var index = app.getValueFormCurrentTargetDataSet(event,"imgIndex");
     wx.previewImage({
-      current: this.data.images[index]?this.dataimages[index]:"", // 当前显示图片的http链接
+      current: this.data.images[index]?this.data.images[index]:"", // 当前显示图片的http链接
       urls: this.data.images // 需要预览的图片http链接列表
     });
   },
