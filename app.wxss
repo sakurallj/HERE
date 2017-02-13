@@ -54,5 +54,8 @@ page{
   width:32rpx;
   height:32rpx;
 }
+.person-header{
+  border: 1px solid rgba(153,153,153,.6);
+}
 
  

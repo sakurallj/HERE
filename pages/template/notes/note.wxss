@@ -1,17 +1,22 @@
 .items{
-  margin: 129rpx 11rpx 0 31rpx;
+  margin-top:90rpx;
+  position: relative;
 }
 .items .item{
   box-sizing: border-box;
   background:#ffffff;
   border:1rpx solid #d0d0d0;
   box-shadow:0 1rpx 2rpx 0 rgba(153,153,153,0.40);
-  height:100%;
   width:338rpx;
   padding: 22rpx 17rpx 22rpx 17rpx;
   margin-bottom: 21rpx;
   overflow: hidden;
   z-index: 99;
+}
+.items .column{
+  margin-top: 29rpx;
+  padding-left: 25rpx;
+  box-sizing: border-box;
 }
 .items .item.shop{
   padding: 0;
@@ -19,7 +24,6 @@
 }
 .items  .column{
   height: 100%;
-  width: 50%;
   float: left;
 }
 .person-header-img{

@@ -1,7 +1,7 @@
 // pages/shop/detail/detail.js
 var app = getApp();
 
-function loadNotes(that){
+function loadNotes(that,callback){
   that.pageNum+=1;
   var data = {
     token:app.globalData.userToken,
@@ -31,7 +31,7 @@ function loadNotes(that){
       that.setData({
         notes:notes,
         rawNotes:rawNotes,
-        isShowLoadMore:res.data.more&&res.data.more==1
+        hasMore:res.data.more&&res.data.more==1
       });
       if(typeof callback == "function")callback(res);
       wx.hideToast();
@@ -52,7 +52,9 @@ Page({
       image:"",
       id:""
     },
+    hasMore:false,
     rawNotes:[],
+    svColumnHeight:0,
     isShowLoadMore:false
   },
   pageNum:0,
@@ -85,7 +87,13 @@ Page({
     });
   },
   onReady:function(){
- 
+    // 页面渲染完成
+    var sy = wx.getSystemInfoSync();
+    console.log(sy);
+    var svColumnHeight = (750/sy.windowWidth)*sy.windowHeight-90;
+     this.setData({
+       svColumnHeight:svColumnHeight
+     });
   },
   onShow:function(){
     var res = wx.getStorageSync('comment_edit_message');
@@ -165,5 +173,34 @@ Page({
     wx.navigateTo({
       url: '/pages/comment/pdetail/pdetail'
     });
+  },
+  scrollToLower:function(){
+    if(this.data.hasMore){
+      loadNotes(this);
+    }
+  },
+  onPullDownRefresh:function(){
+    this.setData({
+      notes:{
+        coloums1:[],
+        coloums2:[],
+        coloums1Heigth:0,//列高
+        coloums2Heigth:0//列高
+      },
+      isShowLoadMore:false,
+      headerDisplayType:"none"
+    });
+    this.pageNum=0;
+  
+    var that = this;
+    wx.showNavigationBarLoading();
+    //获得用户信息
+    //调用登录接口
+    app.doLogin(function(){
+      loadNotes(that,function(){
+        wx.stopPullDownRefresh();
+      });
+    });
+    
   }
 })

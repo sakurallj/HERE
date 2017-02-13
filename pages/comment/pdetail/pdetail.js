@@ -89,6 +89,8 @@ Page({
           images[i]=res.data.data.photos[i].fdURL ;
         }
         res.data.data.meter = options.meter;
+        res.data.data.nickName = res.data.data.nickName ?res.data.data.nickName :"";
+        res.data.data.avatar = res.data.data.avatar ?res.data.data.avatar :app.globalData.defaultHeader;
         that.setData({
           message:res.data.data,
           images:images

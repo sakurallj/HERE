@@ -2,7 +2,7 @@
     <view class="content">
         <view class="reply-main">
             <view class="reply-option" wx:for="{{messages}}" bindtap="clickItem" data-item="{{item}}">
-                <image   class="reply-option-head"
+                <image   class="reply-option-head person-header"
                     mode="scaleToFill" src="{{item.headerImage}}">
                 </image> 
                 <view class="reply-option-content with-img">
@@ -19,8 +19,12 @@
                 </image> 
                 <view class="clear"></view>
             </view>
+            
         </view>
-        <view class="reply-more"  bindtap="loadMore" wx:if="{{isShowLoadMore}}">
+        <view wx:if="{{!messages ||messages.length<=0}}" class="none-resp">
+            暂时还没有回应，先发一张纸条试试吧~
+        </view>
+        <view class="reply-more"  bindtap="loadMore" wx:if="{{messages &&messages.length>0&&isShowLoadMore}}">
             点击加载更多
         </view>
     </view>

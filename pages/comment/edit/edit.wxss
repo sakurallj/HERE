@@ -23,17 +23,17 @@
     margin-top: 32rpx;
 }
 .program-write-img{
-    width: 199rpx;
-    height: 199rpx;
+    width: 153.9rpx;
+    height: 153.9rpx;
     float: left;
     margin: 5rpx;
-    margin-bottom: 10rpx;
+    margin-bottom: 5rpx;
 }
 .program-write-add{
-    width: 199rpx;
-    height: 199rpx;
+    width: 153.9rpx;
+    height: 153.9rpx;
     text-align: center;
-    line-height: 199rpx;
+    line-height: 153.9rpx;
     border: 2rpx solid #666;
     font-size: 40rpx;
     color: #999;
@@ -41,13 +41,22 @@
     margin: 5rpx;
     margin-bottom: 13rpx;
 }
-.program-write-local{
-    background: url("/pages/images/program-local.png")no-repeat left;
-    background-size: 30rpx 38rpx;
+.program-write-local-text{
     line-height: 38rpx;
-    padding-left: 50rpx;
+    padding-left: 5rpx;
     color: #b8b8b8;
     font-size: 24rpx;
+    float: left;
+    max-width: 500rpx;
+    overflow:hidden;
+    height: 38rpx;
+    text-overflow :   ellipsis ;
+    white-space:nowrap; 
+}
+.program-write-local{
+    width: 30rpx;
+    height: 38rpx;
+    float: left;
 }
 .program-write-btn-group{
     padding-top: 50rpx;

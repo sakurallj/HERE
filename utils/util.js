@@ -124,7 +124,7 @@ function separateNotes(that,app,data){
     }
     var textHeight = 0;
     if(note.content){
-      var rawLen = note.content.length
+      var rawLen = note.content?note.content.length:0
         ,ascllLen = app.util.getAscllLength(note.content);
       var trueLen = rawLen-ascllLen+Math.ceil(ascllLen/2);
       var line = Math.ceil((trueLen*28)/304);
@@ -135,6 +135,9 @@ function separateNotes(that,app,data){
       line=line>3?3:line;
       textHeight = line*44;
     }
+    note.fdName = note.fdName ?note.fdName :"";
+    note.nickName = note.nickName ?note.nickName :"";
+    note.avatar = note.avatar ?note.avatar :app.globalData.defaultHeader;
     if(coloums1Heigth<=coloums2Heigth){
       coloums1.push(note);
       if(note.ispartner==1){

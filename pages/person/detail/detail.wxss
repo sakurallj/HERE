@@ -47,14 +47,11 @@
 
 
 .detail-main{
-    background-color: #fff;
     margin-top: 20rpx;
     box-sizing: border-box;
 }
 
-.items{
-  margin: 0 11rpx 0 31rpx;
-}
+ 
 
 .reply-more{
     padding: 57rpx 0 40rpx 0;
@@ -62,4 +59,7 @@
     color:#666666;
     letter-spacing:0;
     text-align:center;
+}
+.items{
+  margin-top:0rpx;
 }

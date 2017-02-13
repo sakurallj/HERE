@@ -81,6 +81,7 @@ App({
         noteList:apiDomain+"/noteapi/infolist"//纸条列表
       }
     },
+    defaultHeader:"/pages/images/default-person.png",//默认头像
     confirmColor:"#a98b59",//确定按钮文字颜色
     noticePageSize:20//通知页每次加载数据的条数
   },

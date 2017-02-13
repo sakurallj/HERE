@@ -3,12 +3,15 @@
 var app = getApp();
  
 function loadNotes(that,latitude,longitude,callback){
-  wx.hideToast();
-  wx.showToast({
-    title: '加载中',
-    icon: 'loading',
-    duration: 10000
-  });
+  if(!that.data.isLastLoadDone){
+    return "";
+  }
+  else{
+    that.setData({
+      isLastLoadDone:false
+    });
+  }
+  wx.showNavigationBarLoading();
   that.pageNum +=1;
   var data = {
     page:that.pageNum,
@@ -37,7 +40,9 @@ function loadNotes(that,latitude,longitude,callback){
       that.setData({
         notes:notes,
         rawNotes:rawNotes,
-        isShowLoadMore:res.data.more&&res.data.more==1
+        isShowLoadMore:false,
+        isLastLoadDone:true,
+        hasMore:res.data.more&&res.data.more==1
       });
       if(typeof callback == "function")callback(res);
       wx.hideToast();
@@ -55,6 +60,9 @@ Page({
     },
     rawNotes:[],
     isShowLoadMore:false,
+    hasMore:false,
+    isLastLoadDone:true,//上次加载是否完成
+    svColumnHeight:100,//coloum的高
     headerDisplayType:"block"//
   },
   pageNum:0,
@@ -63,6 +71,15 @@ Page({
     wx.navigateTo({
       url: '../logs/logs'
     })
+  },
+  onReady:function(){
+    // 页面渲染完成
+    var sy = wx.getSystemInfoSync();
+    console.log(sy);
+    var svColumnHeight = (750/sy.windowWidth)*sy.windowHeight-90;
+     this.setData({
+       svColumnHeight:svColumnHeight
+     });
   },
   onShow:function(){
     // 
@@ -119,6 +136,7 @@ Page({
     app.doLogin();
     //获得地理位置
     app.getLocation(function(res){
+      console.log(res);
       var latitude = res.latitude;
         var longitude = res.longitude;
         var speed = res.speed;
@@ -175,11 +193,7 @@ Page({
       headerDisplayType:"none"
     });
     this.pageNum=0;
-    wx.showToast({
-      title: '加载中',
-      icon: 'loading',
-      duration: 10000
-    });
+  
     var that = this;
     wx.showNavigationBarLoading();
     //获得用户信息
@@ -201,5 +215,19 @@ Page({
           },1000);
         });
     });
+  },
+  scrollToLower:function(){
+    this.setData({
+      isShowLoadMore:true
+    });
+    if(this.data.hasMore){
+      loadNotes(this,app.globalData.location.latitude,app.globalData.location.longitude);
+    }
+  },
+  scroll:function(event){
+    console.log(event);
+  },
+  touchMove:function(event){
+    console.log(event);
   }
 })

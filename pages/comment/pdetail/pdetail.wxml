@@ -3,7 +3,7 @@
     <view class="content">
         <view class="detail-main">
             <view class="detail-main-header">
-                <image   class="detail-main-header-head" catchtap="clickHeader"
+                <image   class="detail-main-header-head person-header" catchtap="clickHeader"
                     mode="scaleToFill" src="{{message.avatar}}" data-sopenid="{{message.fdNoteOpenID}}">
                 </image> 
                 <view class="detail-main-header-name-date" catchtap="clickHeader" data-sopenid="{{message.fdNoteOpenID}}">

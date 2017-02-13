@@ -28,13 +28,13 @@ function loadMessage(that){
         for(var i=0;i<len;i++){
           var m = data[i];
           messages[i] = {
-            name:m["nickname"],
-            headerImage:m["avatar"],
+            name:m["nickname"]?m["nickname"]:"",
+            headerImage:m["avatar"]?m["avatar"]:app.globalData.defaultHeader,
             type:m["action"]==0?"reply":"like",//0 回复 1点赞
             typeText:m["action"]==0?"回应了你的纸条":"摁了你的纸条",//0 回复 1点赞,
             time:app.util.formatShowTimeText(m["addTime"]),
             contentImage:m["infosrc"],
-            content:m["nickname"],
+            content:m["comment"]?m["comment"]:"",
             infoId:m["infoid"]
           };
         }

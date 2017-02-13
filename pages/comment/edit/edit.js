@@ -129,7 +129,7 @@ Page({
   chooseImage:function(){
     var that = this;
     wx.chooseImage({
-      count: 8, // 默认9
+      count: 9, // 默认9
       success: function (res) {
         var tempFilePaths = res.tempFilePaths;
         var m = that.data.message;

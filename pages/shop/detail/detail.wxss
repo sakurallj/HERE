@@ -47,14 +47,11 @@
 
 
 .detail-main{
-    background-color: #fff;
     margin-top: 20rpx;
     box-sizing: border-box;
 }
 
-.items{
-  margin: 0 11rpx 0 31rpx;
-}
+ 
 
 
 .reply-more{
@@ -75,4 +72,7 @@
   height:48rpx;
   float: right;
   padding-top: 26rpx;
+}
+.items{
+  margin-top:0rpx;
 }

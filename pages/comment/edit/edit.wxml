@@ -9,7 +9,15 @@
                 <view class="program-write-add" bindtap="chooseImage">+</view>
                 <view class="clear"></view>
             </view>
-            <view class="program-write-local" bindtap="chooseLocation">{{message.address.name}}</view>
+            <view bindtap="chooseLocation">
+                <image bindtap="previewImages"  class="program-write-local"  
+                            mode="aspectFill" src="/pages/images/program-local.png">
+                </image> 
+                <view class="program-write-local-text">
+                    {{message.address.name}}
+                </view>
+                <view class="clear"></view>
+            </view>
         </view>
         <view class="program-write-btn-group">
             <view class="program-write-btn" bindtap="sendMessage"  >贴纸条</view>

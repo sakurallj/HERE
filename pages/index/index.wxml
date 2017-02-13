@@ -1,7 +1,7 @@
 <!--index.wxml-->
 <import src="../template/header/header.wxml"/>
 <view class="body"> 
-  <view class="header" style="position: {{headerDisplayType}}">
+  <view class="header"  >
     <image   class="warn-icon" bindtap="clickWarn"
         mode="aspectFill" src="/pages/images/warn.png">
     </image> 
@@ -13,7 +13,7 @@
     </image> 
   </view>
   <view class="clear"></view>
-  <view class="items">
+  <scroll-view scroll-y="true" class="items"  style="height:{{svColumnHeight}}rpx"   bindscrolltolower="scrollToLower" bindscroll="scroll">
     <view class="column">
       <block  wx:key="id" wx:for="{{notes.coloums1}}">
         <view class="item shop" wx:if="{{item.ispartner==1}}" bindtap="clickItem" data-type="shop"   data-item ="{{item }}">
@@ -30,7 +30,7 @@
         <view class="item-groups" wx:else>
           <view class="item " bindtap="clickItem" data-type="person" data-item ="{{item }}" >
             <view class="item-header">
-              <image   class="person-header-img"
+              <image   class="person-header-img person-header"
                   mode="aspectFill" src="{{item.avatar}}">
               </image> 
               <view class="person-nickname">{{item.nickName}}</view>
@@ -48,7 +48,7 @@
           </view>
           <view class="item item-after"  wx:if="{{item.commentnum>0}}" bindtap="clickItem" data-type="person" data-item ="{{item }}">
             <view class="item-header">
-              <image   class="person-header-img"
+              <image   class="person-header-img person-header"
                   mode="aspectFill" src="{{item.avatar}}">
               </image> 
               <view class="person-nickname">{{item.nickName}}</view>
@@ -84,7 +84,7 @@
         <view class="item-groups" wx:else>
           <view class="item " bindtap="clickItem" data-type="person"  data-item ="{{item }}">
             <view class="item-header">
-              <image   class="person-header-img"
+              <image   class="person-header-img person-header"
                   mode="aspectFill" src="{{item.avatar}}">
               </image> 
               <view class="person-nickname">{{item.nickName}}</view>
@@ -102,7 +102,7 @@
           </view>
           <view class="item item-after" bindtap="clickItem" data-type="person"  data-item ="{{item }}" wx:if="{{item.commentnum>0}}">
             <view class="item-header">
-              <image   class="person-header-img"
+              <image   class="person-header-img person-header"
                   mode="aspectFill" src="{{item.avatar}}">
               </image> 
               <view class="person-nickname">{{item.nickName}}</view>
@@ -122,8 +122,9 @@
       </block>
     </view>  
     <view class="clear"></view>
-    <view class="reply-more"  bindtap="loadMore" wx:if="{{isShowLoadMore}}">
-        点击加载更多
-    </view>  
-  </view>
+   <!-- <view class="reply-more"  bindtap="loadMore" wx:if="{{isShowLoadMore}}">
+        点击加载更多 
+    </view>  -->
+  </scroll-view>
+  
 </view>
