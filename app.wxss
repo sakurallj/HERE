@@ -57,5 +57,21 @@ page{
 .person-header{
   border: 1px solid rgba(153,153,153,.6);
 }
+.loading{
+  display: inline-block;
+}
+.loading-icon{
+  width:32rpx;
+  height:32rpx;
+  display:  block;
+  padding-top: -12rpx;
+  float: left;
+}
+.loading-text{
+  margin-left: 10rpx;
+  display:  block;
+  float: left;
+  padding-top: 5rpx;
+}
 
  

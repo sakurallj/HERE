@@ -73,4 +73,7 @@
     color:#666666;
     letter-spacing:0;
     text-align:center;
+    display: block;
 }
+ 
+ 
