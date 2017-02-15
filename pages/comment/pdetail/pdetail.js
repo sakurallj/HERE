@@ -47,14 +47,22 @@ Page({
     message:{
 
     },
+    currentImageIndex:1,//当前图片
+    totalImage:0,//图片总数
+    scrollLeft:0,//向左滑动的距离
     isShowLoadMore:false,
     images:[],
+    showImages:[],
     id:"",//纸条id
     app:app,
+    bodyBgColor:"auto",
+    bodyHeight:"100%",
     commentInputValue:"",
-    placeholder:"你也回复点什么吧",
+    placeholder:"写点什么~",
     focus:false,
     initInputValue:"",
+    isFirstLoadEmpty:false,
+    lastScrollDetail:{},//上次滚动的信息
     isReplyResp:false,//是否是回复回应
     currentResp:{}//当前被回复的回应
   },
@@ -84,30 +92,40 @@ Page({
         console.log(res);
         res.data.data.content = app.util.decodeUTF8(res.data.data.content);
         //
-        var images=[], len = res.data.data.photos?res.data.data.photos.length:0;
+        var images=[],showImages=[], len = res.data.data.photos?res.data.data.photos.length:0;
         for(var i=0;i<len;i++){
           images[i]=res.data.data.photos[i].fdURL ;
+          showImages[i] = {
+            url:res.data.data.photos[i].fdURL ,
+            isShow:false
+          }
         }
         res.data.data.meter = options.meter;
         res.data.data.nickName = res.data.data.nickName ?res.data.data.nickName :"";
         res.data.data.avatar = res.data.data.avatar ?res.data.data.avatar :app.globalData.defaultHeader;
         that.setData({
           message:res.data.data,
-          images:images
+          totalImage:len,
+          images:images,
+          showImages:showImages
         });
-        getResp(that,function(){
+        getResp(that,function(res){
           wx.hideToast();
+          that.setData({
+            isFirstLoadEmpty:res.data.data&&res.data.data.length==0
+          });
+          if(res.data.data&&res.data.data.length==0){
+            that.setData({
+              bodyBgColor:"#fff",
+              bodyHeight:app.getSystemInfo().windowHeight+"px"
+            });
+          }
         });
         wx.hideNavigationBarLoading();
       }
     });
   },
   onReady:function(){
-    // 页面渲染完成
-    var sy = wx.getSystemInfoSync();
-     this.setData({
-       scrollViewXWidth:sy.windowWidt ?sy.windowWidt :375
-     });
   },
   onShow:function(){
     // 页面显示
@@ -199,22 +217,37 @@ Page({
             });
           }
           that.setData({
-            initInputValue:""
+            placeholder:"写点什么~",
+            focus:false,
+            isReplyResp:false,
+            currentResp:{},
+            initInputValue:"",
+            bodyBgColor:"auto",
+            bodyHeight:"auto"
           });
           wx.hideToast();
+          wx.showToast({
+            title: '回应成功',
+            icon: 'success',
+            duration: 2000
+          });
         }
       });
     });
   },
   clickRespContent:function(event){
     var resp = app.getValueFormCurrentTargetDataSet(event,"resp");
+    var currentResp = this.data.currentResp;
     console.log(resp);
-    this.setData({
-      placeholder:"@"+resp.author,
-      focus:true,
-      isReplyResp:true,
-      currentResp:resp
-    });
+    if(!currentResp||currentResp.id!=resp.id){
+      this.setData({
+        placeholder:"@"+resp.author,
+        focus:true,
+        isReplyResp:true,
+        currentResp:resp,
+        initInputValue:""
+      });
+    }
   },
   clickHeader:function(event){
     var sOpenId = app.getValueFormCurrentTargetDataSet(event,"sopenid");
@@ -223,13 +256,35 @@ Page({
       url: '/pages/person/detail/detail?sOpenId='+sOpenId+"&nickName="+message.nickName+"&avatar="+message.avatar
     });
   },
-  bindBlur:function(){
+  clickRespItem:function(){
     this.setData({
-      placeholder:"你也回复点什么吧",
+      placeholder:"写点什么~",
       focus:false,
       isReplyResp:false,
       currentResp:{},
       initInputValue:""
     });
+  },
+  swiperChange:function(event){
+    console.log(event);
+    this.setData({
+      currentImageIndex:event.detail.current+1
+    });
+  },
+  imageError:function(event){
+    console.log(event);
+  },
+  loaded:function(event){
+    var index = app.getValueFormCurrentTargetDataSet(event,"imgIndex");
+    console.log(index);
+    var showImages = this.data.showImages;
+    if(showImages[index]){
+      console.log(showImages[index]);
+      showImages[index].isShow = true;
+      console.log(showImages[index]);
+      this.setData({
+        showImages:showImages
+      });
+    }
   }
 });

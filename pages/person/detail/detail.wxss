@@ -17,7 +17,7 @@
     letter-spacing:0;
     box-sizing: border-box;
 }
-.person-header{
+.person-top-header{
     border-radius:54rpx;
     width: 108rpx;
     height: 108rpx;
@@ -33,6 +33,7 @@
     display: inline-block;
     padding-top: 15rpx;
     box-sizing: border-box;
+    width: 100%;
 }
  
 

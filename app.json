@@ -12,10 +12,10 @@
   ],
   "window":{
     "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#000",
+    "navigationBarBackgroundColor": "#39383d",
     "navigationBarTitleText": "HERE小纸条",
     "navigationBarTextStyle":"white",
-    "backgroundColor":"#000",
+    "backgroundColor":"#39383d",
     "enablePullDownRefresh":"true"
   }
 }

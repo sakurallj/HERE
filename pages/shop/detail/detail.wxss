@@ -17,7 +17,7 @@
     letter-spacing:0;
     box-sizing: border-box;
 }
-.person-header{
+.shop-header{
     border-radius:54rpx;
     width: 108rpx;
     height: 108rpx;
@@ -33,6 +33,8 @@
     display: inline-block;
     padding-top: 15rpx;
     box-sizing: border-box;
+    font-size:28rpx;
+    width: 100%;
 }
  
 

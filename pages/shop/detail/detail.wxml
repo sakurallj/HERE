@@ -1,12 +1,13 @@
+<import src="../../template/notes/note-item.wxml"/>
 <view class="body">
     <view class="content">
         <view class="detail-head">
             <view class="detail-head-main">
                 <view class="detail-head-main-first">
-                    <image   class="seller-bell" 
+                    <image   class="seller-bell" catchtap="clickWarn" 
                         mode="aspectFill" src="/pages/images/seller-bell.png">
                     </image> 
-                    <image   class="person-header person-header" 
+                    <image   class="shop-header person-header" 
                         mode="aspectFill" src="{{shop.image}}">
                     </image> 
                     <image   class="seller-edit" bindtap="clickEdit"
@@ -14,12 +15,12 @@
                     </image> 
                 </view>
                 <view class="detail-head-main-second">
-                    <view class="detail-head-main-second-font">{{shop.name}}</view>
+                    <view class="detail-head-main-second-font text-ellipsis">{{shop.name}}</view>
                 </view>
             </view>
         </view>
         <view class="detail-main">
-             <scroll-view scroll-y="true" class="items"  style="height:{{svColumnHeight}}rpx"   bindscrolltolower="scrollToLower" >
+             <view scroll-y="true" class="items"  style="height:{{svColumnHeight}}rpx"   bindscrolltolower="scrollToLower" >
                 <view>
                     <view class="column">
                     <block  wx:key="id" wx:for="{{notes.coloums1}}">
@@ -36,40 +37,10 @@
                         </view>
                         <view class="item-groups" wx:else>
                         <view class="item " bindtap="clickItem" data-type="person" data-item ="{{item }}" >
-                            <view class="item-header">
-                            <image   class="person-header-img"
-                                mode="aspectFill" src="{{item.avatar}}">
-                            </image> 
-                            <view class="person-nickname">{{item.nickName}}</view>
-                            <view class="person-distanct">{{item.meter}}</view>
-                            </view>
-                            <view class="clear"></view>
-                            <view class="item-body">
-                            <image   class="item-body-img" wx:if="{{item.photo}}"
-                                mode="aspectFill" src="{{item.photo}}">
-                            </image> 
-                            <view class="item-body-text" wx:if="{{item.content}}">
-                                {{item.content}} 
-                            </view>
-                            </view>
+                            <template is="note-item"  data="{{...item}}"/>
                         </view>
                         <view class="item item-after"  wx:if="{{item.commentnum>0}}" bindtap="clickItem" data-type="person" data-item ="{{item }}">
-                            <view class="item-header">
-                            <image   class="person-header-img"
-                                mode="aspectFill" src="{{item.avatar}}">
-                            </image> 
-                            <view class="person-nickname">{{item.nickName}}</view>
-                            <view class="person-distanct">{{item.meter}}</view>
-                            </view>
-                            <view class="clear"></view>
-                            <view class="item-body">
-                            <image   class="item-body-img" wx:if="{{item.photo}}"
-                                mode="aspectFill" src="{{item.photo}}">
-                            </image> 
-                            <view class="item-body-text" wx:if="{{item.content}}">
-                                {{item.content}} 
-                            </view>
-                            </view>
+                            <template is="note-item"  data="{{...item}}"/>
                         </view>
                         </view>
                     </block>
@@ -89,42 +60,12 @@
                         <text class="title">{{item.fdName}}</text>
                         </view>
                         <view class="item-groups" wx:else>
-                        <view class="item " bindtap="clickItem" data-type="person"  data-item ="{{item }}">
-                            <view class="item-header">
-                            <image   class="person-header-img"
-                                mode="aspectFill" src="{{item.avatar}}">
-                            </image> 
-                            <view class="person-nickname">{{item.nickName}}</view>
-                            <view class="person-distanct">{{item.meter}}</view>
+                            <view class="item " bindtap="clickItem" data-type="person"  data-item ="{{item }}">
+                            <template is="note-item"  data="{{...item}}"/>
                             </view>
-                            <view class="clear"></view>
-                            <view class="item-body">
-                            <image   class="item-body-img" wx:if="{{item.photo}}"
-                                mode="aspectFill" src="{{item.photo}}">
-                            </image> 
-                            <view class="item-body-text" wx:if="{{item.content}}">
-                                {{item.content}} 
+                            <view class="item item-after" bindtap="clickItem" data-type="person"  data-item ="{{item }}" wx:if="{{item.commentnum>0}}">
+                                <template is="note-item"  data="{{...item}}"/>
                             </view>
-                            </view>
-                        </view>
-                        <view class="item item-after" bindtap="clickItem" data-type="person"  data-item ="{{item }}" wx:if="{{item.commentnum>0}}">
-                            <view class="item-header">
-                            <image   class="person-header-img"
-                                mode="aspectFill" src="{{item.avatar}}">
-                            </image> 
-                            <view class="person-nickname">{{item.nickName}}</view>
-                            <view class="person-distanct">{{item.meter}}</view>
-                            </view>
-                            <view class="clear"></view>
-                            <view class="item-body">
-                            <image   class="item-body-img" wx:if="{{item.photo}}"
-                                mode="aspectFill" src="{{item.photo}}">
-                            </image> 
-                            <view class="item-body-text" wx:if="{{item.content}}">
-                                {{item.content}} 
-                            </view>
-                            </view>
-                        </view>
                         </view>
                     </block>
                     </view>  
@@ -138,9 +79,15 @@
                         <view class="loading-text">加载中...</view>
                     </view>
                 </view>
-            </scroll-view>
+                <view class="not-more"  wx:if="{{isLoadEmpty}}">
+                    没有更多纸条了，你也来写一纸留言吧~
+                </view>
+            </view>
         </view>
         <view class="clear"></view>
        
+    </view>
+    <view  wx:if="{{isFirstLoadEmpty}}" class="none-resp">
+        还没有纸条，贴一张试试~
     </view>
 </view>

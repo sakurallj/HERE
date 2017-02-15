@@ -7,11 +7,11 @@
                 </image> 
                 <view class="reply-option-content with-img">
                     <view class="reply-option-content-name">
-                        <view class="reply-option-content-name-name">{{item.name}}</view>
+                        <view class="reply-option-content-name-name text-ellipsis">{{item.name}}</view>
                         <view class="reply-option-content-name-name-tips">{{item.typeText}}</view>
                         <view class="clear"></view>
                     </view>
-                    <view class="reply-option-content-content">{{item.content}}</view>
+                    <view class="reply-option-content-content text-ellipsis">{{item.content}}</view>
                     <view class="reply-option-content-date">{{item.time}}</view>
                 </view>
                 <image   class="reply-option-img"

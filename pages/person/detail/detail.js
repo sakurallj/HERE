@@ -29,13 +29,15 @@ function loadNotes(that,callback){
       wx.hideToast();
     },
     success: function(res) {
-      console.log(res);          
+      console.log(res);       
+      var isLoadEmpty = res.data.data.length==0;   
       var notes = app.util.separateNotes(that,app,res.data.data),rawNotes=that.data.rawNotes;
       console.log(notes);
       Array.prototype.push.apply(rawNotes, res.data.data);
       that.setData({
         notes:notes,
         rawNotes:rawNotes,
+        isLoadEmpty:isLoadEmpty,
         hasMore:res.data.more&&res.data.more==1
       });
       if(typeof callback == "function")callback(res);
@@ -55,6 +57,8 @@ Page({
     userInfo:{
 
     },
+    isFirstLoadEmpty:false,
+    isLoadEmpty:false,
     svColumnHeight:false,
     rawNotes:[],
     hasMore:false,
@@ -93,7 +97,11 @@ Page({
         }
       });
       console.log(app.globalData.userInfo);
-      loadNotes(that);
+      loadNotes(that,function(res){
+        that.setData({
+          isFirstLoadEmpty:res.data.data&&res.data.data.length==0
+        });
+      });
     });
   },
   onReady:function(){
@@ -222,5 +230,13 @@ Page({
       });
     });
     
+  },
+  onReachBottom:function(){
+    if(!this.data.isLoadEmpty){
+      loadNotes(this);
+    }
+  },
+  loaded:function(event){
+    app.util.notesPhotoLoaded(this,app,event);
   }
 })

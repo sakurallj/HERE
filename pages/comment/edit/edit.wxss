@@ -5,7 +5,7 @@
 }
 .program-write{
     background-color: rgba(255, 255, 255, 0.9);
-    min-height: 600rpx;
+    min-height: 500rpx;
     padding: 36rpx 20rpx 24rpx 20rpx;
     box-shadow:0 1rpx 2rpx 0 rgba(0,0,0,0.30), inset 0 -1rpx 0 0 #ffffff;
 }
@@ -36,7 +36,7 @@
     line-height: 153.9rpx;
     border: 2rpx solid #666;
     font-size: 40rpx;
-    color: #999;
+    color: #b8b8b8;
     float: left;
     margin: 5rpx;
     margin-bottom: 13rpx;

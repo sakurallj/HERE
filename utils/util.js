@@ -138,7 +138,11 @@ function separateNotes(that,app,data){
     note.fdName = note.fdName ?note.fdName :"";
     note.nickName = note.nickName ?note.nickName :"";
     note.avatar = note.avatar ?note.avatar :app.globalData.defaultHeader;
+    note.isPhotoLoaded = false;
+    
     if(coloums1Heigth<=coloums2Heigth){
+      note.itemIndex = coloums1.length;
+      note.coloumsIndex =  1;
       coloums1.push(note);
       if(note.ispartner==1){
         coloums1Heigth += 360;//商家的高度 
@@ -152,6 +156,8 @@ function separateNotes(that,app,data){
       
     }
     else{
+      note.itemIndex = coloums2.length;
+      note.coloumsIndex =  2;
       coloums2.push(note);
       if(note.ispartner==1){
         coloums2Heigth += 360;//商家的高度 
@@ -172,6 +178,39 @@ function separateNotes(that,app,data){
     coloums2Heigth:coloums2Heigth//列高
   };
 }
+/**
+ * 判断是不是空的对象 {}  new Object()
+ */
+function isEmptyObject(obj){
+  for(var key in obj){
+     return false;
+   };
+   return true;
+}
+/**
+ * 处理 notes  图片 加载
+ */
+function notesPhotoLoaded(that,app,event){
+  var coloumsIndex = app.getValueFormCurrentTargetDataSet(event,"coloumsIndex"),
+      itemIndex = app.getValueFormCurrentTargetDataSet(event,"itemIndex"),
+      notes = that.data.notes;
+  if(coloumsIndex==1){
+    if(notes.coloums1[itemIndex]){
+      notes.coloums1[itemIndex].isPhotoLoaded = true;
+      that.setData({
+        notes:notes
+      });
+    }
+  }
+  else{
+    if(notes.coloums2[itemIndex]){
+      notes.coloums2[itemIndex].isPhotoLoaded = true;
+      that.setData({
+        notes:notes
+      });
+    }
+  }
+}
 module.exports = {
   formatTime: formatTime,
   getRandomKey:getRandomKey,
@@ -180,5 +219,7 @@ module.exports = {
   formatShowTimeText:formatShowTimeText,
   formatContentForServer:formatContentForServer,
   trim:trim,
-  separateNotes:separateNotes
+  separateNotes:separateNotes,
+  isEmptyObject:isEmptyObject,
+  notesPhotoLoaded:notesPhotoLoaded
 }

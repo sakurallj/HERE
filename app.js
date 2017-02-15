@@ -64,6 +64,7 @@ App({
     userToken:"",
     location:{},
     appVersion:"0.0.1",//本小程序版本
+    systemInfo:{},//系统信息
     url:{
       api:{
         pInfoList:apiDomain+"/noteapi/pinfolist",//商家纸条列表
@@ -208,5 +209,29 @@ App({
         }
       });
     }
+  },
+  getSystemInfo:function(){
+    var systemInfo = this.globalData.systemInfo;
+    if(util.isEmptyObject(systemInfo)){
+      systemInfo = wx.getSystemInfoSync();
+    }
+    return systemInfo;
+  },
+  /**
+   * rpx是px的多少倍   像素单位
+   */
+  getRpxAsPx:function(){
+    var systemInfo = this.getSystemInfo(),rpxAsPx=0;
+    if(systemInfo.windowWidth){
+      rpxAsPx = 750/systemInfo.windowWidth;
+    }
+    return rpxAsPx;
+  },
+  /**
+   * rpx to px 像素单位
+   */
+  rpxToPx:function(rpx,callback){
+    var rpxAsPx = this.getRpxAsPx(0);
+    return rpx/rpxAsPx;
   }
 });

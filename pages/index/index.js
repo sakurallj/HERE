@@ -34,6 +34,7 @@ function loadNotes(that,latitude,longitude,callback){
     },
     success: function(res) {
       console.log(res);
+      var isLoadEmpty = res.data.data.length==0;
       var notes = app.util.separateNotes(that,app,res.data.data),rawNotes=that.data.rawNotes;
       console.log(notes);
       Array.prototype.push.apply(rawNotes, res.data.data);
@@ -42,6 +43,7 @@ function loadNotes(that,latitude,longitude,callback){
         rawNotes:rawNotes,
         isShowLoadMore:false,
         isLastLoadDone:true,
+        isLoadEmpty:isLoadEmpty,
         hasMore:res.data.more&&res.data.more==1
       });
       if(typeof callback == "function")callback(res);
@@ -58,9 +60,12 @@ Page({
       coloums1Heigth:0,//列高
       coloums2Heigth:0//列高
     },
+    isFirstLoadEmpty:false,
+    scrollTop:0,
     rawNotes:[],
     isShowLoadMore:false,
     hasMore:false,
+    isLoadEmpty:false,
     isLastLoadDone:true,//上次加载是否完成
     svColumnHeight:100,//coloum的高
     headerDisplayType:"block"//
@@ -124,11 +129,7 @@ Page({
   },
   onLoad: function () {
     wx.removeStorageSync('comment_edit_message');
-    wx.showToast({
-      title: '加载中',
-      icon: 'loading',
-      duration: 10000
-    });
+   
     var that = this;
     wx.showNavigationBarLoading();
     //获得用户信息
@@ -142,8 +143,11 @@ Page({
         var speed = res.speed;
         var accuracy = res.accuracy;
         app.globalData.location = res;
-        loadNotes(that,latitude,longitude,function(){
+        loadNotes(that,latitude,longitude,function(res){
           wx.stopPullDownRefresh();
+          that.setData({
+            isFirstLoadEmpty:res.data.data&&res.data.data.length==0
+          });
         });
     });
     
@@ -207,12 +211,10 @@ Page({
         var accuracy = res.accuracy;
         app.globalData.location = res;
         loadNotes(that,latitude,longitude,function(){
-          setTimeout(function(){
-            wx.stopPullDownRefresh();
-            that.setData({
-              headerDisplayType:"block"
-            });
-          },1000);
+          wx.stopPullDownRefresh();
+          that.setData({
+            headerDisplayType:"block"
+          });
         });
     });
   },
@@ -225,9 +227,28 @@ Page({
     }
   },
   scroll:function(event){
-    console.log(event);
+    this.setData({  
+        scrollTop: event.detail.scrollTop  
+    });  
   },
   touchMove:function(event){
     console.log(event);
+  },
+  refresh:function(){
+    this.setData({  
+        scrollTop: 0  
+    });  
+    this.onPullDownRefresh();
+  },
+  onReachBottom:function(){
+    if(!this.data.isLoadEmpty){
+      loadNotes(this,app.globalData.location.latitude,app.globalData.location.longitude);
+    }
+  },
+  imageError:function(event){
+    console.log(event);
+  },
+  loaded:function(event){
+    app.util.notesPhotoLoaded(this,app,event);
   }
 })

@@ -1,3 +1,4 @@
+var bMap = require('../../lib/baidu/bmap-wx.min.js'); 
 var app = getApp();
 //保存服务端图片的路径
 var serverImagePaths = []; 
@@ -107,6 +108,34 @@ Page({
     shopId:""
   },
   onLoad:function(options){
+    var that = this;
+    var BMap = new bMap.BMapWX({ 
+        ak: 'EG3dC6I07FCQzZH9k4BMVDdl7QPOUlfK' 
+    }); 
+    BMap.regeocoding({ 
+        fail: function(res){
+          console.log(res);
+        }, 
+        success: function(res){
+          console.log(res);
+          var message = that.data.message;
+          if(res.originalData&&res.originalData.result){
+            var result = res.originalData.result;
+            if(result.poiRegions&&result.poiRegions.length>0){
+                message.address.name = result.poiRegions[0].name;
+            }
+            else if(result.addressComponent&&result.addressComponent.street){
+              message.address.name = result.addressComponent.street;
+            }
+            if(result.formatted_address){
+              message.address.address = result.formatted_address;
+            }
+            that.setData({
+              message:message
+            });
+          }
+        }
+    }); 
     // 页面初始化 options为页面跳转所带来的参数
     if(options.shopId){
       this.setData({

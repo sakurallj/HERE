@@ -55,7 +55,7 @@ page{
   height:32rpx;
 }
 .person-header{
-  border: 1px solid rgba(153,153,153,.6);
+  border: 1px solid rgba(153,153,153,.15);
 }
 .loading{
   display: inline-block;
@@ -73,5 +73,22 @@ page{
   float: left;
   padding-top: 5rpx;
 }
-
+.none-resp{
+    color:#999999;
+    text-align:center;
+    margin-top: 200rpx;
+    font-size:24rpx;
+}
  
+.not-more{
+  color:#999999;
+  text-align:center;
+  margin-top: 20rpx;
+  margin-bottom: 30rpx;
+  font-size:24rpx;
+}
+.text-ellipsis{
+  white-space:nowrap; 
+  overflow:hidden; 
+  text-overflow:ellipsis;
+}

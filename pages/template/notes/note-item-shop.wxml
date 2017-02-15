@@ -1,0 +1,15 @@
+
+<template name="note-item-shop">
+    <view class="distanct">
+        {{meter}}
+    </view>
+    <image   class="item-img {{isPhotoLoaded?'item-img-loaded':''}}"
+        mode="scaleToFill" src="{{fdLogo}}"  data-item-index="{{itemIndex}}" data-coloums-index="{{coloumsIndex}}" binderror="imageError" bindload="loaded">
+    </image> 
+    <image   class="item-img item-img-holder {{isPhotoLoaded?'item-img-holder-loaded':''}}"
+        mode="scaleToFill" src="/pages/images/img_160.jpg">
+    </image> 
+    <view class="footer">
+    </view>
+    <text class="title text-ellipsis">{{fdName}}</text>
+</template>

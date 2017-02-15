@@ -1,0 +1,23 @@
+<template name="note-item">
+    <view class="item-header">
+        <image   class="person-header-img person-header"
+            mode="aspectFill" src="{{avatar}}">
+        </image> 
+        <view class="person-nickname text-ellipsis">{{nickName}}</view>
+        <view class="person-distanct">{{meter}}</view>
+    </view>
+    <view class="clear"></view>
+    <view class="item-body">
+        <view>
+            <image   class="item-body-img {{isPhotoLoaded?'item-body-img-loaded':''}}" wx:if="{{photo}}"
+                mode="aspectFill" src="{{photo}}" binderror="imageError" bindload="loaded" data-item-index="{{itemIndex}}" data-coloums-index="{{coloumsIndex}}">
+            </image> 
+            <image   class="item-body-img item-body-img-holder {{isPhotoLoaded?'item-body-img-loaded-holder':''}}" wx:if="{{photo}}"
+                mode="aspectFit" src="/pages/images/img_300.jpg"  >
+            </image> 
+        </view>
+        <view class="item-body-text" wx:if="{{content}}">
+            {{content}} 
+        </view>
+    </view>
+</template>

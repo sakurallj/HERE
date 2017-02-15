@@ -1,5 +1,6 @@
 <!--index.wxml-->
-<import src="../template/header/header.wxml"/>
+<import src="../template/notes/note-item.wxml"/>
+<import src="../template/notes/note-item-shop.wxml"/>
 <view class="body"> 
   <view class="header"  >
     <image   class="warn-icon" bindtap="clickWarn"
@@ -13,57 +14,19 @@
     </image> 
   </view>
   <view class="clear"></view>
-  <scroll-view scroll-y="true" class="items"  style="height:{{svColumnHeight}}rpx"   bindscrolltolower="scrollToLower" bindscroll="scroll">
+  <view scroll-y="true" class="items" wx:if="{{notes.coloums1.length>0&&notes.coloums2.length>0}}" >
     <view>
       <view class="column">
         <block  wx:key="id" wx:for="{{notes.coloums1}}">
           <view class="item shop" wx:if="{{item.ispartner==1}}" bindtap="clickItem" data-type="shop"   data-item ="{{item }}">
-            <view class="distanct">
-              {{item.meter}}
-            </view>
-            <image   class="item-img"
-                  mode="scaleToFill" src="{{item.fdLogo}}">
-            </image> 
-            <view class="footer">
-            </view>
-            <text class="title">{{item.fdName}}</text>
+            <template is="note-item-shop"  data="{{...item}}"/>
           </view>
           <view class="item-groups" wx:else>
             <view class="item " bindtap="clickItem" data-type="person" data-item ="{{item }}" >
-              <view class="item-header">
-                <image   class="person-header-img person-header"
-                    mode="aspectFill" src="{{item.avatar}}">
-                </image> 
-                <view class="person-nickname">{{item.nickName}}</view>
-                <view class="person-distanct">{{item.meter}}</view>
-              </view>
-              <view class="clear"></view>
-              <view class="item-body">
-                <image   class="item-body-img" wx:if="{{item.photo}}"
-                    mode="aspectFill" src="{{item.photo}}">
-                </image> 
-                <view class="item-body-text" wx:if="{{item.content}}">
-                  {{item.content}} 
-                </view>
-              </view>
+              <template is="note-item"  data="{{...item}}"/>
             </view>
             <view class="item item-after"  wx:if="{{item.commentnum>0}}" bindtap="clickItem" data-type="person" data-item ="{{item }}">
-              <view class="item-header">
-                <image   class="person-header-img person-header"
-                    mode="aspectFill" src="{{item.avatar}}">
-                </image> 
-                <view class="person-nickname">{{item.nickName}}</view>
-                <view class="person-distanct">{{item.meter}}</view>
-              </view>
-              <view class="clear"></view>
-              <view class="item-body">
-                <image   class="item-body-img" wx:if="{{item.photo}}"
-                    mode="aspectFill" src="{{item.photo}}">
-                </image> 
-                <view class="item-body-text" wx:if="{{item.content}}">
-                  {{item.content}} 
-                </view>
-              </view>
+              <template is="note-item"  data="{{...item}}"/>
             </view>
           </view>
         </block>
@@ -72,52 +35,14 @@
         
         <block  wx:key="id" wx:for="{{notes.coloums2}}">
           <view class="item shop" wx:if="{{item.ispartner==1}}" bindtap="clickItem" data-type="shop"   data-item ="{{item }}">
-            <view class="distanct">
-              {{item.meter}}
-            </view>
-            <image   class="item-img"
-                  mode="scaleToFill" src="{{item.fdLogo}}">
-            </image> 
-            <view class="footer">
-            </view>
-            <text class="title">{{item.fdName}}</text>
+            <template is="note-item-shop"  data="{{...item}}"/>
           </view>
           <view class="item-groups" wx:else>
             <view class="item " bindtap="clickItem" data-type="person"  data-item ="{{item }}">
-              <view class="item-header">
-                <image   class="person-header-img person-header"
-                    mode="aspectFill" src="{{item.avatar}}">
-                </image> 
-                <view class="person-nickname">{{item.nickName}}</view>
-                <view class="person-distanct">{{item.meter}}</view>
-              </view>
-              <view class="clear"></view>
-              <view class="item-body">
-                <image   class="item-body-img" wx:if="{{item.photo}}"
-                    mode="aspectFill" src="{{item.photo}}">
-                </image> 
-                <view class="item-body-text" wx:if="{{item.content}}">
-                  {{item.content}} 
-                </view>
-              </view>
+              <template is="note-item"  data="{{...item}}"/>
             </view>
             <view class="item item-after" bindtap="clickItem" data-type="person"  data-item ="{{item }}" wx:if="{{item.commentnum>0}}">
-              <view class="item-header">
-                <image   class="person-header-img person-header"
-                    mode="aspectFill" src="{{item.avatar}}">
-                </image> 
-                <view class="person-nickname">{{item.nickName}}</view>
-                <view class="person-distanct">{{item.meter}}</view>
-              </view>
-              <view class="clear"></view>
-              <view class="item-body">
-                <image   class="item-body-img" wx:if="{{item.photo}}"
-                    mode="aspectFill" src="{{item.photo}}">
-                </image> 
-                <view class="item-body-text" wx:if="{{item.content}}">
-                  {{item.content}} 
-                </view>
-              </view>
+             <template is="note-item"  data="{{...item}}"/>
             </view>
           </view>
         </block>
@@ -132,5 +57,11 @@
         <view class="loading-text">加载中...</view>
       </view>
     </view>
-  </scroll-view>
+    <view class="not-more" wx:if="{{isLoadEmpty}}">
+      没有更多纸条了，你也来写一纸留言吧~
+    </view>
+  </view>
+  <view  wx:if="{{isFirstLoadEmpty}}" class="none-resp">
+    当前地区还没有纸条，贴一张试试~
+  </view>
 </view>
