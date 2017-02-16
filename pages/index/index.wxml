@@ -2,7 +2,7 @@
 <import src="../template/notes/note-item.wxml"/>
 <import src="../template/notes/note-item-shop.wxml"/>
 <view class="body"> 
-  <view class="header"  >
+  <view class="header" style="position:{{headerPosition}}" >
     <image   class="warn-icon" bindtap="clickWarn"
         mode="aspectFill" src="/pages/images/warn.png">
     </image> 

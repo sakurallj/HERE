@@ -11,6 +11,7 @@
   padding: 22rpx 17rpx 22rpx 17rpx;
   margin-bottom: 21rpx;
   overflow: hidden;
+  height: 100%;
 }
 .items .column{
   margin-top: 29rpx;
@@ -163,4 +164,19 @@ item-body{
 .item-img-holder-loaded{
   opacity: 0;
   transition: opacity 0.5s linear 1s;
+}
+.item-body-text-g {
+  margin-right:0rpx;
+  display: inline;
+  word-wrap:break-word;
+}
+.item-body-text-g:last-child{
+  margin-right: 0;
+}
+
+.item-body-text-2{
+  font-size: 36rpx;
+}
+.item-body-text-3{
+  font-size: 45rpx;
 }

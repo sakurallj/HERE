@@ -9,14 +9,20 @@
     <view class="clear"></view>
     <view class="item-body">
         <view>
+        <!--
             <image   class="item-body-img {{isPhotoLoaded?'item-body-img-loaded':''}}" wx:if="{{photo}}"
                 mode="aspectFill" src="{{photo}}" binderror="imageError" bindload="loaded" data-item-index="{{itemIndex}}" data-coloums-index="{{coloumsIndex}}">
             </image> 
             <image   class="item-body-img item-body-img-holder {{isPhotoLoaded?'item-body-img-loaded-holder':''}}" wx:if="{{photo}}"
                 mode="aspectFit" src="/pages/images/img_300.jpg"  >
-            </image> 
+            </image> -->
         </view>
-        <view class="item-body-text" wx:if="{{content}}">
+        <view class="item-body-text " style="max-height:{{contentar.length>1?140:132}}rpx" wx:if="{{contentar.length>0}}">
+            <block wx:for="{{contentar}}">
+                <view class="item-body-text-g item-body-text-{{item.size}}">{{item.word}}</view>
+            </block>
+        </view>
+        <view class="item-body-text" wx:elif="{{content}}">
             {{content}} 
         </view>
     </view>

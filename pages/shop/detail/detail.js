@@ -125,6 +125,7 @@ Page({
         avatar:app.globalData.userInfo.avatarUrl,
         commentnum:"0",
         content:res.content,
+        contentar:res.contentar,
         fdNoteOpenID:"",
         id:res.id,
         latitude:app.globalData.location.latitude,

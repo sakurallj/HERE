@@ -1,12 +1,8 @@
 // pages/message/message.js
 var app = getApp();
-function loadMessage(that){
+function loadMessage(that,callback){
   wx.hideToast();
-  wx.showToast({
-    title: '加载中',
-    icon: 'loading',
-    duration: 10000
-  });
+   
   app.doLogin(function(){
     that.pageNum +=1;
     var data = {
@@ -24,32 +20,39 @@ function loadMessage(that){
       },
       success: function(res) {
         console.log(res);
-        var data = res.data.data,len = data.length,messages=[];
-        for(var i=0;i<len;i++){
+        var data = res.data.data,len = data.length?data.length:0,messages=[];
+        if(len==0){
+          that.setData({
+            isLoadEmpty:true
+          });
+        }
+        for(var i=0,j=0;i<len;i++){
           var m = data[i];
-          messages[i] = {
+          if(m["action"]!=0){
+            continue;
+          }
+          messages[j++] = {
             name:m["nickname"]?m["nickname"]:"",
             headerImage:m["avatar"]?m["avatar"]:app.globalData.defaultHeader,
             type:m["action"]==0?"reply":"like",//0 回复 1点赞
-            typeText:m["action"]==0?"回应了你的纸条":"摁了你的纸条",//0 回复 1点赞,
+            typeText:m["action"]==0?"回应了你的纸条":"钉住了你的纸条",//0 回复 1点赞,
             time:app.util.formatShowTimeText(m["addTime"]),
             contentImage:m["infosrc"],
             content:m["comment"]?m["comment"]:"",
-            infoId:m["infoid"]
+            infoId:m["infoid"],
+            isLoaded:false
           };
         }
-        if(res.data.total&&res.data.total-(that.pageNum*app.globalData.noticePageSize)>0){
-            that.setData({
-            isShowLoadMore:true
-          });
-        }
+ 
         var oldMessages = that.data.messages;
         Array.prototype.push.apply(oldMessages, messages);
         that.setData({
           messages:oldMessages,
-          isShowLoadMore:res.data.more&&res.data.more==1
+          hasMore:res.data.more&&res.data.more==1
         });
+        if(typeof callback == "function")callback(res);
         wx.hideToast();
+        wx.hideNavigationBarLoading();
       }
     });
   });
@@ -58,11 +61,22 @@ Page({
   data:{
     messages:[
     ],
-    isShowLoadMore:false
+    isLoadEmpty:false,
+    isFirstLoadEmpty:false,
+    hasMore:false
   },
   pageNum:0,
   onLoad:function(options){
-    loadMessage(this);
+    var that = this;
+    wx.showNavigationBarLoading();
+    loadMessage(this,function(res){
+      var len = res.data.data.length ;
+      if(len==0){
+        that.setData({
+          isFirstLoadEmpty:true
+        });
+      }
+    });
   },
   onReady:function(){
     // 页面渲染完成
@@ -85,5 +99,36 @@ Page({
     wx.navigateTo({
       url: '/pages/comment/pdetail/pdetail?id='+item.infoId
     });
+  },
+  onReachBottom:function(){
+    if(!this.data.isLoadEmpty){
+      loadMessage(this);
+    }
+  },
+  onPullDownRefresh:function(){
+    this.setData({
+      messages:[
+      ],
+      isLoadEmpty:false,
+      hasMore:false
+    });
+    this.pageNum=0;
+    wx.showNavigationBarLoading();
+    loadMessage(this,function(res){
+      wx.stopPullDownRefresh();
+    });
+  },
+  imageError:function(event){
+  },
+  loaded:function(event){
+     var itemIndex = app.getValueFormCurrentTargetDataSet(event,"itemIndex");
+     var messages = this.data.messages;
+     console.log(itemIndex);
+     if(messages[itemIndex]){
+       messages[itemIndex].isLoaded = true;
+      this.setData({
+        messages:messages
+      });
+     }
   }
 })

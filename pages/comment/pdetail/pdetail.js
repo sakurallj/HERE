@@ -100,7 +100,7 @@ Page({
             isShow:false
           }
         }
-        res.data.data.meter = options.meter;
+        res.data.data.meter = options.meter||options.meter==0?options.meter:'';
         res.data.data.nickName = res.data.data.nickName ?res.data.data.nickName :"";
         res.data.data.avatar = res.data.data.avatar ?res.data.data.avatar :app.globalData.defaultHeader;
         that.setData({
@@ -216,6 +216,12 @@ Page({
               message:message
             });
           }
+          wx.showToast({
+            title: '回应成功',
+            icon: 'success',
+            duration: 2000
+          });
+        
           that.setData({
             placeholder:"写点什么~",
             focus:false,
@@ -225,12 +231,8 @@ Page({
             bodyBgColor:"auto",
             bodyHeight:"auto"
           });
-          wx.hideToast();
-          wx.showToast({
-            title: '回应成功',
-            icon: 'success',
-            duration: 2000
-          });
+          
+          
         }
       });
     });

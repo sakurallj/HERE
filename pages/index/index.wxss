@@ -75,5 +75,9 @@
     text-align:center;
     display: block;
 }
+.items{
+  border-top: 90rpx solid #39383d;
+  margin-top: -1rpx;
+}
  
  

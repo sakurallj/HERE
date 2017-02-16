@@ -10,7 +10,7 @@
                     <view class="detail-main-header-name text-ellipsis">{{message.nickName}}</view>
                     <view class="detail-main-header-date">{{message.addTimestr}}</view>
                 </view>
-                <view class="detail-main-header-range">{{message.meter}}</view>
+                <view class="detail-main-header-range" wx:if="{{message.meter&&message.meter!='undefined'}}">{{message.meter}}</view>
                 <view class="clear"></view>
             </view>
             <!--单图时候-->

@@ -100,12 +100,13 @@ function formatShowText(str){
 /**
  * 分割notes成两列
  */
-function separateNotes(that,app,data){
+function separateNotes(that,app,data,isRefresh){
+  console.log(isRefresh);
   var length = data.length,
-  coloums1Heigth=that.data.notes.coloums1Heigth,
-  coloums2Heigth=that.data.notes.coloums2Heigth,
-  coloums1=that.data.notes.coloums1,
-  coloums2=that.data.notes.coloums2;           
+  coloums1Heigth=isRefresh?0:that.data.notes.coloums1Heigth,
+  coloums2Heigth=isRefresh?0:that.data.notes.coloums2Heigth,
+  coloums1=isRefresh?[]:that.data.notes.coloums1,
+  coloums2=isRefresh?[]:that.data.notes.coloums2;           
   for(var i=0;i<length;i++){
     //note 结构
     //"id": "195", 
@@ -134,6 +135,9 @@ function separateNotes(that,app,data){
       }
       line=line>3?3:line;
       textHeight = line*44;
+    }
+    if(!note.content&&note.ispartner!=1){
+      continue;
     }
     note.fdName = note.fdName ?note.fdName :"";
     note.nickName = note.nickName ?note.nickName :"";

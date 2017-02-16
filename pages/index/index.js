@@ -1,7 +1,23 @@
 //index.js
 //获取应用实例
 var app = getApp();
- 
+function loadedNotes(that,res){
+  
+  var isLoadEmpty = res.data.data.length==0;
+  var notes = app.util.separateNotes(that,app,res.data.data,that.isRefresh),rawNotes=that.data.rawNotes;
+  console.log(notes);
+  Array.prototype.push.apply(rawNotes, res.data.data);
+  that.setData({
+    notes:notes,
+    rawNotes:rawNotes,
+    isShowLoadMore:false,
+    isLastLoadDone:true,
+    isLoadEmpty:isLoadEmpty,
+    hasMore:res.data.more&&res.data.more==1
+  });
+  wx.hideToast();
+  wx.hideNavigationBarLoading();
+}
 function loadNotes(that,latitude,longitude,callback){
   if(!that.data.isLastLoadDone){
     return "";
@@ -33,22 +49,7 @@ function loadNotes(that,latitude,longitude,callback){
       if(typeof callback == "function")callback(res);
     },
     success: function(res) {
-      console.log(res);
-      var isLoadEmpty = res.data.data.length==0;
-      var notes = app.util.separateNotes(that,app,res.data.data),rawNotes=that.data.rawNotes;
-      console.log(notes);
-      Array.prototype.push.apply(rawNotes, res.data.data);
-      that.setData({
-        notes:notes,
-        rawNotes:rawNotes,
-        isShowLoadMore:false,
-        isLastLoadDone:true,
-        isLoadEmpty:isLoadEmpty,
-        hasMore:res.data.more&&res.data.more==1
-      });
       if(typeof callback == "function")callback(res);
-      wx.hideToast();
-      wx.hideNavigationBarLoading();
     }
   });
 }
@@ -66,10 +67,12 @@ Page({
     isShowLoadMore:false,
     hasMore:false,
     isLoadEmpty:false,
+    isRefresh:false,
     isLastLoadDone:true,//上次加载是否完成
     svColumnHeight:100,//coloum的高
     headerDisplayType:"block"//
   },
+  isRefresh:false,
   pageNum:0,
   //事件处理函数
   bindViewTap: function() {
@@ -97,6 +100,7 @@ Page({
         avatar:app.globalData.userInfo.avatarUrl,
         commentnum:"0",
         content:res.content,
+        contentar:res.contentar,
         fdNoteOpenID:"",
         id:res.id,
         latitude:app.globalData.location.latitude,
@@ -144,6 +148,7 @@ Page({
         var accuracy = res.accuracy;
         app.globalData.location = res;
         loadNotes(that,latitude,longitude,function(res){
+          loadedNotes(that,res);
           wx.stopPullDownRefresh();
           that.setData({
             isFirstLoadEmpty:res.data.data&&res.data.data.length==0
@@ -186,16 +191,7 @@ Page({
     loadNotes(this,app.globalData.location.latitude,app.globalData.location.longitude);
   },
   onPullDownRefresh:function(){
-    this.setData({
-      notes:{
-        coloums1:[],
-        coloums2:[],
-        coloums1Heigth:0,//列高
-        coloums2Heigth:0//列高
-      },
-      isShowLoadMore:false,
-      headerDisplayType:"none"
-    });
+    this.isRefresh = true;
     this.pageNum=0;
   
     var that = this;
@@ -210,7 +206,14 @@ Page({
         var speed = res.speed;
         var accuracy = res.accuracy;
         app.globalData.location = res;
-        loadNotes(that,latitude,longitude,function(){
+        
+        loadNotes(that,latitude,longitude,function(res){
+          that.setData({
+            isShowLoadMore:false,
+            headerDisplayType:"none"
+          });
+          loadedNotes(that,res);
+          that.isRefresh = false;
           wx.stopPullDownRefresh();
           that.setData({
             headerDisplayType:"block"
@@ -241,8 +244,11 @@ Page({
     this.onPullDownRefresh();
   },
   onReachBottom:function(){
+    var that = this;
     if(!this.data.isLoadEmpty){
-      loadNotes(this,app.globalData.location.latitude,app.globalData.location.longitude);
+      loadNotes(this,app.globalData.location.latitude,app.globalData.location.longitude,function(res){
+        loadedNotes(that,res);
+      });
     }
   },
   imageError:function(event){

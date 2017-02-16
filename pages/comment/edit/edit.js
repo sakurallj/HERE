@@ -18,7 +18,6 @@ function uploadImages(images,callback){
         console.log(res);
         var data = JSON.parse(res.data);
         serverImagePaths[serverImagePaths.length] = data.data;
-        wx.hideToast();
         wx.showToast({
           title: '上传图片中',
           icon: 'loading',
@@ -40,7 +39,6 @@ function sendMessage(that,message){
   serverImagePaths = [];//serverImagePaths是此js的全局变量，这里要清空 服务端图片的路径 如果不清空会把上次发表的图片也加进来
   app.doLogin(function(){
     //上传图片
-    wx.hideToast();
     wx.showToast({
       title: '上传图片中',
       icon: 'loading',
@@ -48,7 +46,6 @@ function sendMessage(that,message){
     });
     uploadImages(message.images,function(images){
       //发送纸条
-      wx.hideToast();
       wx.showToast({
         title: '发表中',
         icon: 'loading',
@@ -81,6 +78,7 @@ function sendMessage(that,message){
           else{
             console.log(11212221);
             rawData.id = res.data.id;
+            rawData.contentar = res.data.contentar;
             console.log(rawData);
             wx.setStorageSync("comment_edit_message",rawData);
             wx.hideToast();
@@ -210,16 +208,17 @@ Page({
      //数据校验
     //判断是否有图片或评论
     message.content = app.util.trim(message.content);
-    if(!message.content&&message.images.length==0){
+    if(!message.content){
       wx.showModal({
         title: '',
-        content: '请输入要发表的文字或图片',
+        content: '贴空白纸条是没有意义的，请先写好内容~',
         showCancel:false,
         confirmColor:app.globalData.confirmColor,
         success: function(res) {}
       });
       return;
     }
+ 
     wx.showToast({
       title: '发表中',
       icon: 'loading',

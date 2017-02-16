@@ -34,7 +34,7 @@
     height: 153.9rpx;
     text-align: center;
     line-height: 153.9rpx;
-    border: 2rpx solid #666;
+    border: 2rpx solid #b8b8b8;
     font-size: 40rpx;
     color: #b8b8b8;
     float: left;

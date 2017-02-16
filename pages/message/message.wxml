@@ -14,18 +14,29 @@
                     <view class="reply-option-content-content text-ellipsis">{{item.content}}</view>
                     <view class="reply-option-content-date">{{item.time}}</view>
                 </view>
-                <image   class="reply-option-img"
+                <image  wx:if="{{item.contentImage}}"  class="reply-option-img {{item.isLoaded?'reply-option-img-loaded':''}}"   binderror="imageError" bindload="loaded"  data-item-index="{{index}}"
                     mode="scaleToFill" src="{{item.contentImage}}">
                 </image> 
+                <image    wx:if="{{item.contentImage}}"  class="reply-option-img reply-option-img-holder {{item.isLoaded?'reply-option-img-holder-loaded':''}}"
+                    mode="scaleToFill" src="/pages/images/img_120.jpg">
+                </image>
                 <view class="clear"></view>
             </view>
             
         </view>
-        <view wx:if="{{!messages ||messages.length<=0}}" class="none-resp">
+        <view wx:if="{{isFirstLoadEmpty}}" class="none-resp">
             暂时还没有回应，先发一张纸条试试吧~
         </view>
-        <view class="reply-more"  bindtap="loadMore" wx:if="{{messages &&messages.length>0&&isShowLoadMore}}">
-            点击加载更多
+        <view class="reply-more"  bindtap="loadMore" wx:if="{{hasMore}}" >
+            <view class="loading">
+                <image   class="loading-icon" 
+                mode="aspectFill" src="/pages/images/loading.gif">
+                </image> 
+                <view class="loading-text">加载中...</view>
+            </view>
+        </view>
+        <view class="not-more" wx:if="{{!isFirstLoadEmpty&&isLoadEmpty}}">
+            暂无更多回应~
         </view>
     </view>
 </view>

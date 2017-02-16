@@ -49,7 +49,7 @@
 
 
 .detail-main{
-    margin-top: 20rpx;
+ 
     box-sizing: border-box;
 }
 

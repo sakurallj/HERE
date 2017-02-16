@@ -195,9 +195,6 @@ Page({
         url: '/pages/comment/pdetail/pdetail?id='+item.id+"&meter="+item.meter
       });
     }
-    wx.navigateTo({
-      url: '/pages/comment/pdetail/pdetail'
-    });
   },
   loadMore:function(){
     loadNotes(this);
