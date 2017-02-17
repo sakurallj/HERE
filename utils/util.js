@@ -81,21 +81,38 @@ function isChinese(str){  //
     return !reCh.test(str);  
 }  
 /**
- * 判断文本长度
+ * 获得文本长度
  */
-function formatShowText(str){  
-    var showStr="",len=str.length,strlen=0;  
-    var txtval =  trim(str);  
-    for(var i=0;i<len;i++){  
-     if(isChinese(txtval.charAt(i))==true){  
+function textLength(str){
+  var strlen = 0,len=str.length,txtval =  trim(str);
+  for(var i=0;i<len;i++){  
+    if(isChinese(txtval.charAt(i))==true){  
       strlen=strlen+1;//中文为1个字符  
-     }else{  
+    }else{  
       strlen=strlen+0.5;//英文0.5个字符  
-     } 
-     if(strlen>29){
-       return str.substring(0,i)+"...";
-     } 
-    }  
+    } 
+  }  
+  return strlen;
+}
+/**
+ * 截取文本
+ */
+function formatShowText(str,sLen){  
+  if(sLen==0){
+    return "...";
+  }
+  var showStr="",len=str.length,strlen=0,sLen = sLen?sLen:29;  
+  var txtval =  trim(str);  
+  for(var i=0;i<len;i++){  
+    if(isChinese(txtval.charAt(i))==true){  
+    strlen=strlen+1;//中文为1个字符  
+    }else{  
+    strlen=strlen+0.5;//英文0.5个字符  
+    } 
+    if(strlen>sLen){
+      return str.substring(0,i)+"...";
+    } 
+  }  
 }  
 /**
  * 分割notes成两列
@@ -124,6 +141,7 @@ function separateNotes(that,app,data,isRefresh){
         note.content = app.util.decodeUTF8(note.content);
     }
     var textHeight = 0;
+    //计算行数 文本高度 及 截取文本
     if(note.content){
       var rawLen = note.content?note.content.length:0
         ,ascllLen = app.util.getAscllLength(note.content);
@@ -131,11 +149,26 @@ function separateNotes(that,app,data,isRefresh){
       var line = Math.ceil((trueLen*28)/304);
       if(line>3){
         note.content = formatShowText(note.content);
-        console.log(note.content);
+        //处理分词的文本
+        if(note.contentar){
+          var contentar = note.contentar, contentarLen = contentar.length,tmpContent = "",tmpContentLength = 0;
+          for(var tI = 0;tI<contentarLen;tI++){
+            var tmpLength =textLength(contentar[tI].word);
+            if(tmpContentLength+tmpLength>25){
+              var sLen = 25-tmpContentLength;
+              contentar[tI].word = formatShowText(contentar[tI].word,sLen);
+              note.contentar = contentar.splice(0,tI+1);
+              break;
+            }
+            tmpContentLength+=tmpLength;
+          }
+        }
       }
       line=line>3?3:line;
-      textHeight = line*44;
+      textHeight = line*47;
     }
+    
+    //没有文本则不展示 出 商家外
     if(!note.content&&note.ispartner!=1){
       continue;
     }
@@ -143,13 +176,15 @@ function separateNotes(that,app,data,isRefresh){
     note.nickName = note.nickName ?note.nickName :"";
     note.avatar = note.avatar ?note.avatar :app.globalData.defaultHeader;
     note.isPhotoLoaded = false;
+    note.isShow = true;
+    //处理距离
     
     if(coloums1Heigth<=coloums2Heigth){
       note.itemIndex = coloums1.length;
       note.coloumsIndex =  1;
       coloums1.push(note);
       if(note.ispartner==1){
-        coloums1Heigth += 360;//商家的高度 
+        coloums1Heigth += 375;//商家的高度 
       }
       else{
         if(note.photo){
@@ -164,7 +199,7 @@ function separateNotes(that,app,data,isRefresh){
       note.coloumsIndex =  2;
       coloums2.push(note);
       if(note.ispartner==1){
-        coloums2Heigth += 360;//商家的高度 
+        coloums2Heigth += 375;//商家的高度 
       }
       else{
         if(note.photo){
@@ -173,7 +208,6 @@ function separateNotes(that,app,data,isRefresh){
         coloums2Heigth+= textHeight+119;//119为item最小高度 textHeight为文字高度
       }
     }
-    console.log(coloums1Heigth+">>"+coloums2Heigth);
   }
   return {
     coloums1:coloums1,

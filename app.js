@@ -6,32 +6,30 @@ var apiDomain = "https://api.900here.com";
  * 登录服务器
  * 返回 Promise 
  */
-function loginForServer(app,userInfo){
-  return new Promise(function(resolve, reject) {
-    var data={
-      openid:app.globalData.userOpenId,
-      sitefrom:"weixin",
-      nickname:userInfo.nickName,
-      gtcid:"",
-      from:"miniApp",
-      version:app.globalData.appVersion,
-      mac:"",
-      profile:userInfo.avatarUrl    
-    }, data = app.getAPISign(data);
-    wx.request({
-      url:app.globalData.url.api.ologin,
-      method:"GET",
-      data:data,
-      fail:function(res){
-        reject(res);
-      },
-      success: function(res) {
-        console.log(res);
-        app.globalData.userToken = res.data.token;
-        app.globalData.userServerOpenId = res.data.data.openid;
-        resolve(res);
-      }
-    });
+function loginForServer(app,userInfo,callback){
+  var data={
+    openid:app.globalData.userOpenId,
+    sitefrom:"weixin",
+    nickname:userInfo.nickName,
+    gtcid:"",
+    from:"miniApp",
+    version:app.globalData.appVersion,
+    mac:"",
+    profile:userInfo.avatarUrl    
+  }, data = app.getAPISign(data);
+  wx.request({
+    url:app.globalData.url.api.ologin,
+    method:"GET",
+    data:data,
+    fail:function(res){
+      typeof callback == "function" && callback(res);
+    },
+    success: function(res) {
+      console.log(res);
+      app.globalData.userToken = res.data.token;
+      app.globalData.userServerOpenId = res.data.data.openid;
+      typeof callback == "function" && callback(res);
+    }
   });
 }
 App({
@@ -168,10 +166,10 @@ App({
     //判断是否有openid
     else if(that.globalData.userOpenId){
       //重新向服务器登录
-      loginForServer(that,that.globalData.userInfo).then(function(res){
+      loginForServer(that,that.globalData.userInfo,function(res){
         console.log(res);
         if(typeof callback == "function")callback(that.globalData.userToken);
-      },function(res){});
+      });
     }
     else{
       //先微信登录在登录服务器
@@ -197,10 +195,10 @@ App({
                   that.globalData.userInfo = res.userInfo;
                   console.log(res);
                   //登录服务器
-                  loginForServer(that,res.userInfo).then(function(res){
+                  loginForServer(that,res.userInfo,function(res){
                     console.log(res);
                     if(typeof callback == "function")callback(that.globalData.userToken);
-                  },function(res){console.log(res);});
+                  });
                 }
               });
             }

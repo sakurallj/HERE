@@ -48,7 +48,11 @@
   text-align:rigth;
   float: left;
   margin: 8rpx 0rpx 8rpx 20rpx;
-  width: 54rpx;
+  width: 53rpx;
+ }
+ .person-distanct-text{
+   float: rigth;
+   text-align:rigth;
  }
 .shop .distanct{
    position: absolute;
@@ -118,9 +122,9 @@ item-body{
 }
  
 .item-delete-text{
-  color:#0000CC;
-  font-size: 16rpx;
-  width:49rpx;
+  color:#bbbbbb;
+  font-size: 28rpx;
+  width:62rpx;
   margin-left: -17rpx;
   padding-left: 17rpx;
   margin-top: 10rpx;
@@ -179,4 +183,10 @@ item-body{
 }
 .item-body-text-3{
   font-size: 45rpx;
+}
+.space-text{
+  display: inline-block;
+ 
+  width: 10rpx;
+  height: 5rpx;
 }

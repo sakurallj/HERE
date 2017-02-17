@@ -26,9 +26,14 @@ function loadNotes(that,callback){
     success: function(res) {
       console.log(res);
       var isLoadEmpty = res.data.data.length==0;
-      var notes = app.util.separateNotes(that,app,res.data.data),rawNotes=that.data.rawNotes;
+      var notes = app.util.separateNotes(that,app,res.data.data,that.isRefresh),rawNotes=that.data.rawNotes;
       console.log(notes);
-      Array.prototype.push.apply(rawNotes, res.data.data);
+      if(that.isRefresh){
+        rawNotes = res.data.data;
+      }
+      else{
+        Array.prototype.push.apply(rawNotes, res.data.data);
+      }
       that.setData({
         notes:notes,
         rawNotes:rawNotes,
@@ -62,6 +67,7 @@ Page({
     svColumnHeight:0,
     isShowLoadMore:false
   },
+  isRefresh:false,
   pageNum:0,
   onLoad:function(options){
     //清楚残余的上次发表的纸条
@@ -201,16 +207,7 @@ Page({
     }
   },
   onPullDownRefresh:function(){
-    this.setData({
-      notes:{
-        coloums1:[],
-        coloums2:[],
-        coloums1Heigth:0,//列高
-        coloums2Heigth:0//列高
-      },
-      isShowLoadMore:false,
-      headerDisplayType:"none"
-    });
+    this.isRefresh = true;
     this.pageNum=0;
   
     var that = this;
@@ -219,6 +216,7 @@ Page({
     //调用登录接口
     app.doLogin(function(){
       loadNotes(that,function(){
+        that.isRefresh = false;
         wx.stopPullDownRefresh();
       });
     });

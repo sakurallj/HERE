@@ -53,6 +53,7 @@ Page({
     isShowLoadMore:false,
     images:[],
     showImages:[],
+    isShowTypewriting:false,//是否展示输入法
     id:"",//纸条id
     app:app,
     bodyBgColor:"auto",
@@ -129,6 +130,7 @@ Page({
   },
   onShow:function(){
     // 页面显示
+ 
   },
   onHide:function(){
     // 页面隐藏
@@ -163,13 +165,6 @@ Page({
   sendComment:function(){
     var commentInputValue = this.data.commentInputValue;
     if(!commentInputValue){
-      wx.showModal({
-        title: '',
-        content: '请输回复内容',
-        showCancel:false,
-        confirmColor:app.globalData.confirmColor,
-        success: function(res) {}
-      });
       return;
     }
     var that = this;
@@ -229,7 +224,8 @@ Page({
             currentResp:{},
             initInputValue:"",
             bodyBgColor:"auto",
-            bodyHeight:"auto"
+            bodyHeight:"auto",
+            commentInputValue:""
           });
           
           
@@ -247,6 +243,15 @@ Page({
         focus:true,
         isReplyResp:true,
         currentResp:resp,
+        initInputValue:""
+      });
+    }
+    else if(currentResp.id==resp.id){
+      this.setData({
+        placeholder:"写点什么~",
+        focus:false,
+        isReplyResp:false,
+        currentResp:{},
         initInputValue:""
       });
     }
@@ -288,5 +293,18 @@ Page({
         showImages:showImages
       });
     }
+  },
+  scroll:function(res){
+    console.log(res);
+  },
+  bindBlur:function(){
+    this.setData({
+      isShowTypewriting:false
+    });
+  },
+  bindfocus:function(){
+    this.setData({
+      isShowTypewriting:true
+    });
   }
 });

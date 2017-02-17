@@ -4,7 +4,18 @@
             mode="aspectFill" src="{{avatar}}">
         </image> 
         <view class="person-nickname text-ellipsis">{{nickName}}</view>
-        <view class="person-distanct">{{meter}}</view>
+        <view class="person-distanct">
+            <block wx:if="{{meter.length==3}}">
+                <view class="space-text"></view>{{meter}}
+            </block>
+            <block wx:elif="{{meter.length==2}}">
+                <view class="space-text"></view><view class="space-text"></view>{{meter}}
+            </block>
+            <block wx:elif="{{meter.length==1}}">
+                <view class="space-text"></view><view class="space-text"></view><view class="space-text"></view>{{meter}}
+            </block>
+            <block wx:else>{{meter}}</block>
+        </view>
     </view>
     <view class="clear"></view>
     <view class="item-body">
@@ -24,6 +35,9 @@
         </view>
         <view class="item-body-text" wx:elif="{{content}}">
             {{content}} 
+        </view>
+        <view class="item-delete-text" wx:if="{{isMy}}" catchtap="deleteNote"  data-id="{{id}}" data-index="{{itemIndex}}" data-column-num="{{coloumsIndex}}">
+            删除
         </view>
     </view>
 </template>

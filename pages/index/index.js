@@ -6,7 +6,12 @@ function loadedNotes(that,res){
   var isLoadEmpty = res.data.data.length==0;
   var notes = app.util.separateNotes(that,app,res.data.data,that.isRefresh),rawNotes=that.data.rawNotes;
   console.log(notes);
-  Array.prototype.push.apply(rawNotes, res.data.data);
+  if(that.isRefresh){
+    rawNotes = res.data.data;
+  }
+  else{
+    Array.prototype.push.apply(rawNotes, res.data.data);
+  }
   that.setData({
     notes:notes,
     rawNotes:rawNotes,
@@ -67,7 +72,6 @@ Page({
     isShowLoadMore:false,
     hasMore:false,
     isLoadEmpty:false,
-    isRefresh:false,
     isLastLoadDone:true,//上次加载是否完成
     svColumnHeight:100,//coloum的高
     headerDisplayType:"block"//
@@ -147,7 +151,7 @@ Page({
         var speed = res.speed;
         var accuracy = res.accuracy;
         app.globalData.location = res;
-        loadNotes(that,latitude,longitude,function(res){
+        loadNotes(that,latitude,longitude,function(res){ 
           loadedNotes(that,res);
           wx.stopPullDownRefresh();
           that.setData({

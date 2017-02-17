@@ -20,7 +20,7 @@
             </view>
         </view>
         <view class="detail-main">
-             <view scroll-y="true" class="items"  style="height:{{svColumnHeight}}rpx"   bindscrolltolower="scrollToLower" >
+             <view scroll-y="true" class="items" >
                 <view>
                     <view class="column">
                     <block  wx:key="id" wx:for="{{notes.coloums1}}">
@@ -79,7 +79,7 @@
                         <view class="loading-text">加载中...</view>
                     </view>
                 </view>
-                <view class="not-more"  wx:if="{{isLoadEmpty}}">
+                <view class="not-more"  wx:if="{{!isFirstLoadEmpty&&isLoadEmpty}}">
                     没有更多纸条了，你也来写一纸留言吧~
                 </view>
             </view>
@@ -87,7 +87,7 @@
         <view class="clear"></view>
        
     </view>
-    <view  wx:if="{{isFirstLoadEmpty}}" class="none-resp">
+    <view  wx:if="{{isFirstLoadEmpty&&notes.coloums1.length==0&&notes.coloums2.length==0}}" class="none-resp">
         还没有纸条，贴一张试试~
     </view>
 </view>

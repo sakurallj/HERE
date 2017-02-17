@@ -1,4 +1,15 @@
 /* pages/comment/pdetail/pdetail.wxss */
+.body-margin-top{
+    margin-top: 490rpx;
+    transition: margin-top 0.4s;
+    opacity: 1;
+}
+.body-margin-top-transition-1{
+    transition: margin-top 0.2s;
+}
+.body{
+    
+}
 .content{
     padding-bottom: 124rpx;
 }
@@ -119,6 +130,7 @@
     height:104rpx;
     padding: 25rpx 30rpx 0 30rpx;
     box-sizing: border-box;
+    z-index: 99;
 }
 .detail-input{
     background:#ffffff;
@@ -232,4 +244,8 @@ swiper {
 .store-main-im-holder-loaded{
   opacity: 0;
   transition: opacity 0.5s linear 1s;
+}
+
+.cannot-send{
+    color:#999999;
 }

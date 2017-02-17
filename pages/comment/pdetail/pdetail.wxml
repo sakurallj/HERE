@@ -1,6 +1,6 @@
 <!--pages/comment/pdetail/pdetail.wxml-->
-<view class="body" style="background-color: {{bodyBgColor}};height:{{bodyHeight}};">
-    <view class="content">
+<view class="body {{isShowTypewriting?'body-margin-top':'body-margin-top-transition-1'}}" style="background-color: {{bodyBgColor}};height:{{bodyHeight}};"  >
+    <view class="content" >
         <view class="detail-main">
             <view class="detail-main-header">
                 <image   class="detail-main-header-head person-header" catchtap="clickHeader"
@@ -53,11 +53,11 @@
         </view>
         <view class="detail-reply" wx:if="{{message.resp.length>0}}">
             <view class="detail-reply-title">{{message.commentnum}}条回应</view>
-            <view class="detail-reply-group" bindtap="clickRespItem">
-                <view class="detail-reply-option" wx:for="{{message.resp}}">
+            <view class="detail-reply-group"  >
+                <view class="detail-reply-option" wx:for="{{message.resp}}"  catchtap="clickRespItem" data-resp="{{item}}">
                     <view class="detail-reply-option-header">
                         <image   class="detail-reply-option-head"
-                            mode="scaleToFill" src="{{item.authoravatar}}">
+                            mode="scaleToFill" src="{{item.authoravatar?item.authoravatar:app.globalData.defaultHeader}}">
                         </image> 
                         <view class="detail-reply-option-name-date">
                             <view class="detail-reply-option-name">{{item.author}}</view>
@@ -65,7 +65,7 @@
                         </view>
                         <view class="clear"></view>
                     </view>
-                    <view class="detail-reply-option-content"  catchtap="clickRespContent" data-resp="{{item}}">
+                    <view class="detail-reply-option-content" >
                         <view class="detail-reply-option-content-at" wx:if="{{item.responID}}">{{item.responto ? '@'+item.responto  : ""}}   </view>{{item.content}}
                     </view>
                 </view>
@@ -76,8 +76,8 @@
         </view>
          
         <view class="detail-bottom">
-            <input class="detail-input" placeholder="{{placeholder}}"  placeholder-class="placeholder-class" focus="{{focus}}" value="{{initInputValue}}" bindinput="commentInput" bindblur="bindBlur" />
-            <view class="detail-input-submit"  bindtap="sendComment">发送</view>
+            <input class="detail-input" placeholder="{{placeholder}}"  placeholder-class="placeholder-class" focus="{{focus}}" value="{{initInputValue}}" bindinput="commentInput" bindblur="bindBlur" bindfocus="bindfocus" />
+            <view class="detail-input-submit {{commentInputValue?'':'cannot-send'}}"  bindtap="sendComment">发送</view>
         </view>
     </view>
 </view>
