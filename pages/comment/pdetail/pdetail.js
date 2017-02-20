@@ -47,6 +47,8 @@ Page({
     message:{
 
     },
+    contentMainHeight:0,
+    animationData:{},//
     currentImageIndex:1,//当前图片
     totalImage:0,//图片总数
     scrollLeft:0,//向左滑动的距离
@@ -61,6 +63,7 @@ Page({
     commentInputValue:"",
     placeholder:"写点什么~",
     focus:false,
+    hasFocus:false,
     initInputValue:"",
     isFirstLoadEmpty:false,
     lastScrollDetail:{},//上次滚动的信息
@@ -68,6 +71,7 @@ Page({
     currentResp:{}//当前被回复的回应
   },
   pageNum:0,//回应页码
+  animation:{},
   onLoad:function(options){
     wx.hideToast();
     wx.showToast({
@@ -76,8 +80,17 @@ Page({
       duration: 10000
     });
     var that = this;
+    //创建动画
+    var animation = wx.createAnimation({
+      transformOrigin: "50% 50%",
+      duration: 1000,
+      timingFunction: "ease",
+      delay: 0
+    });
+     this.animation = animation;
     that.setData({
-      id:options.id
+      id:options.id,
+      animationData:this.animation.export()
     });
     wx.showNavigationBarLoading();
     wx.request({
@@ -127,6 +140,9 @@ Page({
     });
   },
   onReady:function(){
+    this.setData({ 
+      contentMainHeight:app.getSystemInfo().windowHeight-app.rpxToPx(104)+"px"
+    });
   },
   onShow:function(){
     // 页面显示
@@ -233,7 +249,19 @@ Page({
       });
     });
   },
-  clickRespContent:function(event){
+  
+  clickHeader:function(event){
+    var sOpenId = app.getValueFormCurrentTargetDataSet(event,"sopenid");
+    var message = this.data.message;
+    wx.navigateTo({
+      url: '/pages/person/detail/detail?sOpenId='+sOpenId+"&nickName="+message.nickName+"&avatar="+message.avatar
+    });
+  },
+  clickRespItem:function(event){
+    console.log("clickRespItem");
+    if(this.data.isShowTypewriting){
+      return;
+    }
     var resp = app.getValueFormCurrentTargetDataSet(event,"resp");
     var currentResp = this.data.currentResp;
     console.log(resp);
@@ -255,22 +283,7 @@ Page({
         initInputValue:""
       });
     }
-  },
-  clickHeader:function(event){
-    var sOpenId = app.getValueFormCurrentTargetDataSet(event,"sopenid");
-    var message = this.data.message;
-    wx.navigateTo({
-      url: '/pages/person/detail/detail?sOpenId='+sOpenId+"&nickName="+message.nickName+"&avatar="+message.avatar
-    });
-  },
-  clickRespItem:function(){
-    this.setData({
-      placeholder:"写点什么~",
-      focus:false,
-      isReplyResp:false,
-      currentResp:{},
-      initInputValue:""
-    });
+    
   },
   swiperChange:function(event){
     console.log(event);
@@ -298,13 +311,22 @@ Page({
     console.log(res);
   },
   bindBlur:function(){
+    console.log("bindBlur");
     this.setData({
       isShowTypewriting:false
     });
   },
   bindfocus:function(){
+
+    console.log("bindfocus");
+    if(!this.data.isShowTypewriting){
+      this.setData({
+        isShowTypewriting:true
+      });
+    }
+    this.animation.top(180).step();
     this.setData({
-      isShowTypewriting:true
+      animationData:this.animation.export()
     });
   }
 });

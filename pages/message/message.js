@@ -80,6 +80,23 @@ Page({
   },
   onReady:function(){
     // 页面渲染完成
+    var data = {
+      token:app.globalData.userToken
+    }, data = app.getAPISign(data);
+    console.log(data);
+    //获得首页数据
+    wx.request({
+      url:app.globalData.url.api.setReadMessage,
+      method:"GET",
+      data:data,
+      fail:function(res){
+        console.log(res);
+      },
+      success: function(res) {
+        console.log(res);
+         
+      }
+    });
   },
   onShow:function(){
     // 页面显示

@@ -66,6 +66,7 @@ Page({
       coloums1Heigth:0,//列高
       coloums2Heigth:0//列高
     },
+    haveNewMessage:false,
     isFirstLoadEmpty:false,
     scrollTop:0,
     rawNotes:[],
@@ -94,6 +95,28 @@ Page({
      });
   },
   onShow:function(){
+    if(app.globalData.userToken){
+      //获得消息
+      var data = {
+        page:1,
+        token:app.globalData.userToken
+      }, data = app.getAPISign(data);
+      wx.request({
+        url:app.globalData.url.api.notice,
+        method:"GET",
+        data:data,
+        fail:function(res){
+          console.log(res);
+        },
+        success: function(res) {
+          console.log(res);        
+          that.setData({
+            haveNewMessage:res.data.unread>0
+          });
+        }
+      });
+    }
+    
     // 
     var res = wx.getStorageSync('comment_edit_message');
     console.log(res);
@@ -134,6 +157,8 @@ Page({
     }
     //清空msg缓存
     wx.removeStorageSync('comment_edit_message');
+
+
   },
   onLoad: function () {
     wx.removeStorageSync('comment_edit_message');
@@ -142,7 +167,27 @@ Page({
     wx.showNavigationBarLoading();
     //获得用户信息
     //调用登录接口
-    app.doLogin();
+    app.doLogin(function(res){
+      //获得消息
+      var data = {
+        page:1,
+        token:app.globalData.userToken
+      }, data = app.getAPISign(data);
+      wx.request({
+        url:app.globalData.url.api.notice,
+        method:"GET",
+        data:data,
+        fail:function(res){
+          console.log(res);
+        },
+        success: function(res) {
+          console.log(res);        
+          that.setData({
+            haveNewMessage:res.data.unread>0
+          });
+        }
+      });
+    });
     //获得地理位置
     app.getLocation(function(res){
       console.log(res);

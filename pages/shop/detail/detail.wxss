@@ -78,3 +78,7 @@
 .items{
   margin-top:0rpx;
 }
+.warn-new{
+    top:85rpx;
+    left:65rpx;
+}

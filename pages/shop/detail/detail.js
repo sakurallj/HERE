@@ -65,6 +65,7 @@ Page({
     hasMore:false,
     rawNotes:[],
     svColumnHeight:0,
+    haveNewMessage:false,
     isShowLoadMore:false
   },
   isRefresh:false,
@@ -92,6 +93,25 @@ Page({
       duration: 10000
     });
     app.doLogin(function(){
+      //获得消息
+      var data = {
+        page:1,
+        token:app.globalData.userToken
+      }, data = app.getAPISign(data);
+      wx.request({
+        url:app.globalData.url.api.notice,
+        method:"GET",
+        data:data,
+        fail:function(res){
+          console.log(res);
+        },
+        success: function(res) {
+          console.log(res);        
+          that.setData({
+            haveNewMessage:res.data.unread>0
+          });
+        }
+      });
       app.getLocation(function(res){
         loadNotes(that,function(res){
           var partner = res.data.partner;
@@ -122,6 +142,27 @@ Page({
      });
   },
   onShow:function(){
+    if(app.globalData.userToken){
+      //获得消息
+      var data = {
+        page:1,
+        token:app.globalData.userToken
+      }, data = app.getAPISign(data);
+      wx.request({
+        url:app.globalData.url.api.notice,
+        method:"GET",
+        data:data,
+        fail:function(res){
+          console.log(res);
+        },
+        success: function(res) {
+          console.log(res);        
+          that.setData({
+            haveNewMessage:res.data.unread>0
+          });
+        }
+      });
+    }
     var res = wx.getStorageSync('comment_edit_message');
     console.log(res);
     if(res){

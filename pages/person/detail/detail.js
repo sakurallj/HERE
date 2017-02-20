@@ -2,53 +2,55 @@
 var app = getApp();
 function loadNotes(that,callback){
   that.pageNum+=1;
-  var data = {
-    token:app.globalData.userToken,
-    page:that.pageNum
-  };
-  var url = "";
-  if(!that.data.isMy){
-    data.openid = that.data.userInfo.sOpenId;
-    url = app.globalData.url.api.otherInfoList;
-  }
-  else{
-    url = app.globalData.url.api.myInfoList;
-  }
-  data = app.getAPISign(data);
-  console.log(data);
-  //获得首页数据
-  wx.request({
-    url:url,
-    method:"GET",
-    data:data,
-    header: {
-      'content-type': 'application/json'
-    },
-    fail:function(res){
-      console.log(res);
-      wx.hideToast();
-    },
-    success: function(res) {
-      console.log(res);       
-      var isLoadEmpty = res.data.data.length==0;   
-      var notes = app.util.separateNotes(that,app,res.data.data,that.isRefresh),rawNotes=that.data.rawNotes;
-      console.log(notes);
-      if(that.isRefresh){
-        rawNotes = res.data.data;
-      }
-      else{
-        Array.prototype.push.apply(rawNotes, res.data.data);
-      }
-      that.setData({
-        notes:notes,
-        rawNotes:rawNotes,
-        isLoadEmpty:isLoadEmpty,
-        hasMore:res.data.more&&res.data.more==1
-      });
-      if(typeof callback == "function")callback(res);
-      wx.hideToast();
-      wx.hideNavigationBarLoading();
+  app.doLogin(function(res){
+    var data = {
+      token:app.globalData.userToken,
+      page:that.pageNum
+    };
+    var url = "";
+    if(!that.data.isMy){
+      data.openid = that.data.userInfo.sOpenId;
+      url = app.globalData.url.api.otherInfoList;
     }
+    else{
+      url = app.globalData.url.api.myInfoList;
+    }
+    data = app.getAPISign(data);
+    console.log(data);
+    //获得首页数据
+    wx.request({
+      url:url,
+      method:"GET",
+      data:data,
+      header: {
+        'content-type': 'application/json'
+      },
+      fail:function(res){
+        console.log(res);
+        wx.hideToast();
+      },
+      success: function(res) {
+        console.log(res);       
+        var isLoadEmpty = res.data.data.length==0;   
+        var notes = app.util.separateNotes(that,app,res.data.data,that.isRefresh),rawNotes=that.data.rawNotes;
+        console.log(notes);
+        if(that.isRefresh){
+          rawNotes = res.data.data;
+        }
+        else{
+          Array.prototype.push.apply(rawNotes, res.data.data);
+        }
+        that.setData({
+          notes:notes,
+          rawNotes:rawNotes,
+          isLoadEmpty:isLoadEmpty,
+          hasMore:res.data.more&&res.data.more==1
+        });
+        if(typeof callback == "function")callback(res);
+        wx.hideToast();
+        wx.hideNavigationBarLoading();
+      }
+    });
   });
 }
 Page({

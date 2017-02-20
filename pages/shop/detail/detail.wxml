@@ -4,9 +4,12 @@
         <view class="detail-head">
             <view class="detail-head-main">
                 <view class="detail-head-main-first">
-                    <image   class="seller-bell" catchtap="clickWarn" 
-                        mode="aspectFill" src="/pages/images/seller-bell.png">
-                    </image> 
+                    <view class="float-left">
+                        <image   class="seller-bell" catchtap="clickWarn" 
+                            mode="aspectFill" src="/pages/images/seller-bell.png">
+                        </image> 
+                        <view class="warn-new" wx:if="{{haveNewMessage}}"></view> 
+                    </view>
                     <image   class="shop-header person-header" 
                         mode="aspectFill" src="{{shop.image}}">
                     </image> 

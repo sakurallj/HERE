@@ -124,7 +124,7 @@ item-body{
 .item-delete-text{
   color:#bbbbbb;
   font-size: 28rpx;
-  width:62rpx;
+  width:80rpx;
   margin-left: -17rpx;
   padding-left: 17rpx;
   margin-top: 10rpx;

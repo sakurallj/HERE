@@ -79,7 +79,6 @@ page{
     margin-top: 200rpx;
     font-size:24rpx;
 }
- 
 .not-more{
   color:#999999;
   text-align:center;
@@ -91,4 +90,16 @@ page{
   white-space:nowrap; 
   overflow:hidden; 
   text-overflow:ellipsis;
+}
+.warn-new{
+  background: #ff0000;
+  width:15rpx;
+  height:15rpx;
+  border-radius: 30rpx;
+  position: absolute;
+  top:15rpx;
+  left:60rpx;
+}
+.float-left{
+  float: left;
 }

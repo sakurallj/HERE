@@ -13,6 +13,10 @@
 .content{
     padding-bottom: 124rpx;
 }
+.content-main{
+    position: absolute;
+  
+}
 .detail-main{
     width: 750rpx;
     padding: 45rpx 25rpx 30rpx 25rpx;

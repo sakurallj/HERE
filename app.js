@@ -55,6 +55,7 @@ App({
     }
   },
   globalData:{
+    haveNewMessage:false,
     //userInfo.gender  性别 0：未知、1：男、2：女 
     userInfo:{},
     userOpenId:"",//微信的openid
@@ -65,6 +66,7 @@ App({
     systemInfo:{},//系统信息
     url:{
       api:{
+        setReadMessage:apiDomain+"/noticeapi/settrendstatus",//设置通知动态已读状态
         pInfoList:apiDomain+"/noteapi/pinfolist",//商家纸条列表
         otherInfoList:apiDomain+"/noteapi/otherinfolist",//查看其他用户纸条
         delNote:apiDomain+"/noteapi/delinfo",//删除纸条
