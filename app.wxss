@@ -46,6 +46,10 @@ page{
   width:37rpx;
   height:37rpx;
 }
+.cry-icon{
+  width:104rpx;
+  height:105rpx;
+}
 .edit-icon{
   width:50rpx;
   height:60rpx;

@@ -1,4 +1,5 @@
 @import "/pages/template/notes/note.wxss";
+@import "/pages/template/normal/lost-network.wxss";
 .detail-head{
     background-color: #fff;
     padding: 0 30rpx;

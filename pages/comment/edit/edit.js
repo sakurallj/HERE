@@ -107,6 +107,7 @@ Page({
   },
   onLoad:function(options){
     var that = this;
+ 
     var BMap = new bMap.BMapWX({ 
         ak: 'EG3dC6I07FCQzZH9k4BMVDdl7QPOUlfK' 
     }); 

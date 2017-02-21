@@ -2,23 +2,28 @@
 //获取应用实例
 var app = getApp();
 function loadedNotes(that,res){
-  
-  var isLoadEmpty = res.data.data.length==0;
-  var notes = app.util.separateNotes(that,app,res.data.data,that.isRefresh),rawNotes=that.data.rawNotes;
-  console.log(notes);
-  if(that.isRefresh){
-    rawNotes = res.data.data;
-  }
-  else{
-    Array.prototype.push.apply(rawNotes, res.data.data);
+  console.log(111);
+  console.log(res);
+  if(res&&res.data&&res.data.data){
+    var isLoadEmpty = res.data.data.length==0;
+    var notes = app.util.separateNotes(that,app,res.data.data,that.isRefresh),rawNotes=that.data.rawNotes;
+    console.log(notes);
+    if(that.isRefresh){
+      rawNotes = res.data.data;
+    }
+    else{
+      Array.prototype.push.apply(rawNotes, res.data.data);
+    }
+    that.setData({
+      notes:notes,
+      rawNotes:rawNotes,
+      isShowLoadMore:false,
+      isLoadEmpty:isLoadEmpty,
+      hasMore:res.data.more&&res.data.more==1
+    });
   }
   that.setData({
-    notes:notes,
-    rawNotes:rawNotes,
-    isShowLoadMore:false,
-    isLastLoadDone:true,
-    isLoadEmpty:isLoadEmpty,
-    hasMore:res.data.more&&res.data.more==1
+    isLastLoadDone:true
   });
   wx.hideToast();
   wx.hideNavigationBarLoading();
@@ -66,6 +71,7 @@ Page({
       coloums1Heigth:0,//列高
       coloums2Heigth:0//列高
     },
+    haveNetwork:true,
     haveNewMessage:false,
     isFirstLoadEmpty:false,
     scrollTop:0,
@@ -95,6 +101,7 @@ Page({
      });
   },
   onShow:function(){
+    var that = this;
     if(app.globalData.userToken){
       //获得消息
       var data = {
@@ -161,9 +168,29 @@ Page({
 
   },
   onLoad: function () {
+    this.pageNum = 0;
+    var that = this;
+    //判断是否有网络
+    wx.getNetworkType({
+      success: function(res) {
+        // 返回网络类型, 有效值：
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        if(res.networkType =="none" ){
+          that.setData({
+            haveNetwork:false
+          });
+        }
+        else{
+          that.setData({
+            haveNetwork:true
+          });
+        }
+      }
+    });
+ 
     wx.removeStorageSync('comment_edit_message');
    
-    var that = this;
+    
     wx.showNavigationBarLoading();
     //获得用户信息
     //调用登录接口
@@ -305,5 +332,32 @@ Page({
   },
   loaded:function(event){
     app.util.notesPhotoLoaded(this,app,event);
+  },
+  reloadForNotNetwork:function(){
+    var that = this;
+    //判断是否有网络
+    wx.getNetworkType({
+      success: function(res) {
+        // 返回网络类型, 有效值：
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        if(res.networkType =="none" ){
+          that.setData({
+            haveNetwork:false
+          });
+          wx.showToast({
+            title: '请检查网络',
+            icon: 'loading',
+            duration: 1000
+          });
+
+        }
+        else{
+          that.setData({
+            haveNetwork:true
+          });
+          that.onPullDownRefresh();
+        }
+      }
+    });
   }
 })

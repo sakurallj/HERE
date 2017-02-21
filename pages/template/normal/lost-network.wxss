@@ -1,0 +1,21 @@
+.cry-icon{
+    display: inline-block;
+    margin-top: 40%;
+
+}
+.lost-network{
+    text-align: center;
+    font-size: 30rpx;
+    color:#696969;
+}
+.lost-network-text{
+    margin-top: 50rpx;
+}
+.lost-network-reload-btn{
+    margin-top: 50rpx;
+    background-color: #b89c6c;
+    line-height:90rpx;
+    width: 300rpx;
+    display: inline-block;
+    color: #fff;
+}

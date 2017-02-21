@@ -1,8 +1,11 @@
 
 <!--pages/comment/pdetail/pdetail.wxml    {{isShowTypewriting?'body-margin-top':'body-margin-top-transition-1'}}-->
+<import src="../../template/normal/lost-network.wxml"/>
 <view class="body" style="background-color: {{bodyBgColor}};height:{{bodyHeight}};">
   <view class="content">
-    <scroll-view animation="{{animationData}}" class="content-main" scroll-y="true" style="background-color: {{bodyBgColor}};height:{{contentMainHeight}};">
+    <template is="lost-network" wx:if="{{!haveNetwork}}"/>
+    <scroll-view  wx:if="{{haveNetwork}}" animation="{{animationData}}" class="content-main" scroll-y="true" style="height:{{contentMainHeight}};" bindscroll="scroll">
+      <view style="height:{{contentMainCoverHeight}};display:{{isShowTypewriting?'block':'none'}}"  class="content-main-cover"></view>
       <view class="detail-main">
         <view class="detail-main-header">
           <image class="detail-main-header-head person-header" catchtap="clickHeader" mode="scaleToFill" src="{{message.avatar}}" data-sopenid="{{message.fdNoteOpenID}}">
@@ -62,7 +65,7 @@
         </view>
       </view>
     </scroll-view>
-    <view class="detail-bottom">
+    <view  wx:if="{{haveNetwork}}" class="detail-bottom">
       <input class="detail-input" placeholder="{{placeholder}}" placeholder-class="placeholder-class" focus="{{focus}}" value="{{initInputValue}}" bindinput="commentInput" bindblur="bindBlur" bindfocus="bindfocus" />
       <view class="detail-input-submit {{commentInputValue?'':'cannot-send'}}" bindtap="sendComment">发送</view>
     </view>

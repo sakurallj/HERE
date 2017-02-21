@@ -47,7 +47,10 @@ Page({
     message:{
 
     },
+    onLoadOptions:{},
+    haveNetwork:true,
     contentMainHeight:0,
+    contentMainCoverHeight:0,
     animationData:{},//
     currentImageIndex:1,//当前图片
     totalImage:0,//图片总数
@@ -73,75 +76,97 @@ Page({
   pageNum:0,//回应页码
   animation:{},
   onLoad:function(options){
-    wx.hideToast();
-    wx.showToast({
-      title: '加载中',
-      icon: 'loading',
-      duration: 10000
+    this.pageNum = 0;
+    wx.showNavigationBarLoading();
+    this.setData({
+      onLoadOptions:options
     });
     var that = this;
     //创建动画
     var animation = wx.createAnimation({
       transformOrigin: "50% 50%",
-      duration: 1000,
-      timingFunction: "ease",
+      duration: 100,
+      timingFunction: "linear",
       delay: 0
     });
-     this.animation = animation;
+    this.animation = animation;
     that.setData({
       id:options.id,
       animationData:this.animation.export()
     });
     wx.showNavigationBarLoading();
-    wx.request({
-      url:app.globalData.url.api.infoDetail,
-      method:"GET",
-      data:{
-        id:options.id
-      },
-      fail:function(res){
-        console.log(res);
-      },
+    //判断是否有网络
+    wx.getNetworkType({
       success: function(res) {
-        console.log(res);
-        res.data.data.content = app.util.decodeUTF8(res.data.data.content);
-        //
-        var images=[],showImages=[], len = res.data.data.photos?res.data.data.photos.length:0;
-        for(var i=0;i<len;i++){
-          images[i]=res.data.data.photos[i].fdURL ;
-          showImages[i] = {
-            url:res.data.data.photos[i].fdURL ,
-            isShow:false
-          }
-        }
-        res.data.data.meter = options.meter||options.meter==0?options.meter:'';
-        res.data.data.nickName = res.data.data.nickName ?res.data.data.nickName :"";
-        res.data.data.avatar = res.data.data.avatar ?res.data.data.avatar :app.globalData.defaultHeader;
-        that.setData({
-          message:res.data.data,
-          totalImage:len,
-          images:images,
-          showImages:showImages
-        });
-        getResp(that,function(res){
-          wx.hideToast();
+        // 返回网络类型, 有效值：
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        if(res.networkType =="none" ){
           that.setData({
-            isFirstLoadEmpty:res.data.data&&res.data.data.length==0
+            haveNetwork:false
           });
-          if(res.data.data&&res.data.data.length==0){
-            that.setData({
-              bodyBgColor:"#fff",
-              bodyHeight:app.getSystemInfo().windowHeight+"px"
-            });
-          }
-        });
-        wx.hideNavigationBarLoading();
+          wx.hideToast();
+          wx.hideNavigationBarLoading();
+        }
+        else{
+          that.setData({
+            haveNetwork:true
+          });
+          wx.request({
+            url:app.globalData.url.api.infoDetail,
+            method:"GET",
+            data:{
+              id:options.id
+            },
+            fail:function(res){
+              console.log(res);
+            },
+            success: function(res) {
+              console.log(res);
+              res.data.data.content = app.util.decodeUTF8(res.data.data.content);
+              //
+              var images=[],showImages=[], len = res.data.data.photos?res.data.data.photos.length:0;
+              for(var i=0;i<len;i++){
+                images[i]=res.data.data.photos[i].fdURL ;
+                showImages[i] = {
+                  url:res.data.data.photos[i].fdURL ,
+                  isShow:false
+                }
+              }
+              res.data.data.meter = options.meter||options.meter==0?options.meter:'';
+              res.data.data.nickName = res.data.data.nickName ?res.data.data.nickName :"";
+              res.data.data.avatar = res.data.data.avatar ?res.data.data.avatar :app.globalData.defaultHeader;
+              that.setData({
+                message:res.data.data,
+                totalImage:len,
+                images:images,
+                showImages:showImages
+              });
+              getResp(that,function(res){
+                wx.hideToast();
+                that.setData({
+                  isFirstLoadEmpty:res.data.data&&res.data.data.length==0
+                });
+                if(res.data.data&&res.data.data.length==0){
+                  that.setData({
+                    bodyBgColor:"#fff",
+                    bodyHeight:app.getSystemInfo().windowHeight+"px"
+                  });
+                }
+              });
+              wx.hideNavigationBarLoading();
+            }
+          });
+        }
       }
     });
+    
+    
   },
   onReady:function(){
+    var h = app.getSystemInfo().windowHeight-app.rpxToPx(104)+"px";
     this.setData({ 
-      contentMainHeight:app.getSystemInfo().windowHeight-app.rpxToPx(104)+"px"
+      contentMainHeight:h,
+      contentMainCoverHeight:h
     });
   },
   onShow:function(){
@@ -230,7 +255,7 @@ Page({
           wx.showToast({
             title: '回应成功',
             icon: 'success',
-            duration: 2000
+            duration: 1000
           });
         
           that.setData({
@@ -315,6 +340,10 @@ Page({
     this.setData({
       isShowTypewriting:false
     });
+    this.animation.top(0).step();
+    this.setData({
+      animationData:this.animation.export()
+    });
   },
   bindfocus:function(){
 
@@ -324,9 +353,38 @@ Page({
         isShowTypewriting:true
       });
     }
-    this.animation.top(180).step();
+    this.animation.top(260).step();
     this.setData({
       animationData:this.animation.export()
     });
+  },
+  reloadForNotNetwork:function(){
+    this.onLoad(this.data.onLoadOptions);
+    var that = this;
+    //判断是否有网络
+    wx.getNetworkType({
+      success: function(res) {
+        // 返回网络类型, 有效值：
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        if(res.networkType =="none" ){
+          wx.showToast({
+            title: '请检查网络',
+            icon: 'loading',
+            duration: 1000
+          });
+
+        }
+        else{
+          that.onLoad(that.data.onLoadOptions);
+        }
+      }
+    });
+  },
+  scroll:function(event){
+    if(event&&event.detail&&event.detail.scrollHeight){
+      this.setData({ 
+        contentMainCoverHeight:event.detail.scrollHeight+"px"
+      });
+    }
   }
 });

@@ -69,16 +69,37 @@ Page({
     svColumnHeight:false,
     rawNotes:[],
     hasMore:false,
-    isMy:false//是否 我的动态
+    isMy:false,//是否 我的动态
+    haveNetwork:true,
+    onLoadOptions:{}
   },
   isRefresh:false,
   pageNum:0,
   onLoad:function(options){
+    this.pageNum = 0;
     var that = this;
-    wx.showToast({
-      title: '加载中',
-      icon: 'loading',
-      duration: 10000
+    this.setData({
+      onLoadOptions:options
+    });
+    wx.showNavigationBarLoading();
+     //判断是否有网络
+    wx.getNetworkType({
+      success: function(res) {
+        // 返回网络类型, 有效值：
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        if(res.networkType =="none" ){
+          that.setData({
+            haveNetwork:false
+          });
+          wx.hideToast();
+          wx.hideNavigationBarLoading();
+        }
+        else{
+          that.setData({
+            haveNetwork:true
+          });
+        }
+      }
     });
     app.doLogin(function(){
       var sOpenId = options.sOpenId,nickName=options.nickName,avatar=options.avatar;
@@ -229,5 +250,27 @@ Page({
   },
   loaded:function(event){
     app.util.notesPhotoLoaded(this,app,event);
+  },
+  reloadForNotNetwork:function(){
+    this.onLoad(this.data.onLoadOptions);
+    var that = this;
+    //判断是否有网络
+    wx.getNetworkType({
+      success: function(res) {
+        // 返回网络类型, 有效值：
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        if(res.networkType =="none" ){
+          wx.showToast({
+            title: '请检查网络',
+            icon: 'loading',
+            duration: 1000
+          });
+
+        }
+        else{
+          that.onLoad(that.data.onLoadOptions);
+        }
+      }
+    });
   }
 })

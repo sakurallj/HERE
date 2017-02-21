@@ -1,6 +1,8 @@
 <!--index.wxml-->
 <import src="../template/notes/note-item.wxml"/>
 <import src="../template/notes/note-item-shop.wxml"/>
+<import src="../template/normal/lost-network.wxml"/>
+
 <view class="body"> 
   <view class="header" style="position:{{headerPosition}}" >
     <view class="float-left">
@@ -10,13 +12,15 @@
       <view class="warn-new" wx:if="{{haveNewMessage}}"></view> 
     </view>
     <view class="circle">
-      纸条墙
+      周围的小纸条
     </view>
     <image   class="edit-icon" bindtap="clickEdit"
           mode="aspectFill" src="/pages/images/edit.png">
     </image> 
   </view>
   <view class="clear"></view>
+  <template is="lost-network" wx:if="{{notes.coloums1.length==0&&notes.coloums2.length==0&&!haveNetwork}}"/>
+
   <view scroll-y="true" class="items" wx:if="{{notes.coloums1.length>0&&notes.coloums2.length>0}}" >
     <view>
       <view class="column">

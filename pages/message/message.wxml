@@ -1,6 +1,8 @@
+<import src="../template/normal/lost-network.wxml"/>
 <view class="body">
     <view class="content">
-        <view class="reply-main">
+        <template is="lost-network" wx:if="{{!haveNetwork}}"/>
+        <view class="reply-main"  wx:if="{{haveNetwork}}">
             <view class="reply-option" wx:for="{{messages}}" bindtap="clickItem" data-item="{{item}}">
                 <image   class="reply-option-head person-header"
                     mode="scaleToFill" src="{{item.headerImage}}">
@@ -24,7 +26,7 @@
             </view>
             
         </view>
-        <view wx:if="{{isFirstLoadEmpty}}" class="none-resp">
+        <view wx:if="{{isFirstLoadEmpty&&haveNetwork}}" class="none-resp">
             暂时还没有回应，先发一张纸条试试吧~
         </view>
         <view class="reply-more"  bindtap="loadMore" wx:if="{{hasMore}}" >

@@ -1,3 +1,4 @@
+@import "/pages/template/normal/lost-network.wxss";
 .reply-main{
     background-color: #fff;
     padding: 0 30rpx;
