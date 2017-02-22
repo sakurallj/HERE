@@ -37,7 +37,7 @@
                 <view class="loading-text">加载中...</view>
             </view>
         </view>
-        <view class="not-more" wx:if="{{!isFirstLoadEmpty&&isLoadEmpty}}">
+        <view class="not-more" wx:if="{{!isFirstLoadEmpty&&isLoadEmpty&&messages.length>8}}">
             暂无更多回应~
         </view>
     </view>

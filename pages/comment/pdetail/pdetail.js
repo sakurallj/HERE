@@ -75,6 +75,7 @@ Page({
   },
   pageNum:0,//回应页码
   animation:{},
+  animation2:{},
   onLoad:function(options){
     this.pageNum = 0;
     wx.showNavigationBarLoading();
@@ -89,7 +90,14 @@ Page({
       timingFunction: "linear",
       delay: 0
     });
+    var animation2 = wx.createAnimation({
+      transformOrigin: "50% 50%",
+      duration: 100,
+      timingFunction: "linear",
+      delay: 200
+    });
     this.animation = animation;
+    this.animation2 = animation2;
     that.setData({
       id:options.id,
       animationData:this.animation.export()
@@ -204,6 +212,7 @@ Page({
     console.log(event.detail.value);
   },
   sendComment:function(){
+    console.log("sendComment");
     var commentInputValue = this.data.commentInputValue;
     if(!commentInputValue){
       return;
@@ -332,21 +341,24 @@ Page({
       });
     }
   },
-  scroll:function(res){
-    console.log(res);
-  },
   bindBlur:function(){
+    this.setData({
+      placeholder:"写点什么~",
+      focus:false,
+      isReplyResp:false,
+      currentResp:{},
+      initInputValue:""
+    });
     console.log("bindBlur");
     this.setData({
       isShowTypewriting:false
     });
-    this.animation.top(0).step();
+    this.animation2.top(0).step();
     this.setData({
-      animationData:this.animation.export()
+      animationData:this.animation2.export()
     });
   },
   bindfocus:function(){
-
     console.log("bindfocus");
     if(!this.data.isShowTypewriting){
       this.setData({

@@ -20,6 +20,9 @@ page{
   line-height: 1;
   overflow-x: hidden
 }
+.content{
+  height: 100%;
+}
 .container {
   
 } 
@@ -80,7 +83,7 @@ page{
 .none-resp{
     color:#999999;
     text-align:center;
-    margin-top: 200rpx;
+    margin-top: 70%;
     font-size:24rpx;
 }
 .not-more{

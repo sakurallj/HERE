@@ -69,12 +69,7 @@
     letter-spacing:0;
     text-align:center;
 }
-.none-resp{
-    color:#999999;
-    text-align:center;
-    margin-top: 100rpx;
-    font-size:24rpx;
-}
+ 
 .reply-option{
     position: relative;
 }
