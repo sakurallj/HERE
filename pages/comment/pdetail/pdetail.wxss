@@ -152,7 +152,7 @@
     background:#ffffff;
     border:1rpx solid #e4e4e4;
     border-radius:10rpx;
-    width:650rpx;
+    width:730rpx;
     height:84rpx;
     font-size: 24rpx;
     float: left;

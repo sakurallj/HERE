@@ -7,7 +7,8 @@ function loadMessage(that,callback){
     that.pageNum +=1;
     var data = {
       page:that.pageNum,
-      token:app.globalData.userToken
+      token:app.globalData.userToken,
+      wxapp:1
     }, data = app.getAPISign(data);
     console.log(data);
     //获得首页数据

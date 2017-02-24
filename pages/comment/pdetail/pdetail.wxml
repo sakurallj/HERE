@@ -66,8 +66,8 @@
       </view>
     </scroll-view>
     <view  wx:if="{{haveNetwork}}" class="detail-bottom">
-      <input class="detail-input" placeholder="{{placeholder}}" placeholder-class="placeholder-class" focus="{{focus}}" value="{{initInputValue}}" bindinput="commentInput" bindblur="bindBlur" bindfocus="bindfocus" />
-      <view class="detail-input-submit {{commentInputValue?'':'cannot-send'}}" bindtap="sendComment">发送</view>
+      <input class="detail-input" placeholder="{{placeholder}}" placeholder-class="placeholder-class" focus="{{focus}}" value="{{initInputValue}}" bindinput="commentInput" bindblur="bindBlur" bindfocus="bindfocus" bindconfirm = "bindconfirm" />
+    <!--  <view class="detail-input-submit {{commentInputValue?'':'cannot-send'}}" bindtap="sendComment">发送</view>-->
     </view>
   </view>
 </view>

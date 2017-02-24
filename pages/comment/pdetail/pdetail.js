@@ -218,12 +218,12 @@ Page({
       return;
     }
     var that = this;
-    wx.hideToast();
+    /*
     wx.showToast({
       title: '发表中',
       icon: 'loading',
-      duration: 10000
-    });
+      duration: 500
+    });*/
     app.doLogin(function(){
       var data={
         token:app.globalData.userToken,
@@ -398,5 +398,8 @@ Page({
         contentMainCoverHeight:event.detail.scrollHeight+"px"
       });
     }
+  },
+  bindconfirm:function(event){
+    this.sendComment();
   }
 });

@@ -1,7 +1,7 @@
 <view class="body">
     <view class="content">
         <view class="program-write">
-            <textarea class="program-write-main" placeholder="写在这儿，留给别人看看" bindinput="inputMsg"></textarea>
+            <textarea class="program-write-main" fixed="true" maxlength="2000" placeholder="写在这儿，留给别人看看" bindinput="inputMsg"></textarea>
             <view class="program-write-img-group">
                 <image bindtap="previewImages"  class="program-write-img" wx:for="{{message.images}}"  data-img-index="{{index}}"
                         mode="aspectFill" src="{{item}}">

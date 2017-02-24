@@ -106,6 +106,7 @@ Page({
       //获得消息
       var data = {
         page:1,
+        wxapp:1,
         token:app.globalData.userToken
       }, data = app.getAPISign(data);
       wx.request({
@@ -139,7 +140,7 @@ Page({
         id:res.id,
         latitude:app.globalData.location.latitude,
         longitude:app.globalData.location.longitude,
-        meter:"0m",
+        meter:res.meter,
         nickName:app.globalData.userInfo.nickName,
         photo:images.length>0?images[0]:""
       };

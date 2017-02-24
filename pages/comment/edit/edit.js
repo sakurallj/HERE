@@ -79,6 +79,12 @@ function sendMessage(that,message){
             console.log(11212221);
             rawData.id = res.data.id;
             rawData.contentar = res.data.contentar;
+            rawData.meter = app.util.formatDistance(app.util.getPonitToPointDistance(
+              message.address.latitude,
+              message.address.longitude,
+              app.globalData.location.latitude,
+              app.globalData.location.longitude
+            )) ;
             console.log(rawData);
             wx.setStorageSync("comment_edit_message",rawData);
             wx.hideToast();
@@ -174,6 +180,7 @@ Page({
     var that = this;
     wx.chooseLocation({
       success:function(res){
+        console.log(res);
         var m = that.data.message;
         m.address = res;
         that.setData({
