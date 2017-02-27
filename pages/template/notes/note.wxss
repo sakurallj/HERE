@@ -46,9 +46,13 @@
   color:#b8b8b8;
   letter-spacing:0;
   text-align:rigth;
-  float: left;
+  float: right;
   margin: 8rpx 0rpx 8rpx 20rpx;
-  width: 53rpx;
+  width: 210rpx;
+  white-space:nowrap; 
+  overflow:hidden; 
+  text-overflow:ellipsis;
+  padding-top: 5rpx;
  }
  .person-distanct-text{
    float: rigth;
@@ -187,6 +191,6 @@ item-body{
 .space-text{
   display: inline-block;
  
-  width: 10rpx;
+  width: 19.9rpx;
   height: 5rpx;
 }

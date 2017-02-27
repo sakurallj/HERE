@@ -3,18 +3,11 @@
         <image   class="person-header-img person-header"
             mode="aspectFill" src="{{avatar}}">
         </image> 
+        <!--
         <view class="person-nickname text-ellipsis">{{nickName}}</view>
+        -->
         <view class="person-distanct">
-            <block wx:if="{{meter.length==3}}">
-                <view class="space-text"></view>{{meter}}
-            </block>
-            <block wx:elif="{{meter.length==2}}">
-                <view class="space-text"></view><view class="space-text"></view>{{meter}}
-            </block>
-            <block wx:elif="{{meter.length==1}}">
-                <view class="space-text"></view><view class="space-text"></view><view class="space-text"></view>{{meter}}
-            </block>
-            <block wx:else>{{meter}}</block>
+            <view class="space-text" wx:for="{{addressSpace}}" wx:key="*this"></view>{{address}}         
         </view>
     </view>
     <view class="clear"></view>

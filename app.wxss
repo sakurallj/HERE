@@ -105,7 +105,7 @@ page{
   border-radius: 30rpx;
   position: absolute;
   top:15rpx;
-  left:60rpx;
+  left:50rpx;
 }
 .float-left{
   float: left;

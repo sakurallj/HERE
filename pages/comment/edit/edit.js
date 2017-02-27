@@ -117,7 +117,7 @@ Page({
     var that = this;
  
     var BMap = new bMap.BMapWX({ 
-        ak: 'EG3dC6I07FCQzZH9k4BMVDdl7QPOUlfK' 
+        ak: app.globalData.bMapAK
     }); 
     BMap.regeocoding({ 
         fail: function(res){

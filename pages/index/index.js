@@ -1,6 +1,7 @@
 //index.js
 //获取应用实例
 var app = getApp();
+var bMap = require('../lib/baidu/bmap-wx.min.js'); 
 function loadedNotes(that,res){
  
   if(res&&res.data&&res.data.data){
@@ -58,12 +59,14 @@ function loadNotes(that,latitude,longitude,callback){
       if(typeof callback == "function")callback(res);
     },
     success: function(res) {
+      console.log(res);
       if(typeof callback == "function")callback(res);
     }
   });
 }
 Page({
   data: {
+    locationName:"",
     notes:{
       coloums1:[],
       coloums2:[],
@@ -82,6 +85,7 @@ Page({
     svColumnHeight:100,//coloum的高
     headerDisplayType:"block"//
   },
+  BMap:new bMap.BMapWX({ak: app.globalData.bMapAK}),
   isRefresh:false,
   pageNum:0,
   //事件处理函数
@@ -126,11 +130,12 @@ Page({
     
     // 
     var res = wx.getStorageSync('comment_edit_message');
- 
+    console.log(res);
     if(res){
  
       var images = res.imageUrls?JSON.parse(res.imageUrls):[], note = {
         addTime:"",
+        address:res.address,
         avatar:app.globalData.userInfo.avatarUrl,
         commentnum:"0",
         content:res.content,
@@ -162,6 +167,7 @@ Page({
   onLoad: function () {
     this.pageNum = 0;
     var that = this;
+    
     //判断是否有网络
     wx.getNetworkType({
       success: function(res) {
@@ -221,6 +227,26 @@ Page({
           that.setData({
             isFirstLoadEmpty:res.data.data&&res.data.data.length==0
           });
+         /* that.BMap.regeocoding({ 
+              fail: function(res){
+                console.log(res);
+              }, 
+              success: function(res){
+                console.log(res);
+                if(res.originalData&&res.originalData.result){
+                  var result = res.originalData.result,locationName="";
+                  if(result.poiRegions&&result.poiRegions.length>0){
+                      locationName = result.poiRegions[0].name;
+                  }
+                  else if(result.addressComponent&&result.addressComponent.street){
+                    locationName = result.addressComponent.street;
+                  }
+                  that.setData({
+                    locationName:locationName
+                  });
+                }
+              }
+          }); */
         });
     });
     
@@ -288,6 +314,27 @@ Page({
           });
         });
     });
+    /*this.BMap.regeocoding({ 
+        fail: function(res){
+          console.log(res);
+        }, 
+        success: function(res){
+          console.log(res);
+          if(res.originalData&&res.originalData.result){
+            var result = res.originalData.result,locationName="";
+            if(result.poiRegions&&result.poiRegions.length>0){
+                locationName = result.poiRegions[0].name;
+            }
+            else if(result.addressComponent&&result.addressComponent.street){
+              locationName = result.addressComponent.street;
+            }
+        
+            that.setData({
+              locationName:locationName
+            });
+          }
+        }
+    }); */
   },
   scrollToLower:function(){
     this.setData({

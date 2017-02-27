@@ -12,7 +12,7 @@
       <view class="warn-new" wx:if="{{haveNewMessage}}"></view> 
     </view>
     <view class="circle">
-      周围的小纸条
+      {{locationName}}
     </view>
     <image   class="edit-icon" bindtap="clickEdit"
           mode="aspectFill" src="/pages/images/seller-edit.png">
@@ -64,7 +64,7 @@
         <view class="loading-text">加载中...</view>
       </view>
     </view>
-    <view class="not-more" wx:if="{{isLoadEmpty}}">
+    <view class="not-more" wx:if="{{isLoadEmpty&&notes.coloums1.length>8}}">
       没有更多纸条了，你也来写一纸留言吧~
     </view>
   </view>

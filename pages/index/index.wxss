@@ -5,7 +5,7 @@
   /*background-image:linear-gradient(0deg, #2c2c30 1%, #0f1012 100%);*/
   background: #fff;
   width:750rpx;
-  height:90rpx;
+  height:80rpx;
   position: fixed;
   z-index:999;
   text-align: center;
@@ -20,8 +20,8 @@
   margin-left: 26rpx;
   margin-right: 34rpx;
   position: relative;
- /* width:30rpx;
-   height: 36rpx;*/
+  width: 40rpx;
+  height: 48rpx;
 }
 .search-icon{
   margin: 9rpx 25rpx 10rpx 21rpx;
@@ -36,16 +36,21 @@
   margin-right: 25rpx;
   margin-left: 37rpx;
   margin-top: 10rpx;
+  width: 40rpx;
+  height: 48rpx;
 }
 .circle{
-  padding-top : 22rpx ;
-  overflow: hidden;
+  padding-top : 19rpx ;
   height:55rpx;
   text-align: center;
   display: inline-block;
   box-sizing: border-box;
   color: #000;
   font-size:30rpx ;
+  width:450rpx;
+  white-space:nowrap; 
+  overflow:hidden; 
+  text-overflow:ellipsis;
 }
 .circle-text{
   border-radius:27.5rpx;
@@ -80,8 +85,14 @@
     display: block;
 }
 .items{
-  border-top: 90rpx solid #39383d;
+  border-top: 80rpx solid #F0F0F0;
   margin-top: -1rpx;
 }
  
  
+ .warn-new{
+  width:10rpx;
+  height:10rpx;
+  border-radius: 10rpx;
+  left:58rpx;
+}

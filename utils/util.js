@@ -161,6 +161,20 @@ function separateNotes(that, app, data, isRefresh) {
   
       note.content = formatShowText(note.content);
     }
+    if(note.address=="请选择位置"){
+      note.address = "";
+    }
+    if(note.address){
+      note.addressLength = textLength(note.address);
+    }
+    note.addressSpace = [];
+    if(note.addressLength<11){
+      var aFL = 10-note.addressLength;
+      for(var aL =0;aL<=aFL;aL++){
+        note.addressSpace[aL] = aL;
+      }
+    }
+    
     noteHeight = getNoteHeight(note);
     //处理分词的文本
     if (note.contentar) {
@@ -213,6 +227,19 @@ function separateNotes(that, app, data, isRefresh) {
  * 添加纸条到 column
  */
 function addNoteToColumn(that, app, note){
+  if(note.address=="请选择位置"){
+    note.address = "";
+  }
+  if(note.address){
+    note.addressLength = textLength(note.address);
+  }
+  note.addressSpace = [];
+  if(note.addressLength<11){
+    var aFL = 10-note.addressLength;
+    for(var aL =0;aL<=aFL;aL++){
+      note.addressSpace[aL] = aL;
+    }
+  }
   var  notes = that.data.notes,cNote = [note],  noteHeight = getNoteHeight(note);
   if(notes.coloums1Heigth<=notes.coloums2Heigth){
     Array.prototype.push.apply(cNote, notes.coloums1);

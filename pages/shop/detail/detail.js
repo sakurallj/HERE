@@ -201,7 +201,8 @@ Page({
         longitude:app.globalData.location.longitude,
         meter:"0m",
         nickName:app.globalData.userInfo.nickName,
-        photo:images.length>0?images[0]:""
+        photo:images.length>0?images[0]:"",
+        address:res.address
       };
      
      

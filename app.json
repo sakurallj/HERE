@@ -11,11 +11,11 @@
     "pages/address/city/city" 
   ],
   "window":{
-    "backgroundTextStyle":"light",
+    "backgroundTextStyle":"dark",
     "navigationBarBackgroundColor": "#39383d",
-    "navigationBarTitleText": "HERE小纸条",
+    "navigationBarTitleText": "HERE",
     "navigationBarTextStyle":"white",
-    "backgroundColor":"#39383d",
+    "backgroundColor":"#ffffff",
     "enablePullDownRefresh":"true"
   }
 }
