@@ -3,13 +3,14 @@
 @import "/pages/template/normal/lost-network.wxss";
 .header{
   /*background-image:linear-gradient(0deg, #2c2c30 1%, #0f1012 100%);*/
-  background: #39383d;
+  background: #fff;
   width:750rpx;
   height:90rpx;
   position: fixed;
   z-index:999;
   text-align: center;
-  
+  padding-top: 7rpx;
+  box-sizing: border-box;
 }
 .search{
    padding-top: 10rpx;
@@ -19,6 +20,8 @@
   margin-left: 26rpx;
   margin-right: 34rpx;
   position: relative;
+ /* width:30rpx;
+   height: 36rpx;*/
 }
 .search-icon{
   margin: 9rpx 25rpx 10rpx 21rpx;
@@ -41,7 +44,7 @@
   text-align: center;
   display: inline-block;
   box-sizing: border-box;
-  color: #fff;
+  color: #000;
   font-size:30rpx ;
 }
 .circle-text{

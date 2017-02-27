@@ -7,7 +7,7 @@
   <view class="header" style="position:{{headerPosition}}" >
     <view class="float-left">
       <image   class="warn-icon" bindtap="clickWarn"
-            mode="aspectFill" src="/pages/images/warn.png">
+            mode="aspectFill" src="/pages/images/seller-bell.png">
       </image>
       <view class="warn-new" wx:if="{{haveNewMessage}}"></view> 
     </view>
@@ -15,13 +15,13 @@
       周围的小纸条
     </view>
     <image   class="edit-icon" bindtap="clickEdit"
-          mode="aspectFill" src="/pages/images/edit.png">
+          mode="aspectFill" src="/pages/images/seller-edit.png">
     </image> 
   </view>
   <view class="clear"></view>
   <template is="lost-network" wx:if="{{notes.coloums1.length==0&&notes.coloums2.length==0&&!haveNetwork}}"/>
 
-  <view scroll-y="true" class="items" wx:if="{{notes.coloums1.length>0&&notes.coloums2.length>0}}" >
+  <view scroll-y="true" class="items" wx:if="{{notes.coloums1.length>0||notes.coloums2.length>0}}" >
     <view>
       <view class="column">
         <block  wx:key="id" wx:for="{{notes.coloums1}}">

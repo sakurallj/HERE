@@ -53,18 +53,20 @@ function sendMessage(that,message){
       });
       var data={
         token:app.globalData.userToken,
-        content:app.util.formatContentForServer(message.content),
         imageUrls:JSON.stringify(images),
         latitude:message.address.latitude,
         longitude:message.address.longitude,
         address:message.address.name,
+        content:app.util.formatContentForServer(message.content)
+     //   ,wxapp:1
       },rawData=data;
       if(that.data.shopId){
         data.fdPartnerID = that.data.shopId;
       }
       data = app.getAPISign(data); 
+      data.content = app.util.formatContentForServer(message.content);
       wx.request({
-        url:app.globalData.url.api.addNote,
+        url:app.globalData.url.api.addNote ,
         method:"GET",
         data:data,
         fail:function(res){
@@ -213,6 +215,7 @@ Page({
   //贴纸片
   sendMessage:function(){
     var that = this,message = that.data.message;
+    console.log(message);
      //数据校验
     //判断是否有图片或评论
     message.content = app.util.trim(message.content);

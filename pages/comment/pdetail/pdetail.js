@@ -17,7 +17,7 @@ function getResp(that,callback){
       console.log(res);
     },
     success: function(res) {
-      console.log(res);
+ 
       var message = that.data.message;
       if(!message.resp){
         message.resp = [];
@@ -129,7 +129,7 @@ Page({
               console.log(res);
             },
             success: function(res) {
-              console.log(res);
+ 
               res.data.data.content = app.util.decodeUTF8(res.data.data.content);
               //
               var images=[],showImages=[], len = res.data.data.photos?res.data.data.photos.length:0;
@@ -209,10 +209,10 @@ Page({
     this.setData({
       commentInputValue:event.detail.value
     });
-    console.log(event.detail.value);
+   
   },
   sendComment:function(){
-    console.log("sendComment");
+ 
     var commentInputValue = this.data.commentInputValue;
     if(!commentInputValue){
       return;
@@ -240,7 +240,7 @@ Page({
           console.log(res);
         },
         success: function(res) {
-          console.log(res);
+       
           if(res.data.errcode == 0){
             var r = [res.data.data];
             var message = that.data.message;
@@ -292,13 +292,13 @@ Page({
     });
   },
   clickRespItem:function(event){
-    console.log("clickRespItem");
+ 
     if(this.data.isShowTypewriting){
       return;
     }
     var resp = app.getValueFormCurrentTargetDataSet(event,"resp");
     var currentResp = this.data.currentResp;
-    console.log(resp);
+ 
     if(!currentResp||currentResp.id!=resp.id){
       this.setData({
         placeholder:"@"+resp.author,
@@ -320,22 +320,22 @@ Page({
     
   },
   swiperChange:function(event){
-    console.log(event);
+   
     this.setData({
       currentImageIndex:event.detail.current+1
     });
   },
   imageError:function(event){
-    console.log(event);
+  
   },
   loaded:function(event){
     var index = app.getValueFormCurrentTargetDataSet(event,"imgIndex");
-    console.log(index);
+ 
     var showImages = this.data.showImages;
     if(showImages[index]){
-      console.log(showImages[index]);
+   
       showImages[index].isShow = true;
-      console.log(showImages[index]);
+  
       this.setData({
         showImages:showImages
       });
@@ -349,7 +349,7 @@ Page({
       currentResp:{},
       initInputValue:""
     });
-    console.log("bindBlur");
+ 
     this.setData({
       isShowTypewriting:false
     });
@@ -359,7 +359,7 @@ Page({
     });
   },
   bindfocus:function(){
-    console.log("bindfocus");
+ 
     if(!this.data.isShowTypewriting){
       this.setData({
         isShowTypewriting:true

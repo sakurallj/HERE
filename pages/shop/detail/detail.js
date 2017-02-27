@@ -10,7 +10,7 @@ function loadNotes(that,callback){
     lng:app.globalData.location.longitude,
     lat:app.globalData.location.latitude
   },data = app.getAPISign(data);
-  console.log(data);
+ 
   //获得首页数据
   wx.request({
     url:app.globalData.url.api.pInfoList,
@@ -20,14 +20,14 @@ function loadNotes(that,callback){
       'content-type': 'application/json'
     },
     fail:function(res){
-      console.log(res);
+  
       wx.hideToast();
     },
-    success: function(res) {
-      console.log(res);
+    success: function(res) { 
+      
       var isLoadEmpty = res.data.data.length==0;
       var notes = app.util.separateNotes(that,app,res.data.data,that.isRefresh),rawNotes=that.data.rawNotes;
-      console.log(notes);
+   
       if(that.isRefresh){
         rawNotes = res.data.data;
       }
@@ -77,7 +77,7 @@ Page({
     wx.showNavigationBarLoading();
     //清楚残余的上次发表的纸条
     wx.removeStorageSync('comment_edit_message');
-    console.log(options);
+ 
     var shop = this.data.shop;
     shop.name = options.name;
     shop.image = options.image;
@@ -127,7 +127,7 @@ Page({
           console.log(res);
         },
         success: function(res) {
-          console.log(res);        
+      
           that.setData({
             haveNewMessage:res.data.unread>0
           });
@@ -156,13 +156,14 @@ Page({
   onReady:function(){
     // 页面渲染完成
     var sy = wx.getSystemInfoSync();
-    console.log(sy);
+  
     var svColumnHeight = (750/sy.windowWidth)*sy.windowHeight-90;
      this.setData({
        svColumnHeight:svColumnHeight
      });
   },
   onShow:function(){
+    var that = this;
     if(app.globalData.userToken){
       //获得消息
       var data = {
@@ -177,7 +178,7 @@ Page({
           console.log(res);
         },
         success: function(res) {
-          console.log(res);        
+       
           that.setData({
             haveNewMessage:res.data.unread>0
           });
@@ -185,9 +186,9 @@ Page({
       });
     }
     var res = wx.getStorageSync('comment_edit_message');
-    console.log(res);
+   
     if(res){
-      console.log(333);
+      
       var images = res.imageUrls?JSON.parse(res.imageUrls):[], note = {
         addTime:"",
         avatar:app.globalData.userInfo.avatarUrl,
@@ -202,20 +203,13 @@ Page({
         nickName:app.globalData.userInfo.nickName,
         photo:images.length>0?images[0]:""
       };
-      console.log(images);
-      this.setData({
-        notes:{
-          coloums1:[],
-          coloums2:[],
-          coloums1Heigth:0,//列高
-          coloums2Heigth:0//列高
-        }
-      });
+     
+     
       var rawNotes=this.data.rawNotes,rawNotes1=[note];
       Array.prototype.push.apply(rawNotes1,rawNotes);
-      console.log("notes");
-      console.log(rawNotes1);
-      var notes = app.util.separateNotes(this,app,rawNotes1);
+ 
+      var notes = app.util.addNoteToColumn(this,app,note);
+ 
       this.setData({
         notes:notes,
         rawNotes:rawNotes1

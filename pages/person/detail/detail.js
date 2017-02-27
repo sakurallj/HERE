@@ -16,7 +16,7 @@ function loadNotes(that,callback){
       url = app.globalData.url.api.myInfoList;
     }
     data = app.getAPISign(data);
-    console.log(data);
+ 
     //获得首页数据
     wx.request({
       url:url,
@@ -30,10 +30,10 @@ function loadNotes(that,callback){
         wx.hideToast();
       },
       success: function(res) {
-        console.log(res);       
+    
         var isLoadEmpty = res.data.data.length==0;   
         var notes = app.util.separateNotes(that,app,res.data.data,that.isRefresh),rawNotes=that.data.rawNotes;
-        console.log(notes);
+      
         if(that.isRefresh){
           rawNotes = res.data.data;
         }
@@ -125,7 +125,7 @@ Page({
           sOpenId:sOpenId
         }
       });
-      console.log(app.globalData.userInfo);
+ 
       loadNotes(that,function(res){
         that.setData({
           isFirstLoadEmpty:res.data.data&&res.data.data.length==0
@@ -136,7 +136,7 @@ Page({
   onReady:function(){
     // 页面渲染完成
     var sy = wx.getSystemInfoSync();
-    console.log(sy);
+ 
     var svColumnHeight = (750/sy.windowWidth)*sy.windowHeight-90;
      this.setData({
        svColumnHeight:svColumnHeight
@@ -168,12 +168,12 @@ Page({
           var id = app.getValueFormCurrentTargetDataSet(event,"id");
           var index = app.getValueFormCurrentTargetDataSet(event,"index");
           var columnNum = app.getValueFormCurrentTargetDataSet(event,"columnNum");
-          console.log(index);console.log(columnNum);
+ 
           var data = {
             token:app.globalData.userToken,
             id:id
           }, data = app.getAPISign(data);
-          console.log(data);
+        
           //获得首页数据
           wx.request({
             url:app.globalData.url.api.delNote,
@@ -187,7 +187,7 @@ Page({
               wx.hideToast();
             },
             success: function(res) {
-              console.log(res);
+    
               
               var notes =  that.data.notes;
               if(columnNum==1){

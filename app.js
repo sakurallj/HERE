@@ -169,7 +169,7 @@ App({
     else if(that.globalData.userOpenId){
       //重新向服务器登录
       loginForServer(that,that.globalData.userInfo,function(res){
-        console.log(res);
+ 
         if(typeof callback == "function")callback(that.globalData.userToken);
       });
     }
@@ -177,7 +177,7 @@ App({
       //先微信登录在登录服务器
       wx.login({
         success: function (res) {
-          console.log(res);
+      
           //获得openid session_key
           wx.request({
             url:that.globalData.url.api.codeToSessionKey,
@@ -189,16 +189,16 @@ App({
               console.log(res);
             },
             success: function(res) {
-              console.log(res);
+       
               that.globalData.userOpenId = res.data.openid;
               //获得用户信息
               wx.getUserInfo({
                 success: function (res) {
                   that.globalData.userInfo = res.userInfo;
-                  console.log(res);
+      
                   //登录服务器
                   loginForServer(that,res.userInfo,function(res){
-                    console.log(res);
+ 
                     if(typeof callback == "function")callback(that.globalData.userToken);
                   });
                 }

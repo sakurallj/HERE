@@ -54,7 +54,7 @@ function formatShowTimeText(second) {
   }
   else {
     var t = new Date(second * 1000);
-    console.log(t);
+   
     return H + ":" + m;
   }
 }
@@ -112,61 +112,70 @@ function formatShowText(str, sLen) {
       return str.substring(0, i) + "...";
     }
   }
+  return str;
+}
+/**
+ * 获得note的展示高度
+ */
+function getNoteHeight(note){
+  var height = 0,textHeight=0;
+  //计算文本高度
+  if (note.content) {
+      var rawLen = note.content ? note.content.length : 0
+        , ascllLen = getAscllLength(note.content) ;
+      var trueLen = rawLen - ascllLen + Math.ceil(ascllLen / 2);
+      var line = Math.ceil((trueLen * 28) / 304);
+      line = line > 3 ? 3 : line;
+      textHeight = line * 47;
+    }
+  //计算图片及基本高度
+  if (note.ispartner == 1) {
+      height += 375;//商家的高度 
+  }
+  else {
+    if (note.photo) {
+      height += 150;//图片高度
+    }
+    height += textHeight + 119;//119为item最小高度 textHeight为文字高度
+  }
+  return height;
 }
 /**
  * 分割notes成两列
  */
 function separateNotes(that, app, data, isRefresh) {
-  console.log(isRefresh);
+  
   var length = data.length,
     coloums1Heigth = isRefresh ? 0 : that.data.notes.coloums1Heigth,
     coloums2Heigth = isRefresh ? 0 : that.data.notes.coloums2Heigth,
     coloums1 = isRefresh ? [] : that.data.notes.coloums1,
     coloums2 = isRefresh ? [] : that.data.notes.coloums2;
   for (var i = 0; i < length; i++) {
-    //note 结构
-    //"id": "195", 
-    //"content": "116", 
-    //"longitude": "113.260572", 
-    //"latitude": "23.135633", 
-    //"addTime": "1486307788", 
-    //"fdNoteOpenID": "5717368126", 
-    //"nickName": "9527", 
-    //"avatar": "http://900here.com/var/uploads/upload/1486092461_36567.jpg",
-    //"photo": null, 
-    //"commentnum": "0"
     var note = data[i];
     if (note.content && note.content.indexOf("\\u") >= 0) {
-      note.content = app.util.decodeUTF8(note.content);
+      note.content = decodeUTF8(note.content);
     }
-    var textHeight = 0;
+    var noteHeight = 0;
     //计算行数 文本高度 及 截取文本
     if (note.content) {
-      var rawLen = note.content ? note.content.length : 0
-        , ascllLen = app.util.getAscllLength(note.content);
-      var trueLen = rawLen - ascllLen + Math.ceil(ascllLen / 2);
-      var line = Math.ceil((trueLen * 28) / 304);
-      if (line > 3) {
-        note.content = formatShowText(note.content);
-        //处理分词的文本
-        if (note.contentar) {
-          var contentar = note.contentar, contentarLen = contentar.length, tmpContent = "", tmpContentLength = 0;
-          for (var tI = 0; tI < contentarLen; tI++) {
-            var tmpLength = textLength(contentar[tI].word);
-            if (tmpContentLength + tmpLength > 25) {
-              var sLen = 25 - tmpContentLength;
-              contentar[tI].word = formatShowText(contentar[tI].word, sLen);
-              note.contentar = contentar.splice(0, tI + 1);
-              break;
-            }
-            tmpContentLength += tmpLength;
-          }
-        }
-      }
-      line = line > 3 ? 3 : line;
-      textHeight = line * 47;
+  
+      note.content = formatShowText(note.content);
     }
-
+    noteHeight = getNoteHeight(note);
+    //处理分词的文本
+    if (note.contentar) {
+      var contentar = note.contentar, contentarLen = contentar.length, tmpContent = "", tmpContentLength = 0;
+      for (var tI = 0; tI < contentarLen; tI++) {
+        var tmpLength = textLength(contentar[tI].word);
+        if (tmpContentLength + tmpLength > 25) {
+          var sLen = 25 - tmpContentLength;
+          contentar[tI].word = formatShowText(contentar[tI].word, sLen);
+          note.contentar = contentar.splice(0, tI + 1);
+          break;
+        }
+        tmpContentLength += tmpLength;
+      }
+    }
     //没有文本则不展示 出 商家外
     if (!note.content && note.ispartner != 1) {
       continue;
@@ -182,38 +191,40 @@ function separateNotes(that, app, data, isRefresh) {
       note.itemIndex = coloums1.length;
       note.coloumsIndex = 1;
       coloums1.push(note);
-      if (note.ispartner == 1) {
-        coloums1Heigth += 375;//商家的高度 
-      }
-      else {
-        if (note.photo) {
-          coloums1Heigth += 150;//图片高度
-        }
-        coloums1Heigth += textHeight + 119;//119为item最小高度 textHeight为文字高度
-      }
-
+      coloums1Heigth += noteHeight ; 
     }
     else {
       note.itemIndex = coloums2.length;
       note.coloumsIndex = 2;
       coloums2.push(note);
-      if (note.ispartner == 1) {
-        coloums2Heigth += 375;//商家的高度 
-      }
-      else {
-        if (note.photo) {
-          coloums2Heigth += 150;//图片高度
-        }
-        coloums2Heigth += textHeight + 119;//119为item最小高度 textHeight为文字高度
-      }
+      coloums2Heigth += noteHeight ; 
     }
   }
-  return {
+  var notes = {
     coloums1: coloums1,
     coloums2: coloums2,
     coloums1Heigth: coloums1Heigth,//列高
     coloums2Heigth: coloums2Heigth//列高
   };
+   
+  return notes;
+}
+/**
+ * 添加纸条到 column
+ */
+function addNoteToColumn(that, app, note){
+  var  notes = that.data.notes,cNote = [note],  noteHeight = getNoteHeight(note);
+  if(notes.coloums1Heigth<=notes.coloums2Heigth){
+    Array.prototype.push.apply(cNote, notes.coloums1);
+    notes.coloums1 = cNote;
+    notes.coloums1Heigth += noteHeight ; 
+  }
+  else{
+    Array.prototype.push.apply(cNote, notes.coloums2);
+    notes.coloums2 = cNote;
+    notes.coloums2Heigth += noteHeight ; 
+  }
+  return notes;
 }
 /**
  * 判断是不是空的对象 {}  new Object()
@@ -287,5 +298,6 @@ module.exports = {
   isEmptyObject: isEmptyObject,
   notesPhotoLoaded: notesPhotoLoaded,
   getPonitToPointDistance: getPonitToPointDistance,
-  formatDistance: formatDistance
+  formatDistance: formatDistance,
+  addNoteToColumn:addNoteToColumn
 }

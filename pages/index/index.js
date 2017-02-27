@@ -2,12 +2,11 @@
 //获取应用实例
 var app = getApp();
 function loadedNotes(that,res){
-  console.log(111);
-  console.log(res);
+ 
   if(res&&res.data&&res.data.data){
     var isLoadEmpty = res.data.data.length==0;
     var notes = app.util.separateNotes(that,app,res.data.data,that.isRefresh),rawNotes=that.data.rawNotes;
-    console.log(notes);
+ 
     if(that.isRefresh){
       rawNotes = res.data.data;
     }
@@ -45,7 +44,7 @@ function loadNotes(that,latitude,longitude,callback){
     lng:longitude,
     wxapp:1
   }, data = app.getAPISign(data);
-  console.log(data);
+ 
   //获得首页数据
   wx.request({
     url:app.globalData.url.api.noteList,
@@ -94,7 +93,7 @@ Page({
   onReady:function(){
     // 页面渲染完成
     var sy = wx.getSystemInfoSync();
-    console.log(sy);
+ 
     var svColumnHeight = (750/sy.windowWidth)*sy.windowHeight-90;
      this.setData({
        svColumnHeight:svColumnHeight
@@ -117,7 +116,7 @@ Page({
           console.log(res);
         },
         success: function(res) {
-          console.log(res);        
+   
           that.setData({
             haveNewMessage:res.data.unread>0
           });
@@ -127,9 +126,9 @@ Page({
     
     // 
     var res = wx.getStorageSync('comment_edit_message');
-    console.log(res);
+ 
     if(res){
-      console.log(333);
+ 
       var images = res.imageUrls?JSON.parse(res.imageUrls):[], note = {
         addTime:"",
         avatar:app.globalData.userInfo.avatarUrl,
@@ -144,20 +143,12 @@ Page({
         nickName:app.globalData.userInfo.nickName,
         photo:images.length>0?images[0]:""
       };
-      console.log(images);
-      this.setData({
-        notes:{
-          coloums1:[],
-          coloums2:[],
-          coloums1Heigth:0,//列高
-          coloums2Heigth:0//列高
-        }
-      });
+
       var rawNotes=this.data.rawNotes,rawNotes1=[note];
       Array.prototype.push.apply(rawNotes1,rawNotes);
-      console.log("notes");
-      console.log(rawNotes1);
-      var notes = app.util.separateNotes(this,app,rawNotes1);
+   
+      var notes = app.util.addNoteToColumn(this,app,note);
+ 
       this.setData({
         notes:notes,
         rawNotes:rawNotes1
@@ -209,7 +200,7 @@ Page({
           console.log(res);
         },
         success: function(res) {
-          console.log(res);        
+        
           that.setData({
             haveNewMessage:res.data.unread>0
           });
@@ -218,7 +209,7 @@ Page({
     });
     //获得地理位置
     app.getLocation(function(res){
-      console.log(res);
+    
       var latitude = res.latitude;
         var longitude = res.longitude;
         var speed = res.speed;
@@ -312,7 +303,7 @@ Page({
     });  
   },
   touchMove:function(event){
-    console.log(event);
+ 
   },
   refresh:function(){
     this.setData({  
@@ -329,7 +320,7 @@ Page({
     }
   },
   imageError:function(event){
-    console.log(event);
+ 
   },
   loaded:function(event){
     app.util.notesPhotoLoaded(this,app,event);

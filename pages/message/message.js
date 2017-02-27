@@ -10,7 +10,7 @@ function loadMessage(that,callback){
       token:app.globalData.userToken,
       wxapp:1
     }, data = app.getAPISign(data);
-    console.log(data);
+  
     //获得首页数据
     wx.request({
       url:app.globalData.url.api.notice,
@@ -20,7 +20,7 @@ function loadMessage(that,callback){
         console.log(res);
       },
       success: function(res) {
-        console.log(res);
+   
         var data = res.data.data,len = data.length?data.length:0,messages=[];
         if(len==0){
           that.setData({
@@ -109,7 +109,7 @@ Page({
     var data = {
       token:app.globalData.userToken
     }, data = app.getAPISign(data);
-    console.log(data);
+ 
     //获得首页数据
     wx.request({
       url:app.globalData.url.api.setReadMessage,
@@ -119,7 +119,7 @@ Page({
         console.log(res);
       },
       success: function(res) {
-        console.log(res);
+ 
          
       }
     });
@@ -138,7 +138,7 @@ Page({
   },
   clickItem:function(event){
     var item = app.getValueFormCurrentTargetDataSet(event,"item");
-    console.log(item);
+ 
     wx.navigateTo({
       url: '/pages/comment/pdetail/pdetail?id='+item.infoId
     });
@@ -166,7 +166,7 @@ Page({
   loaded:function(event){
      var itemIndex = app.getValueFormCurrentTargetDataSet(event,"itemIndex");
      var messages = this.data.messages;
-     console.log(itemIndex);
+ 
      if(messages[itemIndex]){
        messages[itemIndex].isLoaded = true;
       this.setData({
