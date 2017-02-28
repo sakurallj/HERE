@@ -65,3 +65,6 @@
 .items{
   margin-top:0rpx;
 }
+.none-resp{
+    margin-top: 50%;
+}

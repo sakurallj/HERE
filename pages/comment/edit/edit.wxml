@@ -10,12 +10,15 @@
                 <view class="clear"></view>
             </view>
             <view bindtap="chooseLocation">
-                <image bindtap="previewImages"  class="program-write-local"  
+                <image  class="program-write-local"  
                             mode="aspectFill" src="/pages/images/program-local.png">
                 </image> 
                 <view class="program-write-local-text">
                     {{message.address.name}}
                 </view>
+                <image class="right-icon program-write-local-rigth"  
+                            mode="aspectFill" src="/pages/images/right.png">
+                </image> 
                 <view class="clear"></view>
             </view>
         </view>

@@ -5,12 +5,24 @@
     padding: 0 30rpx;
     box-sizing: border-box;
     height: 280rpx;
+    position: relative;
+}
+.show-face{
+    background: rgba(0, 0, 0, 0);
+}
+.shop-face{
+    height: 280rpx;
+    width: 100%;
+    position: absolute;
+    top:0;
+    left: 0;
+    z-index: -1;
 }
 .detail-head-main{
     text-align: center;
     padding-top: 59rpx ;
- 
     box-sizing: border-box;
+    z-index: 2;
 }
 .detail-head-main-first{
     font-size:32rpx;
@@ -82,4 +94,7 @@
 .warn-new{
     top:85rpx;
     left:65rpx;
+}
+.none-resp{
+    margin-top: 50%;
 }

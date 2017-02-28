@@ -3,9 +3,27 @@
 <import src="../../template/normal/lost-network.wxml"/>
 <view class="body" style="background-color: {{bodyBgColor}};height:{{bodyHeight}};">
   <view class="content">
+    <view style="height:{{contentMainCoverHeight}};display:{{isShowTypewriting?'block':'block'}}"  class="content-main-cover">
+      <view class="resp-area">
+        <view  class="resp-area-tool">
+          <view  class="resp-area-tool-cancel">
+            取消
+          </view>
+          <view  class="resp-area-tool-title">
+            写回应
+          </view>
+          <view  class="resp-area-tool-send">
+            发送
+          </view>
+          <view class="clear"></view>
+        </view>
+        <textarea>
+        </textarea>
+      </view>
+    </view>
     <template is="lost-network" wx:if="{{!haveNetwork}}"/>
     <scroll-view  wx:if="{{haveNetwork}}" animation="{{animationData}}" class="content-main" scroll-y="true" style="height:{{contentMainHeight}};" bindscroll="scroll">
-      <view style="height:{{contentMainCoverHeight}};display:{{isShowTypewriting?'block':'none'}}"  class="content-main-cover"></view>
+      
       <view class="detail-main">
         <view class="detail-main-header">
           <image class="detail-main-header-head person-header" catchtap="clickHeader" mode="scaleToFill" src="{{message.avatar}}" data-sopenid="{{message.fdNoteOpenID}}">

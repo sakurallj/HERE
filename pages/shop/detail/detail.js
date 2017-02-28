@@ -60,6 +60,7 @@ Page({
       image:"",
       id:""
     },
+    isShowFace:false,//是否展示商家背景图
     isFirstLoadEmpty:false,
     isLoadEmpty:false,
     hasMore:false,
@@ -82,6 +83,7 @@ Page({
     shop.name = options.name;
     shop.image = options.image;
     shop.id = options.id;
+    
     if(options.name){
       wx.setNavigationBarTitle({
         title: options.name
@@ -140,7 +142,8 @@ Page({
               var shop = {
                 name:partner.fdName,
                 image:partner.fdLogo,
-                id:options.id
+                id:options.id,
+                face:partner.fdFace
               };
               that.setData({
                 shop:shop
@@ -313,5 +316,11 @@ Page({
         }
       }
     });
-  }
+  },
+  bindFaceload:function(){
+    this.setData({
+      isShowFace:true
+    });
+  },
+
 })

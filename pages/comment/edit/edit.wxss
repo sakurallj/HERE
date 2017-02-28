@@ -21,6 +21,8 @@
 }
 .program-write-img-group{
     margin-top: 32rpx;
+    border-bottom: 1rpx solid #d0d0d0;
+    margin-bottom: 10rpx;
 }
 .program-write-img{
     width: 153.9rpx;
@@ -34,7 +36,7 @@
     height: 153.9rpx;
     text-align: center;
     line-height: 153.9rpx;
-    border: 2rpx solid #b8b8b8;
+    border: 2rpx solid #d0d0d0;
     font-size: 40rpx;
     color: #b8b8b8;
     float: left;
@@ -43,7 +45,7 @@
 }
 .program-write-local-text{
     line-height: 38rpx;
-    padding-left: 5rpx;
+    padding-left: 15rpx;
     color: #b8b8b8;
     font-size: 24rpx;
     float: left;
@@ -69,4 +71,8 @@
     text-align: center;
     color: #fff;
     font-size: 32rpx;
+}
+.program-write-local-rigth{
+    float: right;
+    padding-top: 3rpx;
 }

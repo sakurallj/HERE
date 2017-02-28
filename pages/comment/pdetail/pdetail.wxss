@@ -22,9 +22,10 @@
     position: absolute;
     top: 0;
     left: 0;
-    background:rgba(0,0,0,0);
+    background:rgba(0,0,0,.5);
     width: 100%;
     z-index: 200;
+    text-align: center;
 }
 .detail-main{
     width: 750rpx;
@@ -266,4 +267,32 @@ swiper {
 
 .cannot-send{
     color:#999999;
+}
+.resp-area{
+    height: 300rpx;
+    width: 690rpx;
+    background: #EFEFEF;
+    line-height: 300rpx;
+    position: absolute;
+    left:30rpx;
+    bottom:100rpx;
+    font-size: 28rpx;
+    padding: 30rpx;
+    box-sizing: border-box;
+}
+.resp-area-tool{
+    height:100rpx;
+}
+.resp-area-tool-cancel{
+    float: left;
+    height:50rpx;
+}
+.resp-area-tool-title{
+    font-size: 32rpx;
+    float:left;
+    height:50rpx;
+}
+.resp-area-tool-send{
+    float: right;
+    height:50rpx;
 }

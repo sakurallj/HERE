@@ -3,7 +3,10 @@
 <view class="body">
     <view class="content">
         <template is="lost-network" wx:if="{{!haveNetwork}}"/>
-        <view class="detail-head" wx:if="{{haveNetwork}}">
+        <view class="detail-head {{isShowFace?'show-face':''}}" wx:if="{{haveNetwork}}">
+            <image   class="shop-face" catchtap="clickWarn" 
+                mode="aspectFill" src="{{shop.face}}" bindload="bindFaceload" >
+            </image> 
             <view class="detail-head-main">
                 <view class="detail-head-main-first">
                     <view class="float-left">

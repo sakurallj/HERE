@@ -11,6 +11,7 @@
   text-align: center;
   padding-top: 7rpx;
   box-sizing: border-box;
+  border-bottom: 1rpx solid #d0d0d0;
 }
 .search{
    padding-top: 10rpx;

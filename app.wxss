@@ -110,3 +110,7 @@ page{
 .float-left{
   float: left;
 }
+.right-icon{
+  width:30rpx;
+  height:30rpx;
+}
