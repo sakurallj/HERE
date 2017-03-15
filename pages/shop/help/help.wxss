@@ -1,0 +1,5 @@
+/* pages/shop/help/help.wxss */
+.help{
+    width: 750rpx;
+    height: 1305rpx;
+}

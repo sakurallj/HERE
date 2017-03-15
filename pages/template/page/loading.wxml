@@ -1,0 +1,9 @@
+<template name="page-loading">
+    <view  class="page-loading">
+    <view class="loading">
+      <image class="loading-icon" mode="aspectFill" src="/pages/images/loading.gif">
+      </image>
+      <view class="loading-text">{{loadingText}}</view>
+    </view>
+  </view>
+</template>

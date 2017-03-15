@@ -1,5 +1,6 @@
 @import "/pages/template/notes/note.wxss";
 @import "/pages/template/normal/lost-network.wxss";
+@import "/pages/template/page/loading.wxss";
 .detail-head{
     background-color: #fff;
     padding: 0 30rpx;
@@ -66,5 +67,8 @@
   margin-top:0rpx;
 }
 .none-resp{
+    margin-top: 50%;
+}
+.page-loading{
     margin-top: 50%;
 }

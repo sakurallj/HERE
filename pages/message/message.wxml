@@ -5,7 +5,7 @@
         <view class="reply-main"  wx:if="{{haveNetwork}}">
             <view class="reply-option" wx:for="{{messages}}" bindtap="clickItem" data-item="{{item}}">
                 <image   class="reply-option-head person-header"
-                    mode="scaleToFill" src="{{item.headerImage}}">
+                    mode="aspectFill" src="{{item.headerImage}}">
                 </image> 
                 <view class="reply-option-content with-img">
                     <view class="reply-option-content-name">
@@ -17,10 +17,10 @@
                     <view class="reply-option-content-date">{{item.time}}</view>
                 </view>
                 <image  wx:if="{{item.contentImage}}"  class="reply-option-img {{item.isLoaded?'reply-option-img-loaded':''}}"   binderror="imageError" bindload="loaded"  data-item-index="{{index}}"
-                    mode="scaleToFill" src="{{item.contentImage}}">
+                    mode="aspectFill" src="{{item.contentImage}}">
                 </image> 
                 <image    wx:if="{{item.contentImage}}"  class="reply-option-img reply-option-img-holder {{item.isLoaded?'reply-option-img-holder-loaded':''}}"
-                    mode="scaleToFill" src="/pages/images/img_120.jpg">
+                    mode="aspectFill" src="/pages/images/img_120.jpg">
                 </image>
                 <view class="clear"></view>
             </view>

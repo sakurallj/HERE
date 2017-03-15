@@ -1,36 +1,41 @@
 <template name="note-item">
-    <view class="item-header">
-        <image   class="person-header-img person-header"
-            mode="aspectFill" src="{{avatar}}">
-        </image> 
-        <!--
+  <view class="item-header">
+    <view class="item-header-group">
+      <image class="person-header-img-holder person-header    {{isHeaderLoaded?'person-header-img-holder-loaded':''}}" mode="aspectFill" src="/pages/images/default-person.png">
+      </image>
+      <image class="person-header-img person-header {{isHeaderLoaded?'person-header-img-loaded':''}}" mode="aspectFill" src="{{avatar}}" bindload="loadedHeader" data-item-index="{{itemIndex}}" data-coloums-index="{{coloumsIndex}}">
+      </image>
+    </view>
+
+    <!--
         <view class="person-nickname text-ellipsis">{{nickName}}</view>
         -->
-        <view class="person-distanct">
-            <view class="space-text" wx:for="{{addressSpace}}" wx:key="*this"></view>{{address}}         
-        </view>
+    <view class="person-distanct">
+      {{address}}
     </view>
-    <view class="clear"></view>
-    <view class="item-body">
-        <view>
-        <!--
+  </view>
+  <view class="clear"></view>
+  <view class="item-body">
+    <view>
+
+      <!--
             <image   class="item-body-img {{isPhotoLoaded?'item-body-img-loaded':''}}" wx:if="{{photo}}"
                 mode="aspectFill" src="{{photo}}" binderror="imageError" bindload="loaded" data-item-index="{{itemIndex}}" data-coloums-index="{{coloumsIndex}}">
             </image> 
             <image   class="item-body-img item-body-img-holder {{isPhotoLoaded?'item-body-img-loaded-holder':''}}" wx:if="{{photo}}"
                 mode="aspectFit" src="/pages/images/img_300.jpg"  >
             </image> -->
-        </view>
-        <view class="item-body-text " style="max-height:{{contentar.length>1?140:132}}rpx" wx:if="{{contentar.length>0}}">
-            <block wx:for="{{contentar}}">
-                <view class="item-body-text-g item-body-text-{{item.size}}">{{item.word}}</view>
-            </block>
-        </view>
-        <view class="item-body-text" wx:elif="{{content}}">
-            {{content}} 
-        </view>
-        <view class="item-delete-text" wx:if="{{isMy}}" catchtap="deleteNote"  data-id="{{id}}" data-index="{{itemIndex}}" data-column-num="{{coloumsIndex}}">
-            删除
-        </view>
     </view>
+    <view class="item-body-text " style="max-height:{{contentar.length>1?158:150}}rpx" wx:if="{{contentar.length>0}}">
+      <block wx:for="{{contentar}}">
+        <view class="item-body-text-g item-body-text-{{item.size}}">{{item.word}}</view>
+      </block>
+    </view>
+    <view class="item-body-text" wx:elif="{{content}}">
+      {{content}}
+    </view>
+    <view class="item-delete-text" wx:if="{{isMy}}" catchtap="deleteNote" data-id="{{id}}" data-index="{{itemIndex}}" data-column-num="{{coloumsIndex}}">
+      删除
+    </view>
+  </view>
 </template>

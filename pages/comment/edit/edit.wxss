@@ -6,42 +6,47 @@
 .program-write{
     background-color: rgba(255, 255, 255, 0.9);
     min-height: 500rpx;
-    padding: 20rpx 20rpx 24rpx 20rpx;
+    padding: 32rpx 32rpx 32rpx 32rpx;
     box-shadow:0 1rpx 2rpx 0 rgba(0,0,0,0.30), inset 0 -1rpx 0 0 #ffffff;
 }
 .program-write-main{
     -webkit-appearance: none;
-    border: none;
     resize: none;
     outline: none;
     width: 100%;
-    height: 265rpx;
-    font-size: 28rpx;
+    height: 354rpx;
+    font-size: 32rpx;
     background: transparent;
+    border: 1rpx solid #d9d9d9;
+    box-sizing: border-box;
+    margin-top: 30rpx;
+    padding: 15rpx;
 }
 .program-write-img-group{
     margin-top: 32rpx;
-    border-bottom: 1rpx solid #d0d0d0;
-    margin-bottom: 10rpx;
 }
 .program-write-img{
-    width: 153.9rpx;
-    height: 153.9rpx;
+    width: 151.999rpx;
+    height: 151.999rpx;
     float: left;
-    margin: 5rpx;
-    margin-bottom: 5rpx;
+    margin-right: 7.9997rpx;
+    margin-bottom: 7.9997rpx;
+}
+.program-write-main-textarea{
+    color: #c3c3c3;
+}
+.program-write-img:nth-child(4n){
+    margin-right:0rpx;
 }
 .program-write-add{
-    width: 153.9rpx;
-    height: 153.9rpx;
+    width: 151.999rpx;
+    height: 151.999rpx;
     text-align: center;
     line-height: 153.9rpx;
-    border: 2rpx solid #d0d0d0;
+    border:1rpx solid #d9d9d9;
     font-size: 40rpx;
     color: #b8b8b8;
     float: left;
-    margin: 5rpx;
-    margin-bottom: 13rpx;
 }
 .program-write-local-text{
     line-height: 38rpx;
@@ -61,7 +66,7 @@
     float: left;
 }
 .program-write-btn-group{
-    padding-top: 50rpx;
+    padding-top: 30rpx;
 }
 .program-write-btn{
     background:#a98b59;
@@ -72,7 +77,28 @@
     color: #fff;
     font-size: 32rpx;
 }
+button[disabled][type="default"], wx-button[disabled]:not([type]){
+    background:#d1ae87;
+}
 .program-write-local-rigth{
     float: right;
     padding-top: 3rpx;
+}
+textarea{
+    color: #666666;
+}
+.program-write-btn{
+    border: 0;
+    text-align: center;
+    text-decoration: none;
+}
+button {
+    border-radius:0;
+}
+button::after{
+    content:none;
+    height:none;
+}
+.content{
+    position: fixed;
 }

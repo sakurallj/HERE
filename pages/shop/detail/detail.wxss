@@ -1,17 +1,18 @@
 @import "/pages/template/notes/note.wxss";
 @import "/pages/template/normal/lost-network.wxss";
+@import "/pages/template/page/loading.wxss";
 .detail-head{
     background-color: #fff;
     padding: 0 30rpx;
     box-sizing: border-box;
-    height: 280rpx;
+    height: 330rpx;
     position: relative;
 }
 .show-face{
     background: rgba(0, 0, 0, 0);
 }
 .shop-face{
-    height: 280rpx;
+    height: 330rpx;
     width: 100%;
     position: absolute;
     top:0;
@@ -20,7 +21,7 @@
 }
 .detail-head-main{
     text-align: center;
-    padding-top: 59rpx ;
+    padding-top: 89rpx ;
     box-sizing: border-box;
     z-index: 2;
 }
@@ -92,9 +93,25 @@
   margin-top:0rpx;
 }
 .warn-new{
-    top:85rpx;
+    top:115rpx;
     left:65rpx;
 }
 .none-resp{
     margin-top: 50%;
 }
+.detail-head-main-second-font-white{
+    color: #fff;
+}
+.page-loading{
+    margin-top: 50%;
+}
+.help{
+    height: 60rpx;
+    width: 60rpx;
+    position: absolute;
+    right:28rpx;
+    top:10rpx;
+    padding: 17rpx;
+    box-sizing: border-box;
+}
+ 

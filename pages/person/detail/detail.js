@@ -76,6 +76,7 @@ Page({
   isRefresh:false,
   pageNum:0,
   onLoad:function(options){
+    wx.removeStorageSync('comment_pdetail_srnum');
     this.pageNum = 0;
     var that = this;
     this.setData({
@@ -144,6 +145,15 @@ Page({
   },
   onShow:function(){
     // 页面显示
+    //更新纸条的回应数
+    var sendRespNum = wx.getStorageSync('comment_pdetail_srnum');
+    console.log("sendRespNum");
+    console.log(sendRespNum);
+    if (sendRespNum && sendRespNum.num > 0) {
+      app.util.updateNoteRespNum(this, sendRespNum.coloumsIndex, sendRespNum.itemIndex, sendRespNum.rawNotesIndex, sendRespNum.num);
+    }
+
+    wx.removeStorageSync('comment_pdetail_srnum');
   },
   onHide:function(){
     // 页面隐藏
@@ -215,7 +225,7 @@ Page({
     if(event.currentTarget&&event.currentTarget.dataset&& event.currentTarget.dataset.type){
       var item = app.getValueFormCurrentTargetDataSet(event,"item");
       wx.navigateTo({
-        url: '/pages/comment/pdetail/pdetail?id='+item.id+"&meter="+item.meter
+        url: '/pages/comment/pdetail/pdetail?id='+item.id+'&meter='+item.meter+'&itemIndex='+item.itemIndex+'&coloumsIndex='+item.coloumsIndex+'&rawNotesIndex='+item.rawNotesIndex
       });
     }
   },
@@ -260,11 +270,7 @@ Page({
         // 返回网络类型, 有效值：
         // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
         if(res.networkType =="none" ){
-          wx.showToast({
-            title: '请检查网络',
-            icon: 'loading',
-            duration: 1000
-          });
+          app.showCheckNetworld();
 
         }
         else{
@@ -272,5 +278,15 @@ Page({
         }
       }
     });
+  },
+  loadedHeader:function(event){
+    app.util.notesHeaderLoaded(this,app,event);
+  },
+  onShareAppMessage: function () {
+    var options = this.data.onLoadOptions;
+    return {
+      title: options.nickName + '的纸条墙',
+      path: 'pages/person/detail/detail?sOpenId=' +options.sOpenId+"&nickName="+options.nickName+"&avatar="+options.avatar
+    }
   }
 })

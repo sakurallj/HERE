@@ -126,11 +126,11 @@ function getNoteHeight(note){
       var trueLen = rawLen - ascllLen + Math.ceil(ascllLen / 2);
       var line = Math.ceil((trueLen * 28) / 304);
       line = line > 3 ? 3 : line;
-      textHeight = line * 47;
+      textHeight = line * 50;
     }
   //计算图片及基本高度
   if (note.ispartner == 1) {
-      height += 375;//商家的高度 
+      height += 390;//商家的高度 
   }
   else {
     if (note.photo) {
@@ -144,7 +144,8 @@ function getNoteHeight(note){
  * 分割notes成两列
  */
 function separateNotes(that, app, data, isRefresh) {
-  
+  console.log("data");
+  console.log(data);
   var length = data.length,
     coloums1Heigth = isRefresh ? 0 : that.data.notes.coloums1Heigth,
     coloums2Heigth = isRefresh ? 0 : that.data.notes.coloums2Heigth,
@@ -199,6 +200,7 @@ function separateNotes(that, app, data, isRefresh) {
     note.avatar = note.avatar ? note.avatar : app.globalData.defaultHeader;
     note.isPhotoLoaded = false;
     note.isShow = true;
+    note.rawNotesIndex = i;
     //处理距离
 
     if (coloums1Heigth <= coloums2Heigth) {
@@ -241,6 +243,10 @@ function addNoteToColumn(that, app, note){
     }
   }
   var  notes = that.data.notes,cNote = [note],  noteHeight = getNoteHeight(note);
+  Array.prototype.push.apply(cNote, notes.coloums1);
+  notes.coloums1 = cNote;
+  notes.coloums1Heigth += noteHeight ; 
+  /*
   if(notes.coloums1Heigth<=notes.coloums2Heigth){
     Array.prototype.push.apply(cNote, notes.coloums1);
     notes.coloums1 = cNote;
@@ -250,7 +256,7 @@ function addNoteToColumn(that, app, note){
     Array.prototype.push.apply(cNote, notes.coloums2);
     notes.coloums2 = cNote;
     notes.coloums2Heigth += noteHeight ; 
-  }
+  }*/
   return notes;
 }
 /**
@@ -286,6 +292,50 @@ function notesPhotoLoaded(that, app, event) {
     }
   }
 }
+function notesHeaderLoaded(that, app, event){
+  var coloumsIndex = app.getValueFormCurrentTargetDataSet(event, "coloumsIndex"),
+    itemIndex = app.getValueFormCurrentTargetDataSet(event, "itemIndex"),notes = that.data.notes;
+  if (coloumsIndex == 1) {
+    if (notes.coloums1[itemIndex]) {
+      notes.coloums1[itemIndex].isHeaderLoaded = true;
+      that.setData({
+        notes: notes
+      });
+    }
+  }
+  else {
+    if (notes.coloums2[itemIndex]) {
+      notes.coloums2[itemIndex].isHeaderLoaded = true;
+      that.setData({
+        notes: notes
+      });
+    }
+  }
+}
+function updateNoteRespNum(that,coloumsIndex,itemIndex,rawNotesIndex,num){
+  var notes = that.data.notes,rawNotes= that.data.rawNotes;
+  if(rawNotes[rawNotesIndex]){
+    rawNotes[rawNotesIndex].commentnum+= num;
+  }
+  if (coloumsIndex == 1) {
+    if (notes.coloums1[itemIndex]) {
+      notes.coloums1[itemIndex].commentnum+= num;
+      that.setData({
+        notes: notes,
+        rawNotes:rawNotes
+      });
+    }
+  }
+  else {
+    if (notes.coloums2[itemIndex]) {
+      notes.coloums2[itemIndex].commentnum+= num;
+      that.setData({
+        notes: notes,
+        rawNotes:rawNotes
+      });
+    }
+  }
+}
 function toRad(d) { 
   return d * Math.PI / 180; 
 }
@@ -313,6 +363,103 @@ function formatDistance(distance) {
     return "...";
   }
 }
+/**
+ * 转义正则表达式敏感的字符
+ */
+function formatReg(str){
+  return str.replace(/(\(-'"|\[|\{|\\|\^|\$|\||\)|\?|\*|\+|\.|\]|\})/g,'\\$1');
+}
+/**
+ *获得 敏感词
+ */
+function geBadWords(app,callback){
+  var badWords = app.globalData.badWords;
+  if(badWords.length>0){
+    if(typeof callback == "function")callback({data:badWords,code:0});
+  }
+  else{
+    badWords = [];
+    wx.request({
+      url:app.globalData.url.api.getBadWords,
+      method:"GET",
+      fail:function(res){
+        console.log(res);
+        if(typeof callback == "function")callback({data:[],code:1});
+      },
+      success: function(res) {
+        console.log(res);
+        if(res.data.errcode==0){
+          var data = res.data.data ,length=data.length;
+          for(var i=0;i<length;i++){
+            var ws = data[i].fdFilter,wLength = ws.length;
+            if(wLength){
+              for(var j=0;j<wLength;j++){
+                var w = formatReg(ws[j]);
+                if(!w){
+                  continue;
+                }
+                if( j==0){
+                  badWords[i]={
+                    id:data[i].id,
+                    str:w
+                  }
+                }
+                else{
+                  badWords[i].str+="|"+w;
+                }
+              }
+            }
+          }
+        }
+        if(typeof callback == "function")callback({data:badWords,code:0});
+      }
+    });
+  }
+}
+/**
+ * 判断是否有敏感词
+ */
+function hasBadWord(app,content,callback){
+  geBadWords(app,function(res){
+    if(res.code==0){
+      var data = res.data,length=data.length,isBad=[];
+      for(var i=0;i<length;i++){
+        if(!data[i].str){
+          continue;
+        }
+        console.log(i);
+        console.log(data[i]);
+
+        var pattern = new RegExp(data[i].str,"g");
+        if(pattern.test(content)){//包含
+          isBad[data[i].id] = true;           
+        }else{//不包含
+            isBad[data[i].id] = false;    
+        }
+      }//for(var i=0;i<length;i++)
+      console.log(isBad);
+      if(isBad[1]||isBad[4]){
+        if(typeof callback == "function")callback({msg:"包含政治、民族安全 包含黄赌毒枪支弹药",code:-10002});
+        return;
+      }
+      else{
+        var bLen = isBad.length;
+        for(var j=0;j<bLen;j++){
+          if(isBad[j]){
+            if(typeof callback == "function")callback({msg:"包含敏感词",code:-10001});
+            return;
+          }
+        }
+        if(typeof callback == "function")callback({msg:"",code:0});
+        return;
+      }
+    }
+    else{
+      if(typeof callback == "function")callback({msg:"获得敏感词失败",code:1});
+      return;
+    }
+  });
+}
 module.exports = {
   formatTime: formatTime,
   getRandomKey: getRandomKey,
@@ -326,5 +473,9 @@ module.exports = {
   notesPhotoLoaded: notesPhotoLoaded,
   getPonitToPointDistance: getPonitToPointDistance,
   formatDistance: formatDistance,
-  addNoteToColumn:addNoteToColumn
+  addNoteToColumn:addNoteToColumn,
+  notesHeaderLoaded:notesHeaderLoaded,
+  updateNoteRespNum:updateNoteRespNum,
+  geBadWords:geBadWords,
+  hasBadWord:hasBadWord
 }

@@ -1,66 +1,62 @@
-<!--index.wxml-->
-<import src="../template/notes/note-item.wxml"/>
-<import src="../template/notes/note-item-shop.wxml"/>
-<import src="../template/normal/lost-network.wxml"/>
 
-<view class="body"> 
-  <view class="header" style="position:{{headerPosition}}" >
+<!--index.wxml-->
+<import src="../template/notes/note-item.wxml" />
+<import src="../template/notes/note-item-shop.wxml" />
+<import src="../template/normal/lost-network.wxml" />
+<import src="../template/page/loading.wxml" />
+<view class="body">
+  <view class="header" style="position:{{headerPosition}}">
     <view class="float-left">
-      <image   class="warn-icon" bindtap="clickWarn"
-            mode="aspectFill" src="/pages/images/seller-bell.png">
+      <image class="warn-icon" bindtap="clickWarn" mode="aspectFill" src="/pages/images/seller-bell.png">
       </image>
-      <view class="warn-new" wx:if="{{haveNewMessage}}"></view> 
+      <view class="warn-new" wx:if="{{haveNewMessage}}"></view>
     </view>
     <view class="circle">
       {{locationName}}
     </view>
-    <image   class="edit-icon" bindtap="clickEdit"
-          mode="aspectFill" src="/pages/images/seller-edit.png">
-    </image> 
+    <image class="edit-icon" bindtap="clickEdit" mode="aspectFill" src="/pages/images/seller-edit.png">
+    </image>
   </view>
   <view class="clear"></view>
-  <template is="lost-network" wx:if="{{notes.coloums1.length==0&&notes.coloums2.length==0&&!haveNetwork}}"/>
-
-  <view scroll-y="true" class="items" wx:if="{{notes.coloums1.length>0||notes.coloums2.length>0}}" >
+  <template is="lost-network" wx:if="{{notes.coloums1.length==0&&notes.coloums2.length==0&&!haveNetwork}}" />
+  <view scroll-y="true" class="items" wx:if="{{notes.coloums1.length>0||notes.coloums2.length>0}}">
     <view>
       <view class="column">
-        <block  wx:key="id" wx:for="{{notes.coloums1}}">
-          <view class="item shop" wx:if="{{item.ispartner==1}}" bindtap="clickItem" data-type="shop"   data-item ="{{item }}">
-            <template is="note-item-shop"  data="{{...item}}"/>
+        <block wx:key="id" wx:for="{{notes.coloums1}}">
+          <view class="item shop" wx:if="{{item.ispartner==1}}" bindtap="clickItem" data-type="shop" data-item="{{item }}">
+            <template is="note-item-shop" data="{{...item}}" />
           </view>
           <view class="item-groups" wx:else>
-            <view class="item " bindtap="clickItem" data-type="person" data-item ="{{item }}" >
-              <template is="note-item"  data="{{...item}}"/>
+            <view class="item " bindtap="clickItem" data-type="person" data-item="{{item }}">
+              <template is="note-item" data="{{...item}}" />
             </view>
-            <view class="item item-after"  wx:if="{{item.commentnum>0}}" bindtap="clickItem" data-type="person" data-item ="{{item }}">
-              <template is="note-item"  data="{{...item}}"/>
+            <view class="item item-after" wx:if="{{item.commentnum>0}}" bindtap="clickItem" data-type="person" data-item="{{item }}">
+              <template is="note-item" data="{{...item}}" />
             </view>
           </view>
         </block>
       </view>
       <view class="column">
-        
-        <block  wx:key="id" wx:for="{{notes.coloums2}}">
-          <view class="item shop" wx:if="{{item.ispartner==1}}" bindtap="clickItem" data-type="shop"   data-item ="{{item }}">
-            <template is="note-item-shop"  data="{{...item}}"/>
+        <block wx:key="id" wx:for="{{notes.coloums2}}">
+          <view class="item shop" wx:if="{{item.ispartner==1}}" bindtap="clickItem" data-type="shop" data-item="{{item }}">
+            <template is="note-item-shop" data="{{...item}}" />
           </view>
           <view class="item-groups" wx:else>
-            <view class="item " bindtap="clickItem" data-type="person"  data-item ="{{item }}">
-              <template is="note-item"  data="{{...item}}"/>
+            <view class="item " bindtap="clickItem" data-type="person" data-item="{{item }}">
+              <template is="note-item" data="{{...item}}" />
             </view>
-            <view class="item item-after" bindtap="clickItem" data-type="person"  data-item ="{{item }}" wx:if="{{item.commentnum>0}}">
-             <template is="note-item"  data="{{...item}}"/>
+            <view class="item item-after" bindtap="clickItem" data-type="person" data-item="{{item }}" wx:if="{{item.commentnum>0}}">
+              <template is="note-item" data="{{...item}}" />
             </view>
           </view>
         </block>
-      </view>  
+      </view>
       <view class="clear"></view>
     </view>
-    <view class="reply-more"  bindtap="loadMore" wx:if="{{hasMore}}" >
+    <view class="reply-more" bindtap="loadMore" wx:if="{{hasMore}}">
       <view class="loading">
-        <image   class="loading-icon" 
-          mode="aspectFill" src="/pages/images/loading.gif">
-        </image> 
+        <image class="loading-icon" mode="aspectFill" src="/pages/images/loading.gif">
+        </image>
         <view class="loading-text">加载中...</view>
       </view>
     </view>
@@ -68,7 +64,9 @@
       没有更多纸条了，你也来写一纸留言吧~
     </view>
   </view>
-  <view  wx:if="{{isFirstLoadEmpty&&notes.coloums1.length==0&&notes.coloums2.length==0}}" class="none-resp">
+  <view wx:if="{{isFirstLoadEmpty&&notes.coloums1.length==0&&notes.coloums2.length==0}}" class="none-resp">
     当前地区还没有纸条，贴一张试试~
   </view>
+  <template  wx:if="{{!isFirstLoadEmpty&&haveNetwork&&notes.coloums1.length==0&&notes.coloums2.length==0}}" is="page-loading" data="{{loadingText:'正在努力加载纸条...'}}" />
+  
 </view>

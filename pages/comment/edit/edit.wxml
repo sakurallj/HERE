@@ -1,29 +1,27 @@
 <view class="body">
-    <view class="content">
-        <view class="program-write">
-            <textarea class="program-write-main" fixed="true" maxlength="2000" placeholder="写在这儿，留给别人看看" bindinput="inputMsg"></textarea>
-            <view class="program-write-img-group">
-                <image bindtap="previewImages"  class="program-write-img" wx:for="{{message.images}}"  data-img-index="{{index}}"
-                        mode="aspectFill" src="{{item}}">
-                </image> 
-                <view class="program-write-add" bindtap="chooseImage">+</view>
-                <view class="clear"></view>
-            </view>
-            <view bindtap="chooseLocation">
-                <image  class="program-write-local"  
-                            mode="aspectFill" src="/pages/images/program-local.png">
-                </image> 
-                <view class="program-write-local-text">
-                    {{message.address.name}}
-                </view>
-                <image class="right-icon program-write-local-rigth"  
-                            mode="aspectFill" src="/pages/images/right.png">
-                </image> 
-                <view class="clear"></view>
-            </view>
+  <view class="content">
+    <view class="program-write">
+      <view bindtap="chooseLocation">
+        <image class="program-write-local" mode="aspectFill" src="/pages/images/program-local.png">
+        </image>
+        <view class="program-write-local-text">
+          {{message.address.name}}
         </view>
-        <view class="program-write-btn-group">
-            <view class="program-write-btn" bindtap="sendMessage"  >贴纸条</view>
-        </view>
+        
+        <view class="clear"></view>
+      </view>
+      <textarea class="program-write-main" fixed="true" maxlength="-1" placeholder="写在这儿，留给别人看看" bindinput="inputMsg"         placeholder-class="program-write-main-textarea"></textarea>
+      <view class="program-write-img-group">
+        <image bindtap="previewImages" class="program-write-img" wx:for="{{message.images}}" data-img-index="{{index}}" mode="aspectFill" src="{{item}}">
+        </image>
+        <view  class="program-write-add" bindtap="chooseImage">+</view>
+        <view class="clear"></view>
+      </view>
     </view>
+    <view class="program-write-btn-group">
+      <button loading="{{isSending}}" disabled="{{isSending}}" class="program-write-btn {{isSending?'program-write-btn-disabled':''}}" bindtap="sendMessage">
+        贴纸条
+      </button>
+    </view>
+  </view>
 </view>

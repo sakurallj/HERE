@@ -1,5 +1,6 @@
 <import src="../../template/notes/note-item.wxml" />
 <import src="../../template/normal/lost-network.wxml" />
+<import src="../../template/page/loading.wxml" />
 <view class="body">
   <view class="content">
     <template is="lost-network" wx:if="{{notes.coloums1.length==0&&!haveNetwork}}"/>
@@ -80,4 +81,5 @@
   <view wx:if="{{isFirstLoadEmpty&&haveNetwork}}" class="none-resp">
     还没有纸条，贴一张试试~
   </view>
+  <template  wx:if="{{haveNetwork&&notes.coloums1.length==0&&notes.coloums2.length==0}}" is="page-loading" data="{{loadingText:'正在努力加载纸条...'}}" />
 </view>

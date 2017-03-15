@@ -64,6 +64,9 @@ page{
 .person-header{
   border: 1px solid rgba(153,153,153,.15);
 }
+.shop-header{
+  border: 1px solid rgba(255,255,255,.65);
+}
 .loading{
   display: inline-block;
 }
@@ -86,6 +89,7 @@ page{
     margin-top: 70%;
     font-size:24rpx;
 }
+
 .not-more{
   color:#999999;
   text-align:center;
@@ -113,4 +117,15 @@ page{
 .right-icon{
   width:30rpx;
   height:30rpx;
+}
+.write-icon{
+  width:34rpx;
+  height:32rpx;
+}
+.blur {    
+  filter: blur(0px);    
+}
+.help-icon{
+  width:26rpx;
+  height:26rpx;
 }

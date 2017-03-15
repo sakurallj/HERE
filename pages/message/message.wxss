@@ -31,6 +31,7 @@
     letter-spacing:0;
     text-align:left;
     margin-right: 30rpx;
+    max-width:230rpx;
 }
 .reply-option-content-name-name-tips{
     padding-top: 4rpx;

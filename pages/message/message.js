@@ -183,11 +183,7 @@ Page({
         // 返回网络类型, 有效值：
         // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
         if(res.networkType =="none" ){
-          wx.showToast({
-            title: '请检查网络',
-            icon: 'loading',
-            duration: 1000
-          });
+          app.showCheckNetworld();
 
         }
         else{
