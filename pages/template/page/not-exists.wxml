@@ -1,0 +1,9 @@
+<template name="not-exists">
+    <view  class="not-exists">
+    <view class="loading">
+      <image  class="loading-icon" mode="aspectFill" src="/pages/images/close.png">
+      </image >
+      <view class="loading-text">{{loadingText}}</view>
+    </view>
+  </view>
+</template>

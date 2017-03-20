@@ -146,7 +146,15 @@ function sendMessage(that,message){
               isSending:false
             });
             wx.hideToast();
-            wx.navigateBack();
+            if(that.data.isShare){
+              wx.redirectTo({
+                url: '/pages/index/index'
+              });
+            }
+            else{
+              wx.navigateBack();
+            }
+            
           }
         }
       });
@@ -172,7 +180,9 @@ Page({
   },
   onLoad:function(options){
     var that = this;
-
+    this.setData({
+      isShare:options.isShare==1
+    });
     var BMap = new bMap.BMapWX({ 
         ak: app.globalData.bMapAK
     }); 
@@ -322,7 +332,7 @@ Page({
     var options = this.data.onLoadOptions;
     return {
       title:  '写张纸条，留给别人看看',
-      path: 'pages/comment/edit/edit'
+      path: 'pages/comment/edit/edit?isShare=1'
     }
   }
 })

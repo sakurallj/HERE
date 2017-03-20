@@ -43,6 +43,7 @@ function loadNotes(that, latitude, longitude, callback) {
     page: that.pageNum,
     lat: latitude,
     lng: longitude,
+    token: app.globalData.userToken,
     wxapp: 1,
     address: app.getStreetFromBMapSyc()
   }, data = app.getAPISign(data);
@@ -192,7 +193,7 @@ Page({
     });
     wx.removeStorageSync('comment_edit_message');
     wx.removeStorageSync('comment_pdetail_srnum');
-    
+
 
     //获得用户信息
     //调用登录接口
@@ -216,23 +217,24 @@ Page({
           });
         }
       });
-    });
-    //获得地理位置
-    app.getLocation(function (res) {
-      var latitude = res.latitude;
-      var longitude = res.longitude;
-      var speed = res.speed;
-      var accuracy = res.accuracy;
-      app.globalData.location = res;
-      loadNotes(that, latitude, longitude, function (res) {
-        loadedNotes(that, res);
-        wx.stopPullDownRefresh();
-        that.setData({
-          isFirstLoadEmpty: res.data.data && res.data.data.length == 0
-        });
+      //获得地理位置
+      app.getLocation(function (res) {
+        var latitude = res.latitude;
+        var longitude = res.longitude;
+        var speed = res.speed;
+        var accuracy = res.accuracy;
+        app.globalData.location = res;
+        loadNotes(that, latitude, longitude, function (res) {
+          loadedNotes(that, res);
+          wx.stopPullDownRefresh();
+          that.setData({
+            isFirstLoadEmpty: res.data.data && res.data.data.length == 0
+          });
 
+        });
       });
     });
+
   },
   clickEdit: function () {
     wx.navigateTo({
@@ -331,9 +333,12 @@ Page({
     }
   },
   imageError: function (event) {
-
+    console.log("imageError");
+    console.log(event);
   },
   loaded: function (event) {
+    console.log("loaded");
+    console.log(event);
     app.util.notesPhotoLoaded(this, app, event);
   },
   reloadForNotNetwork: function () {

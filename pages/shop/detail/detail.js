@@ -29,22 +29,28 @@ function loadNotes(that, callback) {
     },
     success: function (res) {
       console.log(res);
-      var isLoadEmpty = res.data.data.length == 0;
-      var notes = app.util.separateNotes(that, app, res.data.data, that.isRefresh), rawNotes = that.data.rawNotes;
+      if(res.data.errcode==0){
+        var isLoadEmpty = res.data.data.length == 0;
+        var notes = app.util.separateNotes(that, app, res.data.data, that.isRefresh), rawNotes = that.data.rawNotes;
 
-      if (that.isRefresh) {
-        rawNotes = res.data.data;
+        if (that.isRefresh) {
+          rawNotes = res.data.data;
+        }
+        else {
+          Array.prototype.push.apply(rawNotes, res.data.data);
+        }
+        that.setData({
+          notes: notes,
+          rawNotes: rawNotes,
+          isLoadEmpty: isLoadEmpty,
+          hasMore: res.data.more && res.data.more == 1
+        });
       }
-      else {
-        Array.prototype.push.apply(rawNotes, res.data.data);
+      else{
+        that.setData({
+          isDeleted: true
+        });
       }
-      that.setData({
-        notes: notes,
-        rawNotes: rawNotes,
-        isLoadEmpty: isLoadEmpty,
-        hasMore: res.data.more && res.data.more == 1
-      });
-
       wx.hideToast();
       wx.hideNavigationBarLoading();
       if (typeof callback == "function") callback(res);
@@ -263,6 +269,9 @@ Page({
     });
   },
   clickEdit: function () {
+    if(this.data.isDeleted){
+      return;
+    }
     wx.navigateTo({
       url: '/pages/comment/edit/edit?shopId=' + this.data.shop.id
     });

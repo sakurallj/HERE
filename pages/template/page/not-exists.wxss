@@ -1,0 +1,22 @@
+.not-exists{
+    color:#999999;
+    text-align:center;
+    margin-top: 70%;
+    font-size:24rpx;
+}
+.not-exists .loading{
+  display: inline-block;
+}
+.not-exists .loading-icon{
+  width:32rpx;
+  height:32rpx;
+  display:  block;
+  padding-top: -12rpx;
+  float: left;
+}
+.not-exists .loading-text{
+  margin-left: 10rpx;
+  display:  block;
+  float: left;
+  padding-top: 5rpx;
+}

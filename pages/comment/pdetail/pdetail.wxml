@@ -2,9 +2,11 @@
 <!--pages/comment/pdetail/pdetail.wxml    {{isShowTypewriting?'body-margin-top':'body-margin-top-transition-1'}}-->
 <import src="../../template/normal/lost-network.wxml" />
 <import src="../../template/page/loading.wxml" />
+<import src="../../template/page/not-exists.wxml" />
 <view class="body" style="background-color: {{bodyBgColor}};height:{{bodyHeight}};">
   <view class="content">
-  <!-- -->
+
+    <!-- -->
     <view style="height:{{contentMainCoverHeight}};display:{{isShowWriteResp?'block':'none'}}" class="content-main-cover">
       <view class="resp-area">
         <view class="resp-area-tool">
@@ -14,12 +16,12 @@
           <view class="resp-area-tool-title">
             写回应
           </view>
-          <button   class="resp-area-tool-send {{commentInputValue?'can-send':'cannot-send'}} " bindtap="sendComment" loading="{{isSending}}" disabled="{{!commentInputValue||(isSending&&commentInputValue) }}"  >
+          <button class="resp-area-tool-send {{commentInputValue?'can-send':'cannot-send'}} " bindtap="sendComment" loading="{{isSending}}" disabled="{{!commentInputValue||(isSending&&commentInputValue) }}">
             发送
           </button>
           <view class="clear"></view>
         </view>
-        <textarea maxlength="-1" class="resp-area-textarea" placeholder="{{placeholder}}" placeholder-class="placeholder-class" focus="{{focus}}" value="{{initInputValue}}" bindinput="commentInput">
+        <textarea maxlength="-1" class="resp-area-textarea" placeholder="{{placeholder}}" placeholder-class="placeholder-class {{isShowWriteResp?'':'placeholder-class-unshow'}}" focus="{{focus}}" value="{{initInputValue}}" bindinput="commentInput">
         </textarea>
       </view>
     </view>
@@ -88,11 +90,19 @@
         </view>
       </view>
     </scroll-view>
-    <view wx:if="{{haveNetwork}}" class="detail-bottom" bindtap="showWriteResp">
+    <view wx:if="{{haveNetwork&&!isDeleted}}" class="detail-bottom" bindtap="showWriteResp">
       <image class="write-icon write-resp-icon" mode="scaleToFill" src="/pages/images/pinglun.png">
       </image>
       <view class="write-resp">写回应</view>
     </view>
+    <view class="near-share" wx:if="{{isShare}}" bindtap="goHomePage">
+      <image class="near-bg-icon " mode="aspectFill" src="/pages/images/near.png">
+      </image>
+      <image class="near-point-icon" mode="aspectFill" src="/pages/images/near-point.png">
+      </image>
+      <view class="near-text">周围看看</view>
+    </view>
   </view>
-  <template  wx:if="{{haveNetwork}}" is="page-loading" data="{{loadingText:'正在努力生成纸条...'}}" />
+  <template wx:if="{{haveNetwork&&!isDeleted}}" is="page-loading" data="{{loadingText:'正在努力生成纸条...'}}" />
+  <template wx:if="{{isDeleted}}" is="not-exists" data="{{loadingText:'该纸条已被删除'}}" />
 </view>

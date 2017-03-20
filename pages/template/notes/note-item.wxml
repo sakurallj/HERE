@@ -7,9 +7,9 @@
       </image>
     </view>
 
-    <!--
+     
         <view class="person-nickname text-ellipsis">{{nickName}}</view>
-        -->
+     
     <view class="person-distanct">
       {{address}}
     </view>

@@ -58,7 +58,7 @@ Page({
     scrollLeft: 0,//向左滑动的距离
     isShowLoadMore: false,
     images: [],
-    isSending:false,//是否发送回应
+    isSending: false,//是否发送回应
     showImages: [],
     isShowTypewriting: false,//是否展示输入法
     id: "",//纸条id
@@ -66,13 +66,14 @@ Page({
     bodyBgColor: "auto",
     bodyHeight: "100%",
     commentInputValue: "",
-    placeholder: "写点什么~",
+    placeholder: "",
     focus: false,
     hasFocus: false,
-    sendRespNum:{
-      num:0,
-      itemIndex:-1,
-      coloumsIndex:-1
+    isShare: false,
+    sendRespNum: {
+      num: 0,
+      itemIndex: -1,
+      coloumsIndex: -1
     },//当前发送回应的条数
     initInputValue: "",
     isFirstLoadEmpty: false,
@@ -88,11 +89,11 @@ Page({
     wx.showNavigationBarLoading();
     this.setData({
       onLoadOptions: options,
-      sendRespNum:{
-        num:0,
-        itemIndex:options.itemIndex,
-        coloumsIndex:options.coloumsIndex,
-        rawNotesIndex:options.rawNotesIndex
+      sendRespNum: {
+        num: 0,
+        itemIndex: options.itemIndex,
+        coloumsIndex: options.coloumsIndex,
+        rawNotesIndex: options.rawNotesIndex
       }
     });
     var that = this;
@@ -113,7 +114,8 @@ Page({
     this.animation2 = animation2;
     that.setData({
       id: options.id,
-      animationData: this.animation.export()
+      animationData: this.animation.export(),
+      isShare: options.isShare == 1
     });
     wx.showNavigationBarLoading();
     //判断是否有网络
@@ -142,38 +144,45 @@ Page({
               console.log(res);
             },
             success: function (res) {
-
-              res.data.data.content = app.util.decodeUTF8(res.data.data.content);
-              //
-              var images = [], showImages = [], len = res.data.data.photos ? res.data.data.photos.length : 0;
-              for (var i = 0; i < len; i++) {
-                images[i] = res.data.data.photos[i].fdURL;
-                showImages[i] = {
-                  url: res.data.data.photos[i].fdURL,
-                  isShow: false
+              if (res.data.errcode == 0) {
+                res.data.data.content = app.util.decodeUTF8(res.data.data.content);
+                //
+                var images = [], showImages = [], len = res.data.data.photos ? res.data.data.photos.length : 0;
+                for (var i = 0; i < len; i++) {
+                  images[i] = res.data.data.photos[i].fdURL;
+                  showImages[i] = {
+                    url: res.data.data.photos[i].fdURL,
+                    isShow: false
+                  }
                 }
-              }
-              res.data.data.meter = options.meter || options.meter == 0 ? options.meter : '';
-              res.data.data.nickName = res.data.data.nickName ? res.data.data.nickName : "";
-              res.data.data.avatar = res.data.data.avatar ? res.data.data.avatar : app.globalData.defaultHeader;
-              that.setData({
-                message: res.data.data,
-                totalImage: len,
-                images: images,
-                showImages: showImages
-              });
-              getResp(that, function (res) {
-                wx.hideToast();
+                res.data.data.meter = options.meter || options.meter == 0 ? options.meter : '';
+                res.data.data.nickName = res.data.data.nickName ? res.data.data.nickName : "";
+                res.data.data.avatar = res.data.data.avatar ? res.data.data.avatar : app.globalData.defaultHeader;
                 that.setData({
-                  isFirstLoadEmpty: res.data.data && res.data.data.length == 0
+                  message: res.data.data,
+                  totalImage: len,
+                  images: images,
+                  showImages: showImages
                 });
-                if (res.data.data && res.data.data.length == 0) {
+                getResp(that, function (res) {
+                  wx.hideToast();
                   that.setData({
-                    bodyBgColor: "#fff",
-                    bodyHeight: app.getSystemInfo().windowHeight + "px"
+                    isFirstLoadEmpty: res.data.data && res.data.data.length == 0
                   });
-                }
-              });
+                  if (res.data.data && res.data.data.length == 0) {
+                    that.setData({
+                      bodyBgColor: "#fff",
+                      bodyHeight: app.getSystemInfo().windowHeight + "px"
+                    });
+                  }
+                });
+              }
+              else {//纸条不存在
+                that.setData({
+                  isDeleted:true
+                });
+              }
+
               wx.hideNavigationBarLoading();
             }
           });
@@ -185,7 +194,7 @@ Page({
   },
   onReady: function () {
     this.setData({
-      contentMainHeight: app.getSystemInfo().windowHeight-app.rpxToPx(80)+"px",
+      contentMainHeight: app.getSystemInfo().windowHeight - app.rpxToPx(80) + "px",
       contentMainCoverHeight: app.getSystemInfo().windowHeight + "px"
     });
   },
@@ -201,8 +210,8 @@ Page({
     // 页面关闭
     console.log("onUnload");
     var sendRespNum = this.data.sendRespNum;
-    if(sendRespNum.num>0){
-      wx.setStorageSync("comment_pdetail_srnum",sendRespNum);
+    if (sendRespNum.num > 0) {
+      wx.setStorageSync("comment_pdetail_srnum", sendRespNum);
     }
   },
   previewImages: function (event) {
@@ -243,7 +252,7 @@ Page({
       duration: 500
     });*/
     that.setData({
-      isSending:true
+      isSending: true
     });
     app.doLogin(function () {
       var data = {
@@ -251,16 +260,16 @@ Page({
         infomationID: that.data.id,
         responID: that.data.isReplyResp && that.data.currentResp.id ? that.data.currentResp.id : "",
         fdReplytoMemberID: that.data.isReplyResp && that.data.currentResp.memberID ? that.data.currentResp.memberID : "",
-        wxapp:1
+        wxapp: 1
       }, data = app.getAPISign(data);
       data.content = app.util.formatContentForServer(commentInputValue);
       wx.request({
-        url: app.globalData.url.api.responInfo+"?token="+data.token+"&infomationID="+data.infomationID+"&responID="+data.responID+"&fdReplytoMemberID="+data.fdReplytoMemberID+"&wxapp=1&pos="+data.pos+"&key="+data.key+"&sign="+data.sign,
+        url: app.globalData.url.api.responInfo + "?token=" + data.token + "&infomationID=" + data.infomationID + "&responID=" + data.responID + "&fdReplytoMemberID=" + data.fdReplytoMemberID + "&wxapp=1&pos=" + data.pos + "&key=" + data.key + "&sign=" + data.sign,
         method: "POST",
         data: data,
-        header: {  
-          "Content-Type": "application/x-www-form-urlencoded"  
-        }, 
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
         fail: function (res) {
           console.log(res);
         },
@@ -292,10 +301,10 @@ Page({
             duration: 1000
           });
           var sendRespNum = that.data.sendRespNum;
-          sendRespNum.num ++; 
-          
+          sendRespNum.num++;
+
           that.setData({
-            placeholder: "写点什么~",
+            placeholder: " ",
             focus: false,
             isReplyResp: false,
             currentResp: {},
@@ -304,8 +313,8 @@ Page({
             bodyHeight: "auto",
             commentInputValue: "",
             isShowWriteResp: false,
-            sendRespNum:sendRespNum,
-            isSending:false
+            sendRespNum: sendRespNum,
+            isSending: false
           });
 
 
@@ -361,7 +370,6 @@ Page({
     }
   },
   reloadForNotNetwork: function () {
-    this.onLoad(this.data.onLoadOptions);
     var that = this;
     //判断是否有网络
     wx.getNetworkType({
@@ -401,7 +409,7 @@ Page({
     this.setData({
       focus: false,
       currentResp: {},
-      placeholder: "写点什么~",
+      placeholder: " ",
       isShowWriteResp: false,
       isReplyResp: false
     });
@@ -419,7 +427,12 @@ Page({
     var message = this.data.message;
     return {
       title: message.nickName + '的纸条',
-      path: 'pages/comment/pdetail/pdetail?id=' + message.id
+      path: 'pages/comment/pdetail/pdetail?isShare=1&id=' + message.id
     }
+  },
+  goHomePage: function () {
+    wx.navigateTo({
+      url: '/pages/index/index'
+    });
   }
 });

@@ -129,3 +129,11 @@ page{
   width:26rpx;
   height:26rpx;
 }
+.near-bg-icon{
+  width:266rpx;
+  height:96rpx;
+}
+.near-point-icon{
+  width:32rpx;
+  height:32rpx;
+}

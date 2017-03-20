@@ -1,6 +1,7 @@
 /* pages/comment/pdetail/pdetail.wxss */
 @import "/pages/template/normal/lost-network.wxss";
 @import "/pages/template/page/loading.wxss";
+@import "/pages/template/page/not-exists.wxss";
 .body-margin-top{
     margin-top: 490rpx;
     transition: margin-top 0.4s;
@@ -399,6 +400,27 @@ button[disabled][type="default"], wx-button[disabled]:not([type]){
     background:inherit;
     color: #999999;
 }
- .page-loading{
+.page-loading,.not-exists{
     margin-top: 50%;
+}
+.placeholder-class-unshow{
+    display: none;
+}
+.near-share{
+    position: fixed;
+    right:50rpx;
+    bottom: 130rpx;
+    opacity: 0.5;
+}
+.near-point-icon{
+    position: absolute;
+    left: 48rpx;
+    top: 27rpx;
+}
+.near-text{
+    font-size: 32rpx;
+    position: absolute;
+    left: 90rpx;
+    top:27rpx;
+    color: white;
 }

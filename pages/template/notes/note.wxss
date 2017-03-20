@@ -257,3 +257,15 @@ item-body {
   opacity: 0;
   transition: opacity 0.5s linear 1s;
 }
+.item-img-holder {
+  z-index: -1;
+}
+.item-img-loaded{
+  z-index: 2;
+}
+.item.shop{
+  background: rgba(0,0,0,0);
+}
+.person-nickname{
+  display: none;
+}

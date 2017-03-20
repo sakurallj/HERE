@@ -1,6 +1,7 @@
 @import "/pages/template/notes/note.wxss";
 @import "/pages/template/normal/lost-network.wxss";
 @import "/pages/template/page/loading.wxss";
+@import "/pages/template/page/not-exists.wxss";
 .detail-head{
     background-color: #fff;
     padding: 0 30rpx;
@@ -102,7 +103,7 @@
 .detail-head-main-second-font-white{
     color: #fff;
 }
-.page-loading{
+.page-loading,.not-exists{
     margin-top: 50%;
 }
 .help{
@@ -115,3 +116,10 @@
     box-sizing: border-box;
 }
  
+ .shop-detail .person-nickname{
+    display: block;
+    width: 200rpx;
+ }
+ .person-distanct{
+     display: none;
+ }

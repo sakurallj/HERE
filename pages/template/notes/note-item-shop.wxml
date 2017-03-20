@@ -3,12 +3,13 @@
   <!--  <view class="distanct">
         {{address&&address!='null'?address:''}}
     </view>-->
-    <image   class="item-img {{isPhotoLoaded?'item-img-loaded':''}}"
-        mode="aspectFill" src="{{fdLogo}}"  data-item-index="{{itemIndex}}" data-coloums-index="{{coloumsIndex}}" binderror="imageError" bindload="loaded">
-    </image> 
-    <image   class="item-img item-img-holder {{isPhotoLoaded?'item-img-holder-loaded':''}}"
+    <image   class="item-img item-img-holder  "
         mode="aspectFill" src="/pages/images/img_160.jpg">
     </image> 
+    <image    class="item-img  item-img-loaded"
+        mode="aspectFill" src="{{fdLogo}}"  data-item-index="{{itemIndex}}" data-coloums-index="{{coloumsIndex}}"   >
+    </image> 
+    
     <view class="footer">
     </view>
     <text class="title text-ellipsis">{{fdName}}</text>

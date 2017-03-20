@@ -1,8 +1,9 @@
 <import src="../../template/notes/note-item.wxml" />
 <import src="../../template/normal/lost-network.wxml" />
 <import src="../../template/page/loading.wxml" />
+<import src="../../template/page/not-exists.wxml" />
 <view class="body">
-  <view class="content" bindtouchend="touchend">
+  <view class="content shop-detail" bindtouchend="touchend">
     <template is="lost-network" wx:if="{{!haveNetwork}}" />
     <view class="detail-head {{isShowFace?'show-face':''}}" wx:if="{{haveNetwork}}">
       <image class="shop-face " catchtap="clickWarn" mode="aspectFill" src="{{shop.face}}" bindload="bindFaceload">
@@ -19,9 +20,9 @@
           </view>
           <image class="shop-header shop-header" mode="aspectFill" src="{{shop.image}}">
           </image>
-          <image wx:if="{{!isShowFace}}" class="seller-edit" bindtap="clickEdit" mode="aspectFill" src="/pages/images/seller-edit.png">
+          <image wx:if="{{!isShowFace&&!isDeleted}}" class="seller-edit" bindtap="clickEdit" mode="aspectFill" src="/pages/images/seller-edit.png">
           </image>
-          <image wx:if="{{isShowFace}}" class="seller-edit" bindtap="clickEdit" mode="aspectFill" src="/pages/images/icon_write_white.png">
+          <image wx:if="{{isShowFace&&!isDeleted}}" class="seller-edit" bindtap="clickEdit" mode="aspectFill" src="/pages/images/icon_write_white.png">
           </image>
           <view class="help"  bindtap="clickHelp" >
             <image class="help-icon"mode="aspectFill" src="/pages/images/help.png">
@@ -99,5 +100,6 @@
   <view wx:if="{{isFirstLoadEmpty&&notes.coloums1.length==0&&notes.coloums2.length==0&&haveNetwork}}" class="none-resp">
     还没有纸条，贴一张试试~
   </view>
-  <template wx:if="{{!isFirstLoadEmpty&&haveNetwork&&notes.coloums1.length==0&&notes.coloums2.length==0}}" is="page-loading" data="{{loadingText:'正在努力加载纸条...'}}" />
+  <template wx:if="{{!isDeleted&&!isFirstLoadEmpty&&haveNetwork&&notes.coloums1.length==0&&notes.coloums2.length==0}}" is="page-loading" data="{{loadingText:'正在努力加载纸条...'}}" />
+  <template wx:if="{{isDeleted}}" is="not-exists" data="{{loadingText:'该商家已被删除'}}" />
 </view>
