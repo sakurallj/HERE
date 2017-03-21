@@ -1,0 +1,42 @@
+<template name="footer-tools">
+  <view class="footer-tools">
+    <view class="tools">
+    </view>
+    <view class="footer-bottom-gb">
+      <navigator url="/pages/index/index" class="discovery " wx:if="{{!isIndex}}">
+        <image class="discovery-icon" mode="aspectFill" src="/pages/images/discovery.png" wx:if="{{!isIndex}}">
+        </image>
+        <view class="title ">
+          发现
+        </view>
+      </navigator>
+      <view class="discovery" wx:if="{{isIndex}}">
+        <image class="discovery-icon" mode="aspectFill" src="/pages/images/discovery_hover.png">
+        </image>
+        <view class="title active">
+          发现
+        </view>
+      </view>
+      <navigator url="/pages/my/my" wx:if="{{!isMy}}">
+        <view  class="account">
+          <image class="account-icon" mode="aspectFill" src="/pages/images/account.png">
+          </image>
+          <view class="title">
+            我的
+          </view>
+        </view>
+      </navigator>
+      <view wx:if="{{isMy}}" class="account">
+        <image class="account-icon" mode="aspectFill" src="/pages/images/account_hover.png">
+        </image>
+        <view class="title active">
+          我的
+        </view>
+      </view>
+    </view>
+    <navigator url="/pages/comment/edit/edit" class="add">
+      <image class="add-icon" mode="aspectFill" src="/pages/images/add.png">
+      </image>
+    </navigator>
+  </view>
+</template>

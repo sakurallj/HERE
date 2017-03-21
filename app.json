@@ -7,6 +7,7 @@
     "pages/comment/pdetail/pdetail" ,
     "pages/comment/edit/edit" ,
     "pages/person/detail/detail" ,
+    "pages/my/my" ,
     "pages/message/message" ,
     "pages/search/search" ,
     "pages/address/city/city" 

@@ -137,3 +137,11 @@ page{
   width:32rpx;
   height:32rpx;
 }
+.discovery-icon,.account-icon{
+  width:38rpx;
+  height:38rpx;
+}
+.add-icon{
+  width:40rpx;
+  height:40rpx;
+}

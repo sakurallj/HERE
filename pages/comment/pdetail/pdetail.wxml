@@ -95,7 +95,7 @@
       </image>
       <view class="write-resp">写回应</view>
     </view>
-    <view class="near-share" wx:if="{{isShare}}" bindtap="goHomePage">
+    <view class="near-share" wx:if="{{isShare&&false}}" bindtap="goHomePage">
       <image class="near-bg-icon " mode="aspectFill" src="/pages/images/near.png">
       </image>
       <image class="near-point-icon" mode="aspectFill" src="/pages/images/near-point.png">
