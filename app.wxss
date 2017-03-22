@@ -145,3 +145,9 @@ page{
   width:40rpx;
   height:40rpx;
 }
+.left{
+  float: left;
+}
+.right{
+  float: right;
+}

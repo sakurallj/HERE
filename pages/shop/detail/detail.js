@@ -80,7 +80,8 @@ Page({
     haveNewMessage: false,
     isShowLoadMore: false,
     haveNetwork: true,
-    onLoadOptions: {}
+    onLoadOptions: {},
+    isFavorite:false
   },
   isRefresh: false,
   pageNum: 0,
@@ -153,7 +154,9 @@ Page({
                   name: partner.fdName,
                   image: partner.fdLogo,
                   id: options.id,
-                  face: partner.fdFace
+                  face: partner.fdFace,
+                  address:partner.address,
+                  desc:partner.desc
                 };
                 that.setData({
                   shop: shop
@@ -369,5 +372,8 @@ Page({
     wx.navigateTo({
       url: '/pages/shop/help/help'
     });
+  },
+  doFavorite:function(){
+
   }
 })

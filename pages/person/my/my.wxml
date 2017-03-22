@@ -1,0 +1,35 @@
+<import src="/pages/template/page/footer-tools.wxml" />
+<view class="body">
+  <view class="content">
+    <view class="detail-head"  >
+      <view class="detail-head-main">
+        <view class="detail-head-main-first">
+          <image class="person-top-header person-header" mode="aspectFill" src="{{userInfo.avatarUrl}}">
+          </image>
+        </view>
+        <view class="detail-head-main-second">
+          <view class="detail-head-main-second-font text-ellipsis">{{userInfo.nickName}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="tabls">
+      <navigator class="tabls-item" url="/pages/message/message">
+        <view class="title left">消息中心</view>
+        <view class="warn-new " wx:if="{{haveNewMessage}}"></view>
+        <image class="right-icon right" mode="aspectFill" src="/pages/images/right.png">
+        </image>
+      </navigator>
+      <navigator class="tabls-item" url="/pages/person/detail/detail">
+        <view class="title left">我的纸条</view>
+        <image class="right-icon right" mode="aspectFill" src="/pages/images/right.png">
+        </image>
+      </navigator>
+      <navigator class="tabls-item" url="/pages/person/favorite/favorite">
+        <view class="title left">我的收藏</view>
+        <image class="right-icon right" mode="aspectFill" src="/pages/images/right.png">
+        </image>
+      </navigator>
+    </view>
+    <template is="footer-tools" data="{{isMy:true}}" />
+  </view>
+</view>

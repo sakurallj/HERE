@@ -1,4 +1,4 @@
-// pages/my/my.js
+// pages/person/favorite/favorite.js
 Page({
   data:{},
   onLoad:function(options){

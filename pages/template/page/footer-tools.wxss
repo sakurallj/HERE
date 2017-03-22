@@ -8,6 +8,7 @@
     background-color: none;
     box-sizing: border-box;
     text-align: center;
+    z-index: 1;
 }
 .footer-tools .footer-bottom-gb{
   height: 100rpx;
@@ -21,17 +22,19 @@
   z-index: -1;
 }
 .footer-tools .discovery{
+  display: block;
+  text-align: center;
   position: absolute;
-  left:100rpx;
-  height: 55rpx;
-  width: 80rpx;
+  left: 100rpx;
+  top:65rpx;
 }
 
 .footer-tools .account{
+  display: block;
+  text-align: center;
   position: absolute;
-  right:100rpx;
-  height: 55rpx;
-  width: 80rpx;
+  right: 100rpx;
+  top:65rpx;
 }
 .footer-tools .discovery .title,.footer-tools .account .title{
   font-size: 20rpx;

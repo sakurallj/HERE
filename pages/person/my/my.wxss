@@ -1,0 +1,63 @@
+@import "/pages/template/page/footer-tools.wxss";
+.detail-head{
+    background-color: #39383e;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    height: 360rpx;
+}
+.detail-head-main{
+    text-align: center;
+    padding-top: 93rpx ;
+    box-sizing: border-box;
+}
+.detail-head-main-first{
+    font-size:32rpx;
+    color:#333333;
+    letter-spacing:0;
+    box-sizing: border-box;
+}
+.person-top-header{
+    border-radius:134rpx;
+    width: 134rpx;
+    height: 134rpx;
+}
+.detail-head-main-second{
+    font-size:36rpx;
+    color:rgb(133,133,133);
+    letter-spacing:0;
+    padding-top: 15rpx;
+    box-sizing: border-box;
+}
+.detail-head-main-second-font{
+    display: inline-block;
+    padding-top: 15rpx;
+    box-sizing: border-box;
+    width: 100%;
+}
+.tabls{
+    margin: 30rpx;
+    height: 100%;
+    width: 690rpx;
+    box-sizing: border-box;
+    background: #fff;
+    padding: 0 30rpx;
+}
+.tabls-item{
+    height: 100rpx;
+    width: 630rpx;
+    box-sizing: border-box;
+    border-bottom: 1rpx solid #D9DADA;
+    font-size: 30rpx;
+    padding: 35rpx 0;
+    position: relative;
+}
+.tabls-item .title{
+    color: #626262;
+}
+.tabls-item:last-child{
+    border-bottom:0;
+}
+.tabls-item .warn-new{
+    top:42.5rpx;
+    left: 580rpx;
+}
