@@ -10,7 +10,7 @@ Page({
         userInfo:{
           nickName:app.globalData.userInfo.nickName,
           avatarUrl:app.globalData.userInfo.avatarUrl?app.globalData.userInfo.avatarUrl:app.globalData.defaultHeader,
-          sOpenId:app.globalData.userOpenId
+          sOpenId:app.globalData.userServerOpenId
         }
       });
       //获得消息

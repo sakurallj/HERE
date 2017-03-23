@@ -26,7 +26,6 @@ function loginForServer(app, userInfo, callback) {
       typeof callback == "function" && callback(res);
     },
     success: function (res) {
-      console.log(res);
       app.globalData.userToken = res.data.token;
       app.globalData.userServerOpenId = res.data.data.openid;
       typeof callback == "function" && callback(res);
@@ -55,6 +54,15 @@ App({
     }
   },
   globalData: {
+    constant:{
+      errMsg:{
+        fLocationFail:"getLocation:fail too frequently",
+        ucLocationFail:"getLocation:fail auth deny",
+        unLocationFail:"getLocation:fail 1",//未打开授权
+        cLocationFail:"chooseLocation:fail auth deny",//取消地理位置授权
+        cUserInfo:"getUserInfo:fail auth deny"//取消获得用户信息授权
+      }
+    },
     haveNewMessage: false,
     //userInfo.gender  性别 0：未知、1：男、2：女 
     userInfo: {},
@@ -69,6 +77,9 @@ App({
     bMapLocationName: "",//百度地图的位置名称
     url: {
       api: {
+        delFavPartnerByPId:apiDomain + "/memberapi/delfavpartnerbypid",//删除搜藏商家 by 商家id
+        favPartnerList:apiDomain + "/memberapi/favpartnerlist",//搜藏的商家列表
+        addFavPartner:apiDomain + "/memberapi/addfavpartner",//添加搜藏商家
         getBadWords: apiDomain + "/badwordapi/getlist",//敏感词
         setReadMessage: apiDomain + "/noticeapi/settrendstatus",//设置通知动态已读状态
         pInfoList: apiDomain + "/noteapi/pinfolist",//商家纸条列表
@@ -147,13 +158,17 @@ App({
     //如果没有获取过或者离上次的获取时间超过十分钟则重新获取
     if (!that.globalData.location || !that.globalData.location.getTime || that.globalData.location.getTime + 10 * 60 * 1000 < new Date().getTime()) {
       this.getBMapLocation(function (res) {
-        var wxMarkerData = res.wxMarkerData;
-        that.globalData.location.latitude = wxMarkerData[0].latitude;
-        that.globalData.location.longitude = wxMarkerData[0].longitude;
-        that.globalData.location.getTime = new Date().getTime();
-        console.log("that.globalData.location");
-        console.log(that.globalData.location);
-        if (typeof callback == "function") callback(that.globalData.location);
+        if (!res.errMsg) {
+          var wxMarkerData = res.wxMarkerData;
+          that.globalData.location.latitude = wxMarkerData[0].latitude;
+          that.globalData.location.longitude = wxMarkerData[0].longitude;
+          that.globalData.location.getTime = new Date().getTime();
+
+          if (typeof callback == "function") callback(that.globalData.location);
+        }
+        else {
+          if (typeof callback == "function") callback(res);
+        }
       });
     }
     else {
@@ -171,7 +186,6 @@ App({
     else if (that.globalData.userOpenId) {
       //重新向服务器登录
       loginForServer(that, that.globalData.userInfo, function (res) {
-
         if (typeof callback == "function") callback(that.globalData.userToken);
       });
     }
@@ -179,7 +193,6 @@ App({
       //先微信登录在登录服务器
       wx.login({
         success: function (res) {
-
           //获得openid session_key
           wx.request({
             url: that.globalData.url.api.codeToSessionKey,
@@ -189,25 +202,27 @@ App({
             },
             fail: function (res) {
               console.log(res);
+              if (typeof callback == "function") callback(res);
             },
             success: function (res) {
-
               that.globalData.userOpenId = res.data.openid;
               //获得用户信息
               wx.getUserInfo({
-                success: function (res) {
-                  that.globalData.userInfo = res.userInfo;
-
-                  //登录服务器
-                  loginForServer(that, res.userInfo, function (res) {
-
-                    if (typeof callback == "function") callback(that.globalData.userToken);
-                  });
+                complete: function (res) {
+                  if (res.userInfo) {
+                    that.globalData.userInfo = res.userInfo;
+                    //登录服务器
+                    loginForServer(that, res.userInfo, function (res) {
+                      if (typeof callback == "function") callback(that.globalData.userToken);
+                    });
+                  }
+                  else{
+                    if (typeof callback == "function") callback(res);
+                  }
                 }
               });
             }
           });
-
         }
       });
     }
@@ -244,11 +259,11 @@ App({
     var that = this;
     this.map.regeocoding({
       fail: function (res) {
+        console.log("getBMapLocation");
         console.log(res);
         if (typeof callback == "function") callback(res);
       },
       success: function (res) {
-        console.log(res);
         that.globalData.bMapLocation = res;
         if (typeof callback == "function") callback(res);
       }
@@ -302,13 +317,36 @@ App({
   onLaunch: function () {
 
   },
-  showCheckNetworld:function(){
+  showCheckNetworld: function () {
     wx.showModal({
       title: '',
       content: '请检查网络',
-      showCancel:false,
-      confirmColor:this.globalData.confirmColor,
-      success: function(res) {
+      showCancel: false,
+      confirmColor: this.globalData.confirmColor,
+      success: function (res) {
+      }
+    });
+  },
+  /**
+   * 用户取消地理位置授权
+   */
+  userCancelGrandPosition: function (success, cancel) {
+    wx.showModal({
+      title: '',
+      content: '请退出并删除小程序后，在重新进入小程序',
+      showCancel: false,
+      confirmText: "我知道了",
+      confirmColor: this.globalData.confirmColor,
+      fail: function () {
+
+      },
+      success: function (res) {//重新加载
+        if (res.confirm) {
+          if (typeof success == "function") success(res);
+        }
+        else {
+          if (typeof cancel == "function") cancel(res);
+        }
       }
     });
   }

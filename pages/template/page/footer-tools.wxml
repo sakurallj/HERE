@@ -4,7 +4,7 @@
     </view>
     <view class="footer-bottom-gb">
     </view>
-      <navigator  open-type="redirect" url="/pages/index/index" class="discovery " wx:if="{{!isIndex}}">
+      <navigator  hover-class="none" open-type="redirect" url="/pages/index/index" class="discovery " wx:if="{{!isIndex}}">
         <image class="discovery-icon" mode="aspectFill" src="/pages/images/discovery.png" wx:if="{{!isIndex}}">
         </image>
         <view class="title ">
@@ -18,7 +18,7 @@
           发现
         </view>
       </view>
-      <navigator   open-type="redirect"    class="account" url="/pages/person/my/my" wx:if="{{!isMy}}">
+      <navigator  hover-class="none" open-type="redirect"    class="account" url="/pages/person/my/my" wx:if="{{!isMy}}">
           <image class="account-icon" mode="aspectFill" src="/pages/images/account.png">
           </image>
           <view class="title">
@@ -33,7 +33,7 @@
         </view>
       </view>
     
-    <navigator url="/pages/comment/edit/edit" class="add">
+    <navigator hover-class="none" url="/pages/comment/edit/edit" class="add">
       <image class="add-icon" mode="aspectFill" src="/pages/images/add.png">
       </image>
     </navigator>

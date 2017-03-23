@@ -1,1 +1,98 @@
-/* pages/person/favorite/favorite.wxss */
+@import "/pages/template/normal/lost-network.wxss";
+@import "/pages/template/normal/not-userInfo.wxss";
+@import "/pages/template/page/loading.wxss";
+@import "/pages/template/page/load-more.wxss";
+.collection-icon {
+  display: inline-block;
+  margin-top: 40%;
+}
+
+.not-favorite {
+  text-align: center;
+  font-size: 30rpx;
+  color: #696969;
+}
+
+.not-favorite-text {
+  margin-top: 50rpx;
+}
+
+.not-favorite-reload-btn {
+  margin-top: 50rpx;
+  background-color: #b89c6c;
+  line-height: 90rpx;
+  width: 300rpx;
+  display: inline-block;
+  color: #fff;
+}
+
+.favorites {
+  position: relative;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+
+.favorite-item {
+  position: relative;
+  background: #fff;
+  width: 690rpx;
+  height: 171rpx;
+  box-sizing: border-box;
+  margin-bottom: 30rpx;
+}
+.favorite-item:last-child{
+  margin-bottom: 0;
+}
+.favorite-item-image, .favorite-item-image-holder {
+  height: 171rpx;
+  width: 200rpx;
+  display: block;
+}
+
+.favorite-item-image-holder {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 1;
+}
+
+.favorite-item-image {
+  opacity: 0;
+  transition: opacity 0.5s linear 1s;
+}
+
+.favorite-item-image-loaded {
+  opacity: 1;
+}
+
+.favorite-item-image-holder-loaded {
+  opacity: 0;
+  transition: opacity 0.5s linear 1s;
+}
+
+.favorite-item-right {
+  padding: 20rpx 30rpx;
+  color: #353536;
+  width: 490rpx;
+  height: 171rpx;
+  box-sizing: border-box;
+}
+
+.favorite-item-right-title {
+  font-size: 30rpx;
+  line-height: 40rpx;
+  margin-top: -5rpx;
+  width: 450rpx;
+}
+
+.favorite-item-right-desc {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  line-height: 40rpx;
+  height: 80rpx;
+  overflow: hidden;
+}
+
+.page-loading, .not-exists {
+  margin-top: 50%;
+}

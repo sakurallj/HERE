@@ -137,6 +137,7 @@ page{
   width:32rpx;
   height:32rpx;
 }
+
 .discovery-icon,.account-icon{
   width:38rpx;
   height:38rpx;
@@ -150,4 +151,8 @@ page{
 }
 .right{
   float: right;
+}
+.collection-icon{
+  width:88rpx;
+  height:85rpx;
 }

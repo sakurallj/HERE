@@ -2,6 +2,36 @@
 //获取应用实例
 var app = getApp();
 var bMap = require('../lib/baidu/bmap-wx.min.js');
+//处理获得位置失败的问题
+function doGetLocationFail(that, res) {
+  that.setData({
+    isCancelGrandPosition: true
+  });
+  setTimeout(function () {
+    that.setData({
+      isReGetLocation: false
+    });
+    wx.hideNavigationBarLoading();
+  }, 1000);
+
+  if (res.errMsg == app.globalData.constant.errMsg.unLocationFail) {//未打开微信定位权限
+    that.setData({
+      isLocationFailType: 1
+    });
+
+  }
+  else if (res.errMsg == app.globalData.constant.errMsg.ucLocationFail) {//取消授权
+    console.log(res.errMsg);
+    that.setData({
+      isLocationFailType: 2
+    });
+  }
+  else {
+    that.setData({
+      isLocationFailType: -1
+    });
+  }
+}
 function loadedNotes(that, res) {
 
   if (res && res.data && res.data.data) {
@@ -62,7 +92,7 @@ function loadNotes(that, latitude, longitude, callback) {
       if (typeof callback == "function") callback(res);
     },
     success: function (res) {
-      console.log(res);
+
       wx.stopPullDownRefresh();
       if (typeof callback == "function") callback(res);
     }
@@ -85,6 +115,8 @@ Page({
     isShowLoadMore: false,
     hasMore: false,
     isLoadEmpty: false,
+    isReGetLocation: false,
+    isClickItem: false,//防止重复点击纸条 导致跳转纸条详情页多次,
     isLastLoadDone: true,//上次加载是否完成
     svColumnHeight: 100,//coloum的高
     headerDisplayType: "block"//
@@ -110,6 +142,9 @@ Page({
   onShow: function () {
 
     var that = this;
+    this.setData({
+      isClickItem: false
+    });
     if (app.globalData.userToken) {
       //获得消息
       var data = {
@@ -135,37 +170,40 @@ Page({
 
     // 
     var res = wx.getStorageSync('comment_edit_message');
+
     if (res) {
-      var images = res.imageUrls ? JSON.parse(res.imageUrls) : [], note = {
-        addTime: "",
-        address: res.address,
-        avatar: app.globalData.userInfo.avatarUrl,
-        commentnum: "0",
-        content: res.content,
-        contentar: res.contentar,
-        fdNoteOpenID: "",
-        id: res.id,
-        latitude: app.globalData.location.latitude,
-        longitude: app.globalData.location.longitude,
-        meter: res.meter,
-        nickName: app.globalData.userInfo.nickName,
-        photo: images.length > 0 ? images[0] : ""
-      };
-      var rawNotes = this.data.rawNotes, rawNotes1 = [note];
-      Array.prototype.push.apply(rawNotes1, rawNotes);
-      var notes = app.util.separateNotes(that, app, rawNotes1, true);
-      this.setData({
-        notes: notes,
-        rawNotes: rawNotes1
-      });
+      //在900米以内显示
+      if (res.rawMeter <= 900) {
+        var images = res.imageUrls ? JSON.parse(res.imageUrls) : [], note = {
+          addTime: "",
+          address: res.address,
+          avatar: app.globalData.userInfo.avatarUrl,
+          commentnum: "0",
+          content: res.content,
+          contentar: res.contentar,
+          fdNoteOpenID: "",
+          id: res.id,
+          latitude: app.globalData.location.latitude,
+          longitude: app.globalData.location.longitude,
+          meter: res.meter,
+          nickName: app.globalData.userInfo.nickName,
+          photo: images.length > 0 ? images[0] : ""
+        };
+        var rawNotes = this.data.rawNotes, rawNotes1 = [note];
+        Array.prototype.push.apply(rawNotes1, rawNotes);
+        var notes = app.util.separateNotes(that, app, rawNotes1, true);
+        this.setData({
+          notes: notes,
+          rawNotes: rawNotes1
+        });
+      }
+
     }
     //清空msg缓存
     wx.removeStorageSync('comment_edit_message');
 
     //更新纸条的回应数
     var sendRespNum = wx.getStorageSync('comment_pdetail_srnum');
-    console.log("sendRespNum");
-    console.log(sendRespNum);
     if (sendRespNum && sendRespNum.num > 0) {
       app.util.updateNoteRespNum(this, sendRespNum.coloumsIndex, sendRespNum.itemIndex, sendRespNum.rawNotesIndex, sendRespNum.num);
     }
@@ -176,6 +214,9 @@ Page({
     wx.showNavigationBarLoading();
     this.pageNum = 0;
     var that = this;
+    that.setData({
+      isCancelGrandPosition: false
+    });
     //判断是否有网络
     wx.getNetworkType({
       success: function (res) {
@@ -211,7 +252,6 @@ Page({
           console.log(res);
         },
         success: function (res) {
-
           that.setData({
             haveNewMessage: res.data.unread > 0
           });
@@ -219,19 +259,28 @@ Page({
       });
       //获得地理位置
       app.getLocation(function (res) {
-        var latitude = res.latitude;
-        var longitude = res.longitude;
-        var speed = res.speed;
-        var accuracy = res.accuracy;
-        app.globalData.location = res;
-        loadNotes(that, latitude, longitude, function (res) {
-          loadedNotes(that, res);
-          wx.stopPullDownRefresh();
+        if (res.errMsg) {
+          doGetLocationFail(that, res);
+        }
+        else {
           that.setData({
-            isFirstLoadEmpty: res.data.data && res.data.data.length == 0
+            isCancelGrandPosition: false
           });
+          var latitude = res.latitude;
+          var longitude = res.longitude;
+          var speed = res.speed;
+          var accuracy = res.accuracy;
+          app.globalData.location = res;
+          loadNotes(that, latitude, longitude, function (res) {
+            loadedNotes(that, res);
+            wx.stopPullDownRefresh();
+            that.setData({
+              isFirstLoadEmpty: res.data.data && res.data.data.length == 0
+            });
 
-        });
+          });
+        }
+
       });
     });
 
@@ -242,7 +291,18 @@ Page({
     });
   },
   clickItem: function (event) {
+    if (this.data.isClickItem) {
+      return;
+    }
     if (event.currentTarget && event.currentTarget.dataset && event.currentTarget.dataset.type) {
+      wx.showToast({
+        title: '加载中',
+        icon: 'loading',
+        duration: 10000
+      });
+      this.setData({
+        isClickItem: true
+      });
       var item = app.getValueFormCurrentTargetDataSet(event, "item");
       if (event.currentTarget.dataset.type == "shop") {
         wx.navigateTo({
@@ -274,31 +334,44 @@ Page({
     this.pageNum = 0;
 
     var that = this;
+    that.setData({
+      isReGetLocation: true
+    });
     wx.showNavigationBarLoading();
     //获得用户信息
     //调用登录接口
     app.doLogin();
     //获得地理位置
     app.getLocation(function (res) {
-      var latitude = res.latitude;
-      var longitude = res.longitude;
-      var speed = res.speed;
-      var accuracy = res.accuracy;
-      app.globalData.location = res;
+      if (res.errMsg) {
+        doGetLocationFail(that, res);
+      }
+      else {
+        that.setData({
+          isCancelGrandPosition: false
+        });
+        var latitude = res.latitude;
+        var longitude = res.longitude;
+        var speed = res.speed;
+        var accuracy = res.accuracy;
+        app.globalData.location = res;
 
-      loadNotes(that, latitude, longitude, function (res) {
-        wx.stopPullDownRefresh();
-        that.setData({
-          isShowLoadMore: false,
-          headerDisplayType: "none"
+        loadNotes(that, latitude, longitude, function (res) {
+          wx.stopPullDownRefresh();
+          that.setData({
+            isReGetLocation: false,
+            isShowLoadMore: false,
+            headerDisplayType: "none"
+          });
+          loadedNotes(that, res);
+          that.isRefresh = false;
+          wx.stopPullDownRefresh();
+          that.setData({
+            headerDisplayType: "block"
+          });
         });
-        loadedNotes(that, res);
-        that.isRefresh = false;
-        wx.stopPullDownRefresh();
-        that.setData({
-          headerDisplayType: "block"
-        });
-      });
+      }
+
     });
 
   },
@@ -333,12 +406,10 @@ Page({
     }
   },
   imageError: function (event) {
-    console.log("imageError");
-    console.log(event);
+
   },
   loaded: function (event) {
-    console.log("loaded");
-    console.log(event);
+
     app.util.notesPhotoLoaded(this, app, event);
   },
   reloadForNotNetwork: function () {

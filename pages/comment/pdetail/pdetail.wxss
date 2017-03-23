@@ -55,6 +55,8 @@
     color:#333333;
     letter-spacing:0;
     text-align:left;
+    width: 500rpx;
+    overflow: hidden;
 }
 .detail-main-header-date{
     padding-top: 10rpx;
@@ -151,8 +153,9 @@
 .detail-reply-option-name{
     font-size:24rpx;
     color:#333333;
-    letter-spacing:0;
     text-align:left;
+    width: 500rpx;
+    padding-top: 6rpx;
 }
 .detail-reply-option-date{
     font-size:22rpx;
@@ -360,6 +363,8 @@ swiper {
     height:178rpx;
     border: 1rpx solid #d0d0d0;
     font-size: 32rpx;
+    padding: 15rpx;
+    box-sizing: border-box;
 }
 .detail-bottom{
     position: fixed;

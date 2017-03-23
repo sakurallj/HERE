@@ -4,9 +4,11 @@
 <import src="../template/notes/note-item-shop.wxml" />
 <import src="../template/normal/lost-network.wxml" />
 <import src="../template/page/loading.wxml" />
+<import src="../template/normal/not-location.wxml" />
 <import src="../template/page/footer-tools.wxml" />
+
 <view class="body">
-  
+ 
   <view class="clear"></view>
   <template is="lost-network" wx:if="{{notes.coloums1.length==0&&notes.coloums2.length==0&&!haveNetwork}}" />
   <view scroll-y="true" class="items" wx:if="{{notes.coloums1.length>0||notes.coloums2.length>0}}">
@@ -57,6 +59,7 @@
   <view wx:if="{{isFirstLoadEmpty&&notes.coloums1.length==0&&notes.coloums2.length==0}}" class="none-resp">
     当前地区还没有纸条，贴一张试试~
   </view>
-  <template wx:if="{{!isFirstLoadEmpty&&haveNetwork&&notes.coloums1.length==0&&notes.coloums2.length==0}}" is="page-loading" data="{{loadingText:'正在努力加载纸条...'}}" />
+  <template  wx:if="{{!isCancelGrandPosition&&!isFirstLoadEmpty&&haveNetwork&&notes.coloums1.length==0&&notes.coloums2.length==0}}" is="page-loading" data="{{loadingText:'正在努力加载纸条...'}}" />
+  <template  wx:if="{{isCancelGrandPosition}}" is="not-location" data="{{isReGetLocation:isReGetLocation,isLocationFailType:isLocationFailType }}"  />
   <template is="footer-tools" data="{{isIndex:true}}" />
 </view>

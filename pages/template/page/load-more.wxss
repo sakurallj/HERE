@@ -1,0 +1,9 @@
+.load-more{
+    padding: 40rpx 0 40rpx 0;
+    font-size:24rpx;
+    color:#666666;
+    letter-spacing:0;
+    text-align:center;
+    display: block;
+}
+ 

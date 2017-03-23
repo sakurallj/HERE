@@ -73,7 +73,7 @@
               <image class="detail-reply-option-head  person-header {{item.isHeaderLoaded?'detail-reply-option-head-loaded':''}}" mode="scaleToFill" src="{{item.authoravatar?item.authoravatar:app.globalData.defaultHeader}}" bindload="loadedRespHeader" data-resp-index="{{index}}">
               </image>
               <view class="detail-reply-option-name-date">
-                <view class="detail-reply-option-name">{{item.author&&item.author!='null'?item.author:''}}</view>
+                <view class="detail-reply-option-name text-ellipsis">{{item.author&&item.author!='null'?item.author:''}}</view>
                 <view class="detail-reply-option-date">{{item.addTimestr}}</view>
               </view>
               <view class="clear"></view>

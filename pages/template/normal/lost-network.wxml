@@ -7,5 +7,4 @@
         <view class="lost-network-text">啊哦，网络出错了，请重试</view>
         <view class="lost-network-reload-btn" catchtap="reloadForNotNetwork">重新加载</view>
     </view>
-    
 </template>

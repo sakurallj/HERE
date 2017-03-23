@@ -26,16 +26,16 @@
                 {{shop.address}}
               </view>
             </view>
-            <view class="shop-header-right-favorite right"  wx:if="{{!isFavorite}}" bindtap="doFavorite">
+            <view class="shop-header-right-favorite right" wx:if="{{!isFavorite}}" bindtap="doFavorite">
               +收藏
             </view>
-            <view class="shop-header-right-favorite active right" bindtap="doFavorite" wx:if="{{isFavorite}}">
+            <view class="shop-header-right-favorite active right" wx:if="{{isFavorite}}" bindtap="doCancelFavorite">
               已收藏
             </view>
           </view>
           <view class="clear"></view>
         </view>
-        <view class="shop-header-bottom text-ellipsis">{{shop.desc}}，服装行业哀鸣一片，身处其中的红领集团却成了炙手可热的香饽饽，上万家中外企业趋之</view>
+        <view class="shop-header-bottom text-ellipsis">{{shop.desc}}服装行业哀鸣一片，身处其中的红领集团却成了炙手可热的香饽饽，上万家中外企业趋之</view>
       </view>
     </view>
     <view class="detail-main" wx:if="{{notes.coloums1.length>0&&haveNetwork}}">

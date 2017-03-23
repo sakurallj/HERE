@@ -2,6 +2,7 @@
 @import "/pages/template/notes/note.wxss";
 @import "/pages/template/normal/lost-network.wxss";
 @import "/pages/template/page/loading.wxss";
+@import "/pages/template/normal/not-location.wxss";
 @import "/pages/template/page/footer-tools.wxss";
 .header{
   /*background-image:linear-gradient(0deg, #2c2c30 1%, #0f1012 100%);*/
@@ -87,7 +88,7 @@
     text-align:center;
     display: block;
 }
-
+ 
  
  
  .warn-new{

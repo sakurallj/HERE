@@ -477,5 +477,6 @@ module.exports = {
   notesHeaderLoaded:notesHeaderLoaded,
   updateNoteRespNum:updateNoteRespNum,
   geBadWords:geBadWords,
-  hasBadWord:hasBadWord
+  hasBadWord:hasBadWord,
+  formatShowText:formatShowText
 }

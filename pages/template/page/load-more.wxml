@@ -1,0 +1,9 @@
+<template name="load-more">
+  <view class="load-more" bindtap="loadMore" >
+    <view class="loading">
+      <image class="loading-icon" mode="aspectFill" src="/pages/images/loading.gif">
+      </image>
+      <view class="loading-text">加载中...</view>
+    </view>
+  </view>
+</template>

@@ -71,6 +71,7 @@ Page({
     hasMore:false,
     isMy:false,//是否 我的动态
     haveNetwork:true,
+    isClickItem:false,//防止重复点击纸条 导致跳转纸条详情页多次,
     onLoadOptions:{}
   },
   isRefresh:false,
@@ -144,6 +145,9 @@ Page({
      });
   },
   onShow:function(){
+    this.setData({
+      isClickItem: false
+    });
     // 页面显示
     //更新纸条的回应数
     var sendRespNum = wx.getStorageSync('comment_pdetail_srnum');
@@ -222,7 +226,18 @@ Page({
     
   },
   clickItem:function(event){
+    if (this.data.isClickItem) {
+      return;
+    }
     if(event.currentTarget&&event.currentTarget.dataset&& event.currentTarget.dataset.type){
+      wx.showToast({
+        title: '加载中',
+        icon: 'loading',
+        duration: 10000
+      });
+      this.setData({
+        isClickItem: true
+      });
       var item = app.getValueFormCurrentTargetDataSet(event,"item");
       wx.navigateTo({
         url: '/pages/comment/pdetail/pdetail?id='+item.id+'&meter='+item.meter+'&itemIndex='+item.itemIndex+'&coloumsIndex='+item.coloumsIndex+'&rawNotesIndex='+item.rawNotesIndex

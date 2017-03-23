@@ -1,4 +1,5 @@
 <import src="../template/normal/lost-network.wxml"/>
+<import src="../template/normal/not-userInfo.wxml" />
 <view class="body">
     <view class="content">
         <template is="lost-network" wx:if="{{!haveNetwork}}"/>
@@ -40,5 +41,6 @@
         <view class="not-more" wx:if="{{!isFirstLoadEmpty&&isLoadEmpty&&messages.length>8}}">
             暂无更多回应~
         </view>
+        <template  wx:if="{{isCancelUserInfo}}" is="not-userInfo"  />
     </view>
 </view>
