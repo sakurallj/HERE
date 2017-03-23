@@ -1,0 +1,22 @@
+<template name="not-location">
+  <view class="not-location">
+    <image class="cry-icon" mode="aspectFill" src="/pages/images/cry.png">
+    </image>
+    <view class="not-location-text" wx:if="{{isLocationFailType==1}}">
+      <view>无法获得地址，如果未打开微信定位权限，请打开后再试</view>
+      <button class="not-location-reload-btn" loading="{{isReGetLocation}}" disabled="{{isReGetLocation}}" catchtap="onPullDownRefresh">
+        {{isReGetLocation?'获得地址中...':'尝试获得地址'}}
+      </button>
+    </view>
+    <view class="not-location-text"  wx:elif="{{isLocationFailType==2}}">
+      未授权给HERE定位权限，请删除HERE并重新进入授权
+    </view>
+    <view class="not-location-text" wx:else>
+      <view>无法获得地址，如果未打开微信定位权限，请打开后再试</view>
+      <button class="not-location-reload-btn" loading="{{isReGetLocation}}" disabled="{{isReGetLocation}}" catchtap="onPullDownRefresh">
+        {{isReGetLocation?'获得地址中...':'尝试获得地址'}}
+      </button>
+      <view class="not-location-text-bottom">注：如果未授权给HERE定位权限，请删除HERE并重新进入授权</view>
+    </view>
+  </view>
+</template>

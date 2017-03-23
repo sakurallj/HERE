@@ -1,0 +1,9 @@
+<template name="not-userInfo">
+  <view class="not-userInfo">
+    <image class="cry-icon" mode="aspectFill" src="/pages/images/cry.png">
+    </image>
+    <view class="not-userInfo-text">
+      未能获得用户公开信息，请删除HERE并重新进入授权
+    </view>
+  </view>
+</template>
