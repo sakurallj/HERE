@@ -71,7 +71,7 @@ App({
     userToken: "",
     location: {},
     bMapLocation: {},//百度地图获得的地址信息
-    appVersion: "0.0.1",//本小程序版本
+    appVersion: "1.1.0",//本小程序版本
     systemInfo: {},//系统信息
     badWords: {},//敏感词
     bMapLocationName: "",//百度地图的位置名称

@@ -90,10 +90,3 @@
 }
  
  
- 
- .warn-new{
-  width:10rpx;
-  height:10rpx;
-  border-radius: 10rpx;
-  left:58rpx;
-}

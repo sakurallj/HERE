@@ -145,11 +145,10 @@ Page({
     this.setData({
       isClickItem: false
     });
-    if (app.globalData.userToken) {
+    app.doLogin(function (res) {
       //获得消息
       var data = {
         page: 1,
-        wxapp: 1,
         token: app.globalData.userToken
       }, data = app.getAPISign(data);
       wx.request({
@@ -160,13 +159,12 @@ Page({
           console.log(res);
         },
         success: function (res) {
-
           that.setData({
             haveNewMessage: res.data.unread > 0
           });
         }
       });
-    }
+    });
 
     // 
     var res = wx.getStorageSync('comment_edit_message');

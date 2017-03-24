@@ -59,7 +59,8 @@
 .detail-head-main-second-font {
   padding-top: 25rpx;
   width: 370rpx;
-  font-size: 30rpx;
+  font-size: 34rpx;
+  font-weight: 500;
 }
 
 .shop-header-right-address {

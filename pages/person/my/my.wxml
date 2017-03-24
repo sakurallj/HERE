@@ -1,7 +1,7 @@
 <import src="/pages/template/page/footer-tools.wxml" />
 <view class="body">
   <view class="content">
-    <view class="detail-head"  >
+    <view class="detail-head">
       <view class="detail-head-main">
         <view class="detail-head-main-first">
           <image class="person-top-header person-header" mode="aspectFill" src="{{userInfo.avatarUrl}}">
@@ -30,6 +30,9 @@
         </image>
       </navigator>
     </view>
-    <template is="footer-tools" data="{{isMy:true}}" />
+    <view class="version">
+      HERE留言吧V{{app.globalData.appVersion?app.globalData.appVersion:'1.0.0'}}
+    </view>
+    <template is="footer-tools" data="{{isMy:true,haveNewMessage:haveNewMessage}}" />
   </view>
 </view>

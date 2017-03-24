@@ -1,19 +1,30 @@
 // pages/person/my/my.js
 var app = getApp();
 Page({
-  data:{},
-  onLoad:function(options){
+  data: {
+    app: app
+  },
+  onLoad: function (options) {
     var that = this;
-    app.doLogin(function(res){
+    app.doLogin(function (res) {
       console.log(res);
       that.setData({
-        userInfo:{
-          nickName:app.globalData.userInfo.nickName,
-          avatarUrl:app.globalData.userInfo.avatarUrl?app.globalData.userInfo.avatarUrl:app.globalData.defaultHeader,
-          sOpenId:app.globalData.userServerOpenId
+        userInfo: {
+          nickName: app.globalData.userInfo.nickName,
+          avatarUrl: app.globalData.userInfo.avatarUrl ? app.globalData.userInfo.avatarUrl : app.globalData.defaultHeader,
+          sOpenId: app.globalData.userServerOpenId
         }
       });
-      //获得消息
+      
+    });
+  },
+  onReady: function () {
+    // 页面渲染完成
+  },
+  onShow: function () {
+    var that = this;
+    app.doLogin(function (res) {
+       //获得消息
       var data = {
         page: 1,
         wxapp: 1,
@@ -35,16 +46,10 @@ Page({
       });
     });
   },
-  onReady:function(){
-    // 页面渲染完成
-  },
-  onShow:function(){
-    // 页面显示
-  },
-  onHide:function(){
+  onHide: function () {
     // 页面隐藏
   },
-  onUnload:function(){
+  onUnload: function () {
     // 页面关闭
   }
 })

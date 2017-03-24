@@ -61,5 +61,5 @@
   </view>
   <template  wx:if="{{!isCancelGrandPosition&&!isFirstLoadEmpty&&haveNetwork&&notes.coloums1.length==0&&notes.coloums2.length==0}}" is="page-loading" data="{{loadingText:'正在努力加载纸条...'}}" />
   <template  wx:if="{{isCancelGrandPosition}}" is="not-location" data="{{isReGetLocation:isReGetLocation,isLocationFailType:isLocationFailType }}"  />
-  <template is="footer-tools" data="{{isIndex:true}}" />
+  <template is="footer-tools" data="{{isIndex:true,haveNewMessage:haveNewMessage}}" />
 </view>
