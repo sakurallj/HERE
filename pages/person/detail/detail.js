@@ -1,52 +1,52 @@
 // pages/person/detail/detail.js
 var app = getApp();
-function loadNotes(that,callback){
-  that.pageNum+=1;
-  app.doLogin(function(res){
+function loadNotes(that, callback) {
+  that.pageNum += 1;
+  app.doLogin(function (res) {
     var data = {
-      token:app.globalData.userToken,
-      page:that.pageNum
+      token: app.globalData.userToken,
+      page: that.pageNum
     };
     var url = "";
-    if(!that.data.isMy){
+    if (!that.data.isMy) {
       data.openid = that.data.userInfo.sOpenId;
       url = app.globalData.url.api.otherInfoList;
     }
-    else{
+    else {
       url = app.globalData.url.api.myInfoList;
     }
     data = app.getAPISign(data);
- 
+
     //获得首页数据
     wx.request({
-      url:url,
-      method:"GET",
-      data:data,
+      url: url,
+      method: "GET",
+      data: data,
       header: {
         'content-type': 'application/json'
       },
-      fail:function(res){
+      fail: function (res) {
         console.log(res);
         wx.hideToast();
       },
-      success: function(res) {
-    
-        var isLoadEmpty = res.data.data.length==0;   
-        var notes = app.util.separateNotes(that,app,res.data.data,that.isRefresh),rawNotes=that.data.rawNotes;
-      
-        if(that.isRefresh){
+      success: function (res) {
+
+        var isLoadEmpty = res.data.data.length == 0;
+        var notes = app.util.separateNotes(that, app, res.data.data, that.isRefresh), rawNotes = that.data.rawNotes;
+
+        if (that.isRefresh) {
           rawNotes = res.data.data;
         }
-        else{
+        else {
           Array.prototype.push.apply(rawNotes, res.data.data);
         }
         that.setData({
-          notes:notes,
-          rawNotes:rawNotes,
-          isLoadEmpty:isLoadEmpty,
-          hasMore:res.data.more&&res.data.more==1
+          notes: notes,
+          rawNotes: rawNotes,
+          isLoadEmpty: isLoadEmpty,
+          hasMore: res.data.more && res.data.more == 1
         });
-        if(typeof callback == "function")callback(res);
+        if (typeof callback == "function") callback(res);
         wx.hideToast();
         wx.hideNavigationBarLoading();
       }
@@ -54,97 +54,97 @@ function loadNotes(that,callback){
   });
 }
 Page({
-  data:{
-    notes:{
-      coloums1:[],
-      coloums2:[],
-      coloums1Heigth:0,//列高
-      coloums2Heigth:0//列高
+  data: {
+    notes: {
+      coloums1: [],
+      coloums2: [],
+      coloums1Heigth: 0,//列高
+      coloums2Heigth: 0//列高
     },
-    userInfo:{
+    userInfo: {
 
     },
-    isFirstLoadEmpty:false,
-    isLoadEmpty:false,
-    svColumnHeight:false,
-    rawNotes:[],
-    hasMore:false,
-    isMy:false,//是否 我的动态
-    haveNetwork:true,
-    isClickItem:false,//防止重复点击纸条 导致跳转纸条详情页多次,
-    onLoadOptions:{}
+    isFirstLoadEmpty: false,
+    isLoadEmpty: false,
+    svColumnHeight: false,
+    rawNotes: [],
+    hasMore: false,
+    isMy: false,//是否 我的动态
+    haveNetwork: true,
+    isClickItem: false,//防止重复点击纸条 导致跳转纸条详情页多次,
+    onLoadOptions: {}
   },
-  isRefresh:false,
-  pageNum:0,
-  onLoad:function(options){
+  isRefresh: false,
+  pageNum: 0,
+  onLoad: function (options) {
     wx.removeStorageSync('comment_pdetail_srnum');
     this.pageNum = 0;
     var that = this;
     this.setData({
-      onLoadOptions:options
+      onLoadOptions: options
     });
     wx.showNavigationBarLoading();
-     //判断是否有网络
+    //判断是否有网络
     wx.getNetworkType({
-      success: function(res) {
+      success: function (res) {
         // 返回网络类型, 有效值：
         // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
-        if(res.networkType =="none" ){
+        if (res.networkType == "none") {
           that.setData({
-            haveNetwork:false
+            haveNetwork: false
           });
           wx.hideToast();
           wx.hideNavigationBarLoading();
         }
-        else{
+        else {
           that.setData({
-            haveNetwork:true
+            haveNetwork: true
           });
         }
       }
     });
-    app.doLogin(function(){
-      var sOpenId = options.sOpenId,nickName=options.nickName,avatar=options.avatar;
-      if(sOpenId==app.globalData.userServerOpenId){
+    app.doLogin(function () {
+      var sOpenId = options.sOpenId, nickName = options.nickName, avatar = options.avatar;
+      if (sOpenId == app.globalData.userServerOpenId) {
         wx.setNavigationBarTitle({
           title: '我的纸条'
         });
         that.setData({
-          isMy:true,
+          isMy: true,
         });
-        nickName=nickName?nickName:app.globalData.userInfo.nickName;
-        avatar=avatar?avatar:app.globalData.userInfo.avatarUrl?app.globalData.userInfo.avatarUrl:app.globalData.defaultHeader;
+        nickName = nickName ? nickName : app.globalData.userInfo.nickName;
+        avatar = avatar ? avatar : app.globalData.userInfo.avatarUrl ? app.globalData.userInfo.avatarUrl : app.globalData.defaultHeader;
       }
-      else{
+      else {
         wx.setNavigationBarTitle({
           title: 'TA的纸条'
         });
       }
       that.setData({
-        userInfo:{
-          nickName:nickName,
-          avatarUrl:avatar?avatar:app.globalData.defaultHeader,
-          sOpenId:sOpenId
+        userInfo: {
+          nickName: nickName,
+          avatarUrl: avatar ? avatar : app.globalData.defaultHeader,
+          sOpenId: sOpenId
         }
       });
- 
-      loadNotes(that,function(res){
+
+      loadNotes(that, function (res) {
         that.setData({
-          isFirstLoadEmpty:res.data.data&&res.data.data.length==0
+          isFirstLoadEmpty: res.data.data && res.data.data.length == 0
         });
       });
     });
   },
-  onReady:function(){
+  onReady: function () {
     // 页面渲染完成
     var sy = wx.getSystemInfoSync();
- 
-    var svColumnHeight = (750/sy.windowWidth)*sy.windowHeight-90;
-     this.setData({
-       svColumnHeight:svColumnHeight
-     });
+
+    var svColumnHeight = (750 / sy.windowWidth) * sy.windowHeight - 90;
+    this.setData({
+      svColumnHeight: svColumnHeight
+    });
   },
-  onShow:function(){
+  onShow: function () {
     this.setData({
       isClickItem: false
     });
@@ -159,63 +159,63 @@ Page({
 
     wx.removeStorageSync('comment_pdetail_srnum');
   },
-  onHide:function(){
+  onHide: function () {
     // 页面隐藏
   },
-  onUnload:function(){
+  onUnload: function () {
     // 页面关闭
   },
-  deleteNote:function(event){
+  deleteNote: function (event) {
     var that = this;
     wx.showModal({
       title: '',
       content: '确定删除吗？',
-      confirmColor:app.globalData.confirmColor,
-      success: function(res) {
+      confirmColor: app.globalData.confirmColor,
+      success: function (res) {
         if (res.confirm) {
-           wx.showToast({
-              title: '删除中',
-              icon: 'loading',
-              duration: 10000
+          wx.showToast({
+            title: '删除中',
+            icon: 'loading',
+            duration: 10000
           });
-          
-          var id = app.getValueFormCurrentTargetDataSet(event,"id");
-          var index = app.getValueFormCurrentTargetDataSet(event,"index");
-          var columnNum = app.getValueFormCurrentTargetDataSet(event,"columnNum");
- 
+
+          var id = app.getValueFormCurrentTargetDataSet(event, "id");
+          var index = app.getValueFormCurrentTargetDataSet(event, "index");
+          var columnNum = app.getValueFormCurrentTargetDataSet(event, "columnNum");
+
           var data = {
-            token:app.globalData.userToken,
-            id:id
+            token: app.globalData.userToken,
+            id: id
           }, data = app.getAPISign(data);
-        
+
           //获得首页数据
           wx.request({
-            url:app.globalData.url.api.delNote,
-            method:"GET",
-            data:data,
+            url: app.globalData.url.api.delNote,
+            method: "GET",
+            data: data,
             header: {
               'content-type': 'application/json'
             },
-            fail:function(res){
+            fail: function (res) {
               console.log(res);
               wx.hideToast();
             },
-            success: function(res) {
-    
-              
-              var notes =  that.data.notes;
-              if(columnNum==1){
-                if(notes.coloums1[index]){
+            success: function (res) {
+
+
+              var notes = that.data.notes;
+              if (columnNum == 1) {
+                if (notes.coloums1[index]) {
                   notes.coloums1[index].isShow = false;
                 }
               }
-              else if(columnNum==2){
-                if(notes.coloums2[index]){
+              else if (columnNum == 2) {
+                if (notes.coloums2[index]) {
                   notes.coloums2[index].isShow = false;
                 }
               }
               that.setData({
-                notes:notes
+                notes: notes
               });
               wx.hideToast();
             }
@@ -223,13 +223,13 @@ Page({
         }
       }
     })
-    
+
   },
-  clickItem:function(event){
+  clickItem: function (event) {
     if (this.data.isClickItem) {
       return;
     }
-    if(event.currentTarget&&event.currentTarget.dataset&& event.currentTarget.dataset.type){
+    if (event.currentTarget && event.currentTarget.dataset && event.currentTarget.dataset.type) {
       wx.showToast({
         title: '加载中',
         icon: 'loading',
@@ -238,70 +238,76 @@ Page({
       this.setData({
         isClickItem: true
       });
-      var item = app.getValueFormCurrentTargetDataSet(event,"item");
+      var item = app.getValueFormCurrentTargetDataSet(event, "item");
       wx.navigateTo({
-        url: '/pages/comment/pdetail/pdetail?id='+item.id+'&meter='+item.meter+'&itemIndex='+item.itemIndex+'&coloumsIndex='+item.coloumsIndex+'&rawNotesIndex='+item.rawNotesIndex
+        url: '/pages/comment/pdetail/pdetail?id=' + item.id + '&meter=' + item.meter + '&itemIndex=' + item.itemIndex + '&coloumsIndex=' + item.coloumsIndex + '&rawNotesIndex=' + item.rawNotesIndex
       });
     }
   },
-  loadMore:function(){
+  loadMore: function () {
     loadNotes(this);
   },
-  scrollToLower:function(){
-    if(this.data.hasMore){
+  scrollToLower: function () {
+    if (this.data.hasMore) {
       loadNotes(this);
     }
   },
-  onPullDownRefresh:function(){
-    this.isRefresh=true;
-    this.pageNum=0;
-  
+  onPullDownRefresh: function () {
+    this.isRefresh = true;
+    this.pageNum = 0;
+
     var that = this;
     wx.showNavigationBarLoading();
     //获得用户信息
     //调用登录接口
-    app.doLogin(function(){
-      loadNotes(that,function(){
-        that.isRefresh=false;
+    app.doLogin(function () {
+      loadNotes(that, function (res) {
+        if (res.data && res.data.data && res.data.data.length == 0) {
+          that.setData({
+            isFirstLoadEmpty: true
+          });
+        }
+
+        that.isRefresh = false;
         wx.stopPullDownRefresh();
       });
     });
-    
+
   },
-  onReachBottom:function(){
-    if(!this.data.isLoadEmpty){
+  onReachBottom: function () {
+    if (!this.data.isLoadEmpty) {
       loadNotes(this);
     }
   },
-  loaded:function(event){
-    app.util.notesPhotoLoaded(this,app,event);
+  loaded: function (event) {
+    app.util.notesPhotoLoaded(this, app, event);
   },
-  reloadForNotNetwork:function(){
+  reloadForNotNetwork: function () {
     this.onLoad(this.data.onLoadOptions);
     var that = this;
     //判断是否有网络
     wx.getNetworkType({
-      success: function(res) {
+      success: function (res) {
         // 返回网络类型, 有效值：
         // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
-        if(res.networkType =="none" ){
+        if (res.networkType == "none") {
           app.showCheckNetworld();
 
         }
-        else{
+        else {
           that.onLoad(that.data.onLoadOptions);
         }
       }
     });
   },
-  loadedHeader:function(event){
-    app.util.notesHeaderLoaded(this,app,event);
+  loadedHeader: function (event) {
+    app.util.notesHeaderLoaded(this, app, event);
   },
   onShareAppMessage: function () {
     var options = this.data.onLoadOptions;
     return {
       title: options.nickName + '的纸条墙',
-      path: 'pages/person/detail/detail?sOpenId=' +options.sOpenId+"&nickName="+options.nickName+"&avatar="+options.avatar
+      path: 'pages/person/detail/detail?sOpenId=' + options.sOpenId + "&nickName=" + options.nickName + "&avatar=" + options.avatar
     }
   }
 })

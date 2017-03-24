@@ -25,16 +25,18 @@
   display: block;
   text-align: center;
   position: absolute;
-  left: 100rpx;
-  top:65rpx;
+  left: 15rpx;
+  top:45rpx;
+  padding: 20rpx 85rpx;
 }
 
 .footer-tools .account{
   display: block;
   text-align: center;
   position: absolute;
-  right: 100rpx;
-  top:65rpx;
+  right: 15rpx;
+  top:45rpx;
+  padding: 20rpx 85rpx;
 }
 .footer-tools .discovery .title,.footer-tools .account .title{
   font-size: 20rpx;
@@ -58,6 +60,6 @@
   box-sizing: border-box;
 }
 .my-warn-new{
-  top:5rpx;
-  left: 35rpx;
+  top:20rpx;
+  left: 115rpx;
 }

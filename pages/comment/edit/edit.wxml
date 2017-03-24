@@ -5,7 +5,7 @@
         <image class="program-write-local" mode="aspectFill" src="/pages/images/program-local.png">
         </image>
         <view class="program-write-local-text">
-          {{message.address.name}}
+          {{message.address.name?message.address.name:message.address.address}}
         </view>
         
         <view class="clear"></view>

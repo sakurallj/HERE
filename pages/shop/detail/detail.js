@@ -151,6 +151,7 @@ Page({
             var partner = res.data.partner;
             if (partner) {
               var shop = {
+                desc:Partial.fdDescription,
                 address: partner.address,
                 name: partner.fdName,
                 image: partner.fdLogo,
@@ -323,6 +324,7 @@ Page({
         var partner = res.data.partner, shop = that.data.shop;
         if (partner) {
           var shop = {
+            desc:Partial.fdDescription,
             address: partner.address,
             name: partner.fdName,
             image: partner.fdLogo,

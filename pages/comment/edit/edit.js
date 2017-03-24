@@ -265,6 +265,9 @@ Page({
       success: function (res) {
         console.log(res);
         var m = that.data.message;
+        if(!res.name){
+          res.name = res.address;
+        }
         m.address = res;
         that.setData({
           message: m
@@ -277,7 +280,7 @@ Page({
       fail: function (res) {
         console.log("fail");
         console.log(res);
-        if (res.errMsg ) {
+        if (res.errMsg &&res.errMsg!="chooseLocation:fail cancel") {
           wx.showModal({
             title: '',
             content: '无法获得地址，如果未打开微信定位权限，请打开后再试；如果未授权给HERE定位权限，请删除HERE并重新进入授权',
