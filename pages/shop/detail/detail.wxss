@@ -64,7 +64,7 @@
 }
 
 .shop-header-right-address {
-  width: 370rpx;
+  width: 330rpx;
   padding-top: 15rpx;
 }
 
@@ -161,4 +161,14 @@
 }
 .items {
   margin-bottom: 160rpx;
+}
+.shop-header-right-address-image{
+   
+  margin-right: 15rpx;
+}
+.shop-header-right-address .position-icon{
+  width:25rpx;
+  height:26rpx;
+  display: block;
+  margin-top: 8rpx;
 }

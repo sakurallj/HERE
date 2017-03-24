@@ -34,7 +34,7 @@
       </view>
       <view class="warn-new my-warn-new" wx:if="{{haveNewMessage}}"></view>
     </view>
-    <navigator hover-class="none" url="/pages/comment/edit/edit" class="add">
+    <navigator hover-class="none" url="/pages/comment/edit/edit?shopId={{shopId}}" class="add">
       <image class="add-icon" mode="aspectFill" src="/pages/images/add.png">
       </image>
     </navigator>

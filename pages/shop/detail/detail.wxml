@@ -23,6 +23,10 @@
                 {{shop.name}}
               </view>
               <view class="shop-header-right-address text-ellipsis">
+                <view class="shop-header-right-address-image left">
+                  <image class="position-icon" mode="aspectFill" src="/pages/images/position.png">
+                  </image>
+                </view>
                 {{shop.address}}
               </view>
             </view>
@@ -35,7 +39,7 @@
           </view>
           <view class="clear"></view>
         </view>
-        <view class="shop-header-bottom text-ellipsis">{{shop.desc}}服装行业哀鸣一片，身处其中的红领集团却成了炙手可热的香饽饽，上万家中外企业趋之</view>
+        <view class="shop-header-bottom text-ellipsis">{{shop.desc}}</view>
       </view>
     </view>
     <view class="detail-main" wx:if="{{notes.coloums1.length>0&&haveNetwork}}">
@@ -106,5 +110,5 @@
   </view>
   <template wx:if="{{!isDeleted&&!isFirstLoadEmpty&&haveNetwork&&notes.coloums1.length==0&&notes.coloums2.length==0}}" is="page-loading" data="{{loadingText:'正在努力加载纸条...'}}" />
   <template wx:if="{{isDeleted}}" is="not-exists" data="{{loadingText:'该商家已被删除'}}" />
-  <template is="footer-tools" />
+  <template is="footer-tools" data="{{shopId:shop.id}}" />
 </view>

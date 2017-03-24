@@ -155,7 +155,19 @@ Page({
                     isShow: false
                   }
                 }
+                //判断是否有地理位置
                 res.data.data.meter = options.meter || options.meter == 0 ? options.meter : '';
+                if (res.data.data.meter == '' && app.globalData.location.latitude) {
+                  res.data.data.meter = app.util.formatDistance(parseInt(app.util.getPonitToPointDistance(
+                    res.data.data.latitude,
+                    res.data.data.longitude,
+                    app.globalData.location.latitude,
+                    app.globalData.location.longitude
+                  )));
+
+                }
+
+
                 res.data.data.nickName = res.data.data.nickName ? res.data.data.nickName : "";
                 res.data.data.avatar = res.data.data.avatar ? res.data.data.avatar : app.globalData.defaultHeader;
                 that.setData({
@@ -179,7 +191,7 @@ Page({
               }
               else {//纸条不存在
                 that.setData({
-                  isDeleted:true
+                  isDeleted: true
                 });
               }
 

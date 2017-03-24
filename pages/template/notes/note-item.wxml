@@ -28,7 +28,7 @@
     </view>
     <view class="item-body-text " style="max-height:{{contentar.length>1?158:150}}rpx" wx:if="{{contentar.length>0}}">
       <block wx:for="{{contentar}}">
-        <view class="item-body-text-g item-body-text-{{item.size}}">{{item.word}}</view>
+        <view class="item-body-text-g item-body-text-{{item.size}} {{item.haveBlank?'item-body-text-g-before':''}}">{{item.word}}</view>
       </block>
     </view>
     <view class="item-body-text" wx:elif="{{content}}">

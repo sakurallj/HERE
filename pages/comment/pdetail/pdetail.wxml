@@ -4,7 +4,7 @@
 <import src="../../template/page/loading.wxml" />
 <import src="../../template/page/not-exists.wxml" />
 <view class="body" style="background-color: {{bodyBgColor}};height:{{bodyHeight}};">
-  <view class="content">
+  <view class="content" wx:if="{{!isDeleted}}">
 
     <!-- -->
     <view style="height:{{contentMainCoverHeight}};display:{{isShowWriteResp?'block':'none'}}" class="content-main-cover">
@@ -49,7 +49,7 @@
               </swiper-item>
             </block>
           </swiper>
-          <view class="swiper-num" wx:if="{{totalImage>1}}">{{currentImageIndex}}/{{totalImage}}</view>
+          <view class="swiper-num" wx:if="{{totalImage>1}}"><view class="swiper-num-text">{{currentImageIndex}}/{{totalImage}}</view></view>
         </view>
         <text class="detail-main-content">
           {{message.content}}

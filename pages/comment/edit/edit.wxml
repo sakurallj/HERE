@@ -1,5 +1,5 @@
 <view class="body">
-  <view class="content">
+  <scroll-view class="content" scroll-y="true">
     <view class="program-write">
       <view bindtap="chooseLocation">
         <image class="program-write-local" mode="aspectFill" src="/pages/images/program-local.png">
@@ -23,5 +23,5 @@
         贴纸条
       </button>
     </view>
-  </view>
+  </scroll-view>
 </view>

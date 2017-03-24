@@ -50,6 +50,7 @@
     text-align:left;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 35rpx;
 }
 .reply-option-content-date{
     font-size:24rpx;

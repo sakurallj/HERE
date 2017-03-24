@@ -181,7 +181,17 @@ function separateNotes(that, app, data, isRefresh) {
     if (note.contentar) {
       var contentar = note.contentar, contentarLen = contentar.length, tmpContent = "", tmpContentLength = 0;
       for (var tI = 0; tI < contentarLen; tI++) {
+        
+        var lastWord = contentar[tI].word[contentar[tI].word.length-1];
+        if(lastWord){
+          console.log(lastWord);
+          if(!/^[\u4e00-\u9fa5]/.test(lastWord)&&/^[a-zA-Z]/.test(lastWord)){
+            note.contentar[tI].haveBlank = true;
+          }
+          console.log(note.contentar);
+        }
         var tmpLength = textLength(contentar[tI].word);
+        
         if (tmpContentLength + tmpLength > 25) {
           var sLen = 25 - tmpContentLength;
           contentar[tI].word = formatShowText(contentar[tI].word, sLen);

@@ -215,7 +215,9 @@ item-body {
   display: inline;
   word-wrap: break-word;
 }
-
+.item-body-text-g-before:before{
+  content: " ";
+}
 .item-body-text-g:last-child {
   margin-right: 0;
 }

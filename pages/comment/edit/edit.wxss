@@ -34,6 +34,7 @@
 }
 .program-write-main-textarea{
     color: #c3c3c3;
+    position: absolute;
 }
 .program-write-img:nth-child(4n){
     margin-right:0rpx;
@@ -86,6 +87,7 @@ button[disabled][type="default"], wx-button[disabled]:not([type]){
 }
 textarea{
     color: #666666;
+    
 }
 .program-write-btn{
     border: 0;
@@ -99,6 +101,4 @@ button::after{
     content:none;
     height:none;
 }
-.content{
-    position: fixed;
-}
+ 
