@@ -79,7 +79,7 @@
 }
 
 .favorite-item-right-title {
-  font-size: 30rpx;
+  font-size: 36rpx;
   line-height: 40rpx;
   margin-top: -5rpx;
   width: 450rpx;
@@ -87,10 +87,11 @@
 
 .favorite-item-right-desc {
   margin-top: 20rpx;
-  font-size: 24rpx;
+  font-size: 28rpx;
   line-height: 40rpx;
   height: 80rpx;
   overflow: hidden;
+  color:#999999;
 }
 
 .page-loading, .not-exists {

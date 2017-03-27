@@ -102,7 +102,8 @@ Page({
 
 
     this.setData({
-      shop: shop
+      shop: shop,
+      formPage:options.from
     });
 
     this.setData({
@@ -151,7 +152,7 @@ Page({
             var partner = res.data.partner;
             if (partner) {
               var shop = {
-                desc:Partial.fdDescription,
+                desc:partner.fdDescription,
                 address: partner.address,
                 name: partner.fdName,
                 image: partner.fdLogo,
@@ -228,15 +229,20 @@ Page({
       };
       var rawNotes = this.data.rawNotes, rawNotes1 = [note];
       Array.prototype.push.apply(rawNotes1, rawNotes);
-      console.log("rawNotes1");
-      console.log(rawNotes1);
       var notes = app.util.separateNotes(that, app, rawNotes1, true);
-      console.log("notes");
-      console.log(notes);
       this.setData({
         notes: notes,
         rawNotes: rawNotes1
       });
+      //保存发布的纸条 以备返回首页时候展示
+      var newNotes = wx.getStorageSync('shop_detail_new_notes');
+      if(!newNotes){
+        newNotes = [note];
+      }
+      else{
+        newNotes[newNotes.length] = note;
+      }
+      wx.setStorageSync("shop_detail_new_notes",newNotes);
     }
     //清空msg缓存
     wx.removeStorageSync('comment_edit_message');
@@ -324,7 +330,7 @@ Page({
         var partner = res.data.partner, shop = that.data.shop;
         if (partner) {
           var shop = {
-            desc:Partial.fdDescription,
+            desc:partner.fdDescription,
             address: partner.address,
             name: partner.fdName,
             image: partner.fdLogo,
@@ -477,6 +483,10 @@ Page({
               that.setData({
                 isFavorite: false
               });
+              //判断是否从我的收藏页来的
+              if(that.data.formPage=="favorite"&& that.data.shop.id){
+                wx.setStorageSync("shop_detail_cancel_favorite_shop_id", that.data.shop.id);
+              }
             }
             else {
               wx.showModal({

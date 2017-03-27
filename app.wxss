@@ -62,7 +62,7 @@ page{
   height:32rpx;
 }
 .person-header{
-  border: 1px solid rgba(153,153,153,.35);
+  border: 1px solid rgba(153,153,153,.15);
 }
 .shop-header{
   border: 1px solid rgba(255,255,255,.65);
@@ -123,7 +123,7 @@ page{
   height:32rpx;
 }
 .blur {    
-  filter: blur(0px);    
+  filter: blur(1rpx) brightness(.9);    
 }
 .help-icon{
   width:26rpx;
@@ -159,4 +159,10 @@ page{
 .position-icon{
   width:20rpx;
   height:21rpx;
+}
+.box-shadow-round {
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+.inline-block{
+  display: inline-block;
 }

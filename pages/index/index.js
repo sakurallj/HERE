@@ -207,6 +207,24 @@ Page({
     }
 
     wx.removeStorageSync('comment_pdetail_srnum');
+
+    //查看是否有在商家页发表的纸条
+    var newNotes = wx.getStorageSync('shop_detail_new_notes');
+    console.log("newNotes");
+    console.log(newNotes);
+    if (newNotes && newNotes.length > 0) {
+      newNotes = newNotes.reverse();
+      var rawNotes = this.data.rawNotes;
+      Array.prototype.push.apply(newNotes, rawNotes);
+      var notes = app.util.separateNotes(that, app, newNotes, true);
+      console.log(notes);
+      console.log(newNotes);
+      this.setData({
+        notes: notes,
+        rawNotes: newNotes
+      });
+    }
+    wx.removeStorageSync('shop_detail_new_notes');
   },
   onLoad: function () {
     wx.showNavigationBarLoading();
@@ -232,7 +250,7 @@ Page({
     });
     wx.removeStorageSync('comment_edit_message');
     wx.removeStorageSync('comment_pdetail_srnum');
-
+    wx.removeStorageSync('shop_detail_new_notes');
 
     //获得用户信息
     //调用登录接口

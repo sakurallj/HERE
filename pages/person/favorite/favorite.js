@@ -43,6 +43,7 @@ Page({
   },
   pageNum: 0,
   onLoad: function (options) {
+    wx.removeStorageSync('shop_detail_cancel_favorite_shop_id');
     this.pageNum = 0;
     var that = this;
     wx.showNavigationBarLoading();
@@ -100,6 +101,22 @@ Page({
   },
   onShow: function () {
     // 页面显示
+    var cFShopId = wx.getStorageSync('shop_detail_cancel_favorite_shop_id');
+    console.log(cFShopId);
+    if(cFShopId){
+      var favorites=this.data.favorites, len = favorites.length;
+      for(var i=0;i<len;i++){
+        console.log(favorites[i]);
+        if(favorites[i].partnerID==cFShopId){
+          favorites[i].isHide=true;
+          break;
+        }
+      }
+      this.setData({
+        favorites:favorites
+      });
+    }
+    wx.removeStorageSync('shop_detail_cancel_favorite_shop_id');
   },
   onHide: function () {
     // 页面隐藏

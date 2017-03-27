@@ -11,14 +11,14 @@
       <navigator hover-class="none" open-type="redirect" url="/pages/index/index" class="not-favorite-reload-btn" catchtap="reloadForNotNetwork">周围看看</navigator>
     </view>
     <view  wx:if="{{!isFirstLoadEmpty}}" class="favorites">
-      <navigator hover-class="none" url="/pages/shop/detail/detail?id={{item.partnerID}}&name={{item.fdName}}&image={{item.fdLogo}}"  class="favorite-item" wx:for="{{favorites}}" bindtap="clickItem" data-index="{{index}}"  >
+      <navigator hover-class="none" url="/pages/shop/detail/detail?id={{item.partnerID}}&name={{item.fdName}}&image={{item.fdLogo}}&index={{index}}&from=favorite"  class="favorite-item" wx:for="{{favorites}}" bindtap="clickItem" data-index="{{index}}" wx:if="{{!item.isHide}}" >
         <image class="favorite-item-image-holder  {{item.isLoaded?'favorite-item-image-holder-loaded':''}}"  mode="aspectFill" src="/pages/images/img_160.jpg">
         </image>
         <image  data-index="{{index}}" bindload="logoLoaded" class="favorite-item-image left {{item.isLoaded?'favorite-item-image-loaded':''}}" mode="aspectFill" src="{{item.fdLogo}}">
         </image>
         <view class="favorite-item-right left">
-          <view class="favorite-item-right-title text-ellipsis">{{item.fdName}}</view>
-          <view class="favorite-item-right-desc">{{item.fdDescription}}</view>
+          <view class="favorite-item-right-title text-ellipsis">{{item.fdName&&item.fdName!='null'?item.fdName:""}}</view>
+          <view class="favorite-item-right-desc">{{item.fdDescription&&item.fdDescription!='null'?item.fdDescription:""}}</view>
         </view>
         <view class="clear"></view>
       </navigator>

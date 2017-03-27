@@ -57,23 +57,34 @@
 }
 
 .detail-head-main-second-font {
-  padding-top: 25rpx;
-  width: 370rpx;
+  margin-top: 25rpx;
+  max-width: 370rpx;
   font-size: 34rpx;
   font-weight: 500;
+  line-height: 34rpx;
 }
 
 .shop-header-right-address {
-  width: 330rpx;
-  padding-top: 15rpx;
+  max-width: 330rpx;
+  margin-top: 30rpx;
+  line-height: 25rpx;
 }
 
+.shop-header-right-address .position-icon {
+  width: 25rpx;
+  height: 26rpx;
+  display: block;
+ 
+}
 .shop-header-bottom {
   font-size: 25rpx;
   color: #fff;
-  width: 687rpx;
-  line-height: 44rpx;
+  max-width: 687rpx;
+  line-height: 25rpx;
   margin-top: 30rpx;
+  display: inline-block;
+  border-radius: 25rpx;
+  padding: 0 5rpx;
 }
 
 .shop-header-right-favorite {
@@ -84,9 +95,11 @@
   text-align: center;
   padding-top: 11rpx;
 }
+
 .shop-header-right-favorite.active {
-    color:#ffc882;
+  color: #ffc882;
 }
+
 .detail-head-bottom {
   padding: 15rpx 0;
   height: 88rpx;
@@ -159,16 +172,15 @@
 .person-distanct {
   display: none;
 }
+
 .items {
   margin-bottom: 160rpx;
 }
-.shop-header-right-address-image{
-   
+
+.shop-header-right-address-image {
   margin-right: 15rpx;
 }
-.shop-header-right-address .position-icon{
-  width:25rpx;
-  height:26rpx;
-  display: block;
-  margin-top: 8rpx;
+
+.shop-header-font-color-n-face{
+  color:#333;
 }

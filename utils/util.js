@@ -144,8 +144,7 @@ function getNoteHeight(note){
  * 分割notes成两列
  */
 function separateNotes(that, app, data, isRefresh) {
-  console.log("data");
-  console.log(data);
+ 
   var length = data.length,
     coloums1Heigth = isRefresh ? 0 : that.data.notes.coloums1Heigth,
     coloums2Heigth = isRefresh ? 0 : that.data.notes.coloums2Heigth,
@@ -184,11 +183,9 @@ function separateNotes(that, app, data, isRefresh) {
         
         var lastWord = contentar[tI].word[contentar[tI].word.length-1];
         if(lastWord){
-          console.log(lastWord);
           if(!/^[\u4e00-\u9fa5]/.test(lastWord)&&/^[a-zA-Z]/.test(lastWord)){
             note.contentar[tI].haveBlank = true;
           }
-          console.log(note.contentar);
         }
         var tmpLength = textLength(contentar[tI].word);
         

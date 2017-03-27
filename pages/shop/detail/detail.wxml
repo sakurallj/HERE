@@ -7,7 +7,7 @@
   <view class="content shop-detail" bindtouchend="touchend">
     <template is="lost-network" wx:if="{{!haveNetwork}}" />
     <view class="detail-head {{isShowFace?'show-face':''}}" wx:if="{{haveNetwork}}">
-      <image class="shop-face " catchtap="clickWarn" mode="aspectFill" src="{{shop.face}}" bindload="bindFaceload">
+      <image class="shop-face blur" catchtap="clickWarn" mode="aspectFill" src="{{shop.face}}" bindload="bindFaceload">
       </image>
       <view class="detail-head-main">
         <view class="help" bindtap="clickHelp">
@@ -19,15 +19,15 @@
           </image>
           <view class="shop-header-right left">
             <view class="left">
-              <view class="detail-head-main-second-font  text-ellipsis {{isShowFace?'detail-head-main-second-font-white':''}}">
-                {{shop.name}}
+              <view class="detail-head-main-second-font  {{isShowFace?'detail-head-main-second-font-white':''}}">
+                <view class="{{isShowFace?'box-shadow-round':'shop-header-font-color-n-face'}}  inline-block text-ellipsis" >{{shop.name}}</view>
               </view>
-              <view class="shop-header-right-address text-ellipsis">
+              <view class="shop-header-right-address">
                 <view class="shop-header-right-address-image left">
                   <image class="position-icon" mode="aspectFill" src="/pages/images/position.png">
                   </image>
                 </view>
-                {{shop.address}}
+                <view class=" {{isShowFace?'box-shadow-round':'shop-header-font-color-n-face'}}   text-ellipsis" >{{shop.address}}</view>
               </view>
             </view>
             <view class="shop-header-right-favorite right" wx:if="{{!isFavorite}}" bindtap="doFavorite">
@@ -39,7 +39,7 @@
           </view>
           <view class="clear"></view>
         </view>
-        <view class="shop-header-bottom text-ellipsis">{{shop.desc}}</view>
+        <view class="shop-header-bottom {{isShowFace?'box-shadow-round':'shop-header-font-color-n-face'}}  text-ellipsis">{{shop.desc&&shop.desc!='null'?shop.desc:""}}</view>
       </view>
     </view>
     <view class="detail-main" wx:if="{{notes.coloums1.length>0&&haveNetwork}}">
