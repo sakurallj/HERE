@@ -94,6 +94,7 @@ Page({
     //清楚残余的上次发表的纸条
     wx.removeStorageSync('comment_edit_message');
     wx.removeStorageSync('comment_pdetail_srnum');
+    wx.removeStorageSync('person_detail_del_note_ids');
 
     var shop = this.data.shop;
     shop.name = options.name;
@@ -103,7 +104,7 @@ Page({
 
     this.setData({
       shop: shop,
-      formPage:options.from
+      formPage: options.from
     });
 
     this.setData({
@@ -152,7 +153,7 @@ Page({
             var partner = res.data.partner;
             if (partner) {
               var shop = {
-                desc:partner.fdDescription,
+                desc: partner.fdDescription,
                 address: partner.address,
                 name: partner.fdName,
                 image: partner.fdLogo,
@@ -234,15 +235,7 @@ Page({
         notes: notes,
         rawNotes: rawNotes1
       });
-      //保存发布的纸条 以备返回首页时候展示
-      var newNotes = wx.getStorageSync('shop_detail_new_notes');
-      if(!newNotes){
-        newNotes = [note];
-      }
-      else{
-        newNotes[newNotes.length] = note;
-      }
-      wx.setStorageSync("shop_detail_new_notes",newNotes);
+
     }
     //清空msg缓存
     wx.removeStorageSync('comment_edit_message');
@@ -256,6 +249,12 @@ Page({
     }
 
     wx.removeStorageSync('comment_pdetail_srnum');
+    //隐藏在我的消息页面删除的纸条   
+    var delNoteIds = wx.getStorageSync('person_detail_del_note_ids');
+    if (delNoteIds) {
+      app.util.doHideDelNote(app, that, delNoteIds);
+    }
+    wx.removeStorageSync('person_detail_del_note_ids');
   },
   onHide: function () {
     // 页面隐藏
@@ -330,7 +329,7 @@ Page({
         var partner = res.data.partner, shop = that.data.shop;
         if (partner) {
           var shop = {
-            desc:partner.fdDescription,
+            desc: partner.fdDescription,
             address: partner.address,
             name: partner.fdName,
             image: partner.fdLogo,
@@ -449,7 +448,7 @@ Page({
       });
     });
   },
-  doCancelFavorite:function(){
+  doCancelFavorite: function () {
     var that = this;
     app.doLogin(function (res) {
       console.log(res);
@@ -474,7 +473,7 @@ Page({
           console.log("success");
           console.log(res);
           if (res.data) {
-            if (res.data.errcode == 0  ) {
+            if (res.data.errcode == 0) {
               wx.showToast({
                 title: '已取消收藏',
                 icon: 'success',
@@ -484,7 +483,7 @@ Page({
                 isFavorite: false
               });
               //判断是否从我的收藏页来的
-              if(that.data.formPage=="favorite"&& that.data.shop.id){
+              if (that.data.formPage == "favorite" && that.data.shop.id) {
                 wx.setStorageSync("shop_detail_cancel_favorite_shop_id", that.data.shop.id);
               }
             }

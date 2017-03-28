@@ -51,5 +51,12 @@ Page({
   },
   onUnload: function () {
     // 页面关闭
+  },
+  onShareAppMessage: function () {
+    var options = this.data.onLoadOptions;
+    return {
+      title: 'HERE—在这而贴张纸条吧~',
+      path: 'pages/index/index'
+    }
   }
 })

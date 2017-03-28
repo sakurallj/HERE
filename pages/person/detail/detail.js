@@ -1,6 +1,84 @@
 // pages/person/detail/detail.js
 var app = getApp();
-function loadNotes(that, callback) {
+/**
+ * 从服务器上删除
+ */
+function doDeleteNoteFromServer(that, id, index, columnNum, isAgain) {
+  var data = {
+    token: app.globalData.userToken,
+    id: id
+  }, data = app.getAPISign(data);
+  //获得首页数据
+  wx.request({
+    url: app.globalData.url.api.delNote,
+    method: "GET",
+    data: data,
+    header: {
+      'content-type': 'application/json'
+    },
+    fail: function (res) {
+      console.log(res);
+      wx.hideToast();
+    },
+    success: function (res) {
+      if (res.data && res.data.errcode == 1002) {
+        if (isAgain) {
+          wx.showModal({
+            title: '',
+            content: '删除失败，请重试',
+            showCancel: false,
+            confirmText: "我知道了",
+            confirmColor: app.globalData.confirmColor,
+            success: function (res) { }
+          });
+        }
+        else {
+          app.loginForServer(app, app.globalData.userInfo, function () {
+            doDeleteNoteFromServer(that, id, index, columnNum, true);
+          });
+        }
+
+      }
+      else {
+        var notes = that.data.notes, note = [];
+        console.log(notes);
+        if (columnNum == 1) {
+          if (notes.coloums1[index]) {
+            note = notes.coloums1[index];
+            note.isShow = false;
+          }
+        }
+        else if (columnNum == 2) {
+          if (notes.coloums2[index]) {
+            note = notes.coloums2[index];
+            note.isShow = false;
+          }
+        }
+        if (note && note.id) {
+          app.util.doHideDelNote(app, that, [note.id]);
+          console.log(note);
+        }
+        if (that.data.rawNotes.length == 0) {
+          that.setData({
+            isAllDeleted: true
+          });
+        }
+        wx.hideToast();
+        //保存删除的note id 到缓存 以备返回首页等地方删除纸条
+        var noteIds = wx.getStorageSync('person_detail_del_note_ids');
+        if (!noteIds) {
+          noteIds = [id];
+        }
+        else {
+          noteIds[noteIds.length] = id;
+        }
+        wx.setStorageSync("person_detail_del_note_ids", noteIds);
+
+      }
+    }
+  });
+}
+function loadNotes(that, callback, isAgain) {
   that.pageNum += 1;
   app.doLogin(function (res) {
     var data = {
@@ -30,25 +108,47 @@ function loadNotes(that, callback) {
         wx.hideToast();
       },
       success: function (res) {
+        if (res.data && res.data.errcode == 1002) {
+          if (!isAgain) {
 
-        var isLoadEmpty = res.data.data.length == 0;
-        var notes = app.util.separateNotes(that, app, res.data.data, that.isRefresh), rawNotes = that.data.rawNotes;
+            app.loginForServer(app, app.globalData.userInfo, function () {
+              that.pageNum -= 1;
+              loadNotes(that, callback, true);
+            });
+          }
+          else {
+            wx.showModal({
+              title: '',
+              content: '加载失败，请重试',
+              showCancel: false,
+              confirmText: "我知道了",
+              confirmColor: app.globalData.confirmColor,
+              success: function (res) { }
+            });
+          }
 
-        if (that.isRefresh) {
-          rawNotes = res.data.data;
         }
         else {
-          Array.prototype.push.apply(rawNotes, res.data.data);
+          var isLoadEmpty = res.data.data.length == 0;
+          var notes = app.util.separateNotes(that, app, res.data.data, that.isRefresh), rawNotes = that.data.rawNotes;
+
+          if (that.isRefresh) {
+            rawNotes = res.data.data;
+          }
+          else {
+            Array.prototype.push.apply(rawNotes, res.data.data);
+          }
+          that.setData({
+            notes: notes,
+            rawNotes: rawNotes,
+            isLoadEmpty: isLoadEmpty,
+            hasMore: res.data.more && res.data.more == 1
+          });
+          if (typeof callback == "function") callback(res);
+          wx.hideToast();
+          wx.hideNavigationBarLoading();
         }
-        that.setData({
-          notes: notes,
-          rawNotes: rawNotes,
-          isLoadEmpty: isLoadEmpty,
-          hasMore: res.data.more && res.data.more == 1
-        });
-        if (typeof callback == "function") callback(res);
-        wx.hideToast();
-        wx.hideNavigationBarLoading();
+
       }
     });
   });
@@ -81,7 +181,8 @@ Page({
     this.pageNum = 0;
     var that = this;
     this.setData({
-      onLoadOptions: options
+      onLoadOptions: options,
+      isAllDeleted: false
     });
     wx.showNavigationBarLoading();
     //判断是否有网络
@@ -151,8 +252,6 @@ Page({
     // 页面显示
     //更新纸条的回应数
     var sendRespNum = wx.getStorageSync('comment_pdetail_srnum');
-    console.log("sendRespNum");
-    console.log(sendRespNum);
     if (sendRespNum && sendRespNum.num > 0) {
       app.util.updateNoteRespNum(this, sendRespNum.coloumsIndex, sendRespNum.itemIndex, sendRespNum.rawNotesIndex, sendRespNum.num);
     }
@@ -165,7 +264,7 @@ Page({
   onUnload: function () {
     // 页面关闭
   },
-  deleteNote: function (event) {
+  deleteNote: function (event, ) {
     var that = this;
     wx.showModal({
       title: '',
@@ -183,43 +282,8 @@ Page({
           var index = app.getValueFormCurrentTargetDataSet(event, "index");
           var columnNum = app.getValueFormCurrentTargetDataSet(event, "columnNum");
 
-          var data = {
-            token: app.globalData.userToken,
-            id: id
-          }, data = app.getAPISign(data);
 
-          //获得首页数据
-          wx.request({
-            url: app.globalData.url.api.delNote,
-            method: "GET",
-            data: data,
-            header: {
-              'content-type': 'application/json'
-            },
-            fail: function (res) {
-              console.log(res);
-              wx.hideToast();
-            },
-            success: function (res) {
-
-
-              var notes = that.data.notes;
-              if (columnNum == 1) {
-                if (notes.coloums1[index]) {
-                  notes.coloums1[index].isShow = false;
-                }
-              }
-              else if (columnNum == 2) {
-                if (notes.coloums2[index]) {
-                  notes.coloums2[index].isShow = false;
-                }
-              }
-              that.setData({
-                notes: notes
-              });
-              wx.hideToast();
-            }
-          });
+          doDeleteNoteFromServer(that, id, index, columnNum);
         }
       }
     })
@@ -255,7 +319,9 @@ Page({
   onPullDownRefresh: function () {
     this.isRefresh = true;
     this.pageNum = 0;
-
+    this.setData({
+      isAllDeleted: false
+    });
     var that = this;
     wx.showNavigationBarLoading();
     //获得用户信息

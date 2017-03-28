@@ -54,7 +54,7 @@ function formatShowTimeText(second) {
   }
   else {
     var t = new Date(second * 1000);
-   
+
     return H + ":" + m;
   }
 }
@@ -117,20 +117,20 @@ function formatShowText(str, sLen) {
 /**
  * 获得note的展示高度
  */
-function getNoteHeight(note){
-  var height = 0,textHeight=0;
+function getNoteHeight(note) {
+  var height = 0, textHeight = 0;
   //计算文本高度
   if (note.content) {
-      var rawLen = note.content ? note.content.length : 0
-        , ascllLen = getAscllLength(note.content) ;
-      var trueLen = rawLen - ascllLen + Math.ceil(ascllLen / 2);
-      var line = Math.ceil((trueLen * 28) / 304);
-      line = line > 3 ? 3 : line;
-      textHeight = line * 50;
-    }
+    var rawLen = note.content ? note.content.length : 0
+      , ascllLen = getAscllLength(note.content);
+    var trueLen = rawLen - ascllLen + Math.ceil(ascllLen / 2);
+    var line = Math.ceil((trueLen * 28) / 304);
+    line = line > 3 ? 3 : line;
+    textHeight = line * 50;
+  }
   //计算图片及基本高度
   if (note.ispartner == 1) {
-      height += 390;//商家的高度 
+    height += 390;//商家的高度 
   }
   else {
     if (note.photo) {
@@ -144,7 +144,7 @@ function getNoteHeight(note){
  * 分割notes成两列
  */
 function separateNotes(that, app, data, isRefresh) {
- 
+
   var length = data.length,
     coloums1Heigth = isRefresh ? 0 : that.data.notes.coloums1Heigth,
     coloums2Heigth = isRefresh ? 0 : that.data.notes.coloums2Heigth,
@@ -158,37 +158,37 @@ function separateNotes(that, app, data, isRefresh) {
     var noteHeight = 0;
     //计算行数 文本高度 及 截取文本
     if (note.content) {
-  
+
       note.content = formatShowText(note.content);
     }
-    if(note.address=="请选择位置"){
+    if (note.address == "请选择位置") {
       note.address = "";
     }
-    if(note.address){
+    if (note.address) {
       note.addressLength = textLength(note.address);
     }
     note.addressSpace = [];
-    if(note.addressLength<11){
-      var aFL = 10-note.addressLength;
-      for(var aL =0;aL<=aFL;aL++){
+    if (note.addressLength < 11) {
+      var aFL = 10 - note.addressLength;
+      for (var aL = 0; aL <= aFL; aL++) {
         note.addressSpace[aL] = aL;
       }
     }
-    
+
     noteHeight = getNoteHeight(note);
     //处理分词的文本
     if (note.contentar) {
       var contentar = note.contentar, contentarLen = contentar.length, tmpContent = "", tmpContentLength = 0;
       for (var tI = 0; tI < contentarLen; tI++) {
-        
-        var lastWord = contentar[tI].word[contentar[tI].word.length-1];
-        if(lastWord){
-          if(!/^[\u4e00-\u9fa5]/.test(lastWord)&&/^[a-zA-Z]/.test(lastWord)){
+
+        var lastWord = contentar[tI].word[contentar[tI].word.length - 1];
+        if (lastWord) {
+          if (!/^[\u4e00-\u9fa5]/.test(lastWord) && /^[a-zA-Z]/.test(lastWord)) {
             note.contentar[tI].haveBlank = true;
           }
         }
         var tmpLength = textLength(contentar[tI].word);
-        
+
         if (tmpContentLength + tmpLength > 25) {
           var sLen = 25 - tmpContentLength;
           contentar[tI].word = formatShowText(contentar[tI].word, sLen);
@@ -214,13 +214,13 @@ function separateNotes(that, app, data, isRefresh) {
       note.itemIndex = coloums1.length;
       note.coloumsIndex = 1;
       coloums1.push(note);
-      coloums1Heigth += noteHeight ; 
+      coloums1Heigth += noteHeight;
     }
     else {
       note.itemIndex = coloums2.length;
       note.coloumsIndex = 2;
       coloums2.push(note);
-      coloums2Heigth += noteHeight ; 
+      coloums2Heigth += noteHeight;
     }
   }
   var notes = {
@@ -229,30 +229,30 @@ function separateNotes(that, app, data, isRefresh) {
     coloums1Heigth: coloums1Heigth,//列高
     coloums2Heigth: coloums2Heigth//列高
   };
-   
+
   return notes;
 }
 /**
  * 添加纸条到 column
  */
-function addNoteToColumn(that, app, note){
-  if(note.address=="请选择位置"){
+function addNoteToColumn(that, app, note) {
+  if (note.address == "请选择位置") {
     note.address = "";
   }
-  if(note.address){
+  if (note.address) {
     note.addressLength = textLength(note.address);
   }
   note.addressSpace = [];
-  if(note.addressLength<11){
-    var aFL = 10-note.addressLength;
-    for(var aL =0;aL<=aFL;aL++){
+  if (note.addressLength < 11) {
+    var aFL = 10 - note.addressLength;
+    for (var aL = 0; aL <= aFL; aL++) {
       note.addressSpace[aL] = aL;
     }
   }
-  var  notes = that.data.notes,cNote = [note],  noteHeight = getNoteHeight(note);
+  var notes = that.data.notes, cNote = [note], noteHeight = getNoteHeight(note);
   Array.prototype.push.apply(cNote, notes.coloums1);
   notes.coloums1 = cNote;
-  notes.coloums1Heigth += noteHeight ; 
+  notes.coloums1Heigth += noteHeight;
   /*
   if(notes.coloums1Heigth<=notes.coloums2Heigth){
     Array.prototype.push.apply(cNote, notes.coloums1);
@@ -299,9 +299,9 @@ function notesPhotoLoaded(that, app, event) {
     }
   }
 }
-function notesHeaderLoaded(that, app, event){
+function notesHeaderLoaded(that, app, event) {
   var coloumsIndex = app.getValueFormCurrentTargetDataSet(event, "coloumsIndex"),
-    itemIndex = app.getValueFormCurrentTargetDataSet(event, "itemIndex"),notes = that.data.notes;
+    itemIndex = app.getValueFormCurrentTargetDataSet(event, "itemIndex"), notes = that.data.notes;
   if (coloumsIndex == 1) {
     if (notes.coloums1[itemIndex]) {
       notes.coloums1[itemIndex].isHeaderLoaded = true;
@@ -319,32 +319,32 @@ function notesHeaderLoaded(that, app, event){
     }
   }
 }
-function updateNoteRespNum(that,coloumsIndex,itemIndex,rawNotesIndex,num){
-  var notes = that.data.notes,rawNotes= that.data.rawNotes;
-  if(rawNotes[rawNotesIndex]){
-    rawNotes[rawNotesIndex].commentnum+= num;
+function updateNoteRespNum(that, coloumsIndex, itemIndex, rawNotesIndex, num) {
+  var notes = that.data.notes, rawNotes = that.data.rawNotes;
+  if (rawNotes[rawNotesIndex]) {
+    rawNotes[rawNotesIndex].commentnum += num;
   }
   if (coloumsIndex == 1) {
     if (notes.coloums1[itemIndex]) {
-      notes.coloums1[itemIndex].commentnum+= num;
+      notes.coloums1[itemIndex].commentnum += num;
       that.setData({
         notes: notes,
-        rawNotes:rawNotes
+        rawNotes: rawNotes
       });
     }
   }
   else {
     if (notes.coloums2[itemIndex]) {
-      notes.coloums2[itemIndex].commentnum+= num;
+      notes.coloums2[itemIndex].commentnum += num;
       that.setData({
         notes: notes,
-        rawNotes:rawNotes
+        rawNotes: rawNotes
       });
     }
   }
 }
-function toRad(d) { 
-  return d * Math.PI / 180; 
+function toRad(d) {
+  return d * Math.PI / 180;
 }
 /**
  * 获得两点间的距离
@@ -358,7 +358,7 @@ function getPonitToPointDistance(lat1, lng1, lat2, lng2) {
   var dis = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(deltaLng / 2), 2)));
   return dis * 6378137;
 }
- 
+
 function formatDistance(distance) {
   if (distance < 1000) {
     return distance + "m";
@@ -373,52 +373,52 @@ function formatDistance(distance) {
 /**
  * 转义正则表达式敏感的字符
  */
-function formatReg(str){
-  return str.replace(/(\(-'"|\[|\{|\\|\^|\$|\||\)|\?|\*|\+|\.|\]|\})/g,'\\$1');
+function formatReg(str) {
+  return str.replace(/(\(-'"|\[|\{|\\|\^|\$|\||\)|\?|\*|\+|\.|\]|\})/g, '\\$1');
 }
 /**
  *获得 敏感词
  */
-function geBadWords(app,callback){
+function geBadWords(app, callback) {
   var badWords = app.globalData.badWords;
-  if(badWords.length>0){
-    if(typeof callback == "function")callback({data:badWords,code:0});
+  if (badWords.length > 0) {
+    if (typeof callback == "function") callback({ data: badWords, code: 0 });
   }
-  else{
+  else {
     badWords = [];
     wx.request({
-      url:app.globalData.url.api.getBadWords,
-      method:"GET",
-      fail:function(res){
+      url: app.globalData.url.api.getBadWords,
+      method: "GET",
+      fail: function (res) {
         console.log(res);
-        if(typeof callback == "function")callback({data:[],code:1});
+        if (typeof callback == "function") callback({ data: [], code: 1 });
       },
-      success: function(res) {
+      success: function (res) {
         console.log(res);
-        if(res.data.errcode==0){
-          var data = res.data.data ,length=data.length;
-          for(var i=0;i<length;i++){
-            var ws = data[i].fdFilter,wLength = ws.length;
-            if(wLength){
-              for(var j=0;j<wLength;j++){
+        if (res.data.errcode == 0) {
+          var data = res.data.data, length = data.length;
+          for (var i = 0; i < length; i++) {
+            var ws = data[i].fdFilter, wLength = ws.length;
+            if (wLength) {
+              for (var j = 0; j < wLength; j++) {
                 var w = formatReg(ws[j]);
-                if(!w){
+                if (!w) {
                   continue;
                 }
-                if( j==0){
-                  badWords[i]={
-                    id:data[i].id,
-                    str:w
+                if (j == 0) {
+                  badWords[i] = {
+                    id: data[i].id,
+                    str: w
                   }
                 }
-                else{
-                  badWords[i].str+="|"+w;
+                else {
+                  badWords[i].str += "|" + w;
                 }
               }
             }
           }
         }
-        if(typeof callback == "function")callback({data:badWords,code:0});
+        if (typeof callback == "function") callback({ data: badWords, code: 0 });
       }
     });
   }
@@ -426,46 +426,73 @@ function geBadWords(app,callback){
 /**
  * 判断是否有敏感词
  */
-function hasBadWord(app,content,callback){
-  geBadWords(app,function(res){
-    if(res.code==0){
-      var data = res.data,length=data.length,isBad=[];
-      for(var i=0;i<length;i++){
-        if(!data[i].str){
+function hasBadWord(app, content, callback) {
+  geBadWords(app, function (res) {
+    if (res.code == 0) {
+      var data = res.data, length = data.length, isBad = [];
+      for (var i = 0; i < length; i++) {
+        if (!data[i].str) {
           continue;
         }
         console.log(i);
         console.log(data[i]);
 
-        var pattern = new RegExp(data[i].str,"g");
-        if(pattern.test(content)){//包含
-          isBad[data[i].id] = true;           
-        }else{//不包含
-            isBad[data[i].id] = false;    
+        var pattern = new RegExp(data[i].str, "g");
+        if (pattern.test(content)) {//包含
+          isBad[data[i].id] = true;
+        } else {//不包含
+          isBad[data[i].id] = false;
         }
       }//for(var i=0;i<length;i++)
       console.log(isBad);
-      if(isBad[1]||isBad[4]){
-        if(typeof callback == "function")callback({msg:"包含政治、民族安全 包含黄赌毒枪支弹药",code:-10002});
+      if (isBad[1] || isBad[4]) {
+        if (typeof callback == "function") callback({ msg: "包含政治、民族安全 包含黄赌毒枪支弹药", code: -10002 });
         return;
       }
-      else{
+      else {
         var bLen = isBad.length;
-        for(var j=0;j<bLen;j++){
-          if(isBad[j]){
-            if(typeof callback == "function")callback({msg:"包含敏感词",code:-10001});
+        for (var j = 0; j < bLen; j++) {
+          if (isBad[j]) {
+            if (typeof callback == "function") callback({ msg: "包含敏感词", code: -10001 });
             return;
           }
         }
-        if(typeof callback == "function")callback({msg:"",code:0});
+        if (typeof callback == "function") callback({ msg: "", code: 0 });
         return;
       }
     }
-    else{
-      if(typeof callback == "function")callback({msg:"获得敏感词失败",code:1});
+    else {
+      if (typeof callback == "function") callback({ msg: "获得敏感词失败", code: 1 });
       return;
     }
   });
+}
+/**
+   * 从首页或商家页等中隐藏在我的消息页面删除的纸条   
+   */
+function doHideDelNote(app, that, delNoteIds) {
+  console.log("doHideDelNote");
+  var rawNotes = that.data.rawNotes, dLen = delNoteIds.length;
+  console.log(rawNotes);
+  console.log(delNoteIds);
+  for (var i = 0; i < dLen; i++) {
+    var rLen = rawNotes.length;
+    for (var j = 0; j < rLen; j++) {
+      console.log(i+"<>"+j);
+      if (rawNotes[j].id == delNoteIds[i]) {
+        rawNotes.splice(j,1);
+        break;
+      }
+    }
+  }
+  var notes = separateNotes(that, app, rawNotes, true);
+  console.log(rawNotes);
+  console.log(notes);
+  that.setData({
+    notes: notes,
+    rawNotes: rawNotes
+  });
+  console.log("doHideDelNote end");
 }
 module.exports = {
   formatTime: formatTime,
@@ -480,10 +507,11 @@ module.exports = {
   notesPhotoLoaded: notesPhotoLoaded,
   getPonitToPointDistance: getPonitToPointDistance,
   formatDistance: formatDistance,
-  addNoteToColumn:addNoteToColumn,
-  notesHeaderLoaded:notesHeaderLoaded,
-  updateNoteRespNum:updateNoteRespNum,
-  geBadWords:geBadWords,
-  hasBadWord:hasBadWord,
-  formatShowText:formatShowText
+  addNoteToColumn: addNoteToColumn,
+  notesHeaderLoaded: notesHeaderLoaded,
+  updateNoteRespNum: updateNoteRespNum,
+  geBadWords: geBadWords,
+  hasBadWord: hasBadWord,
+  formatShowText: formatShowText,
+  doHideDelNote:doHideDelNote
 }

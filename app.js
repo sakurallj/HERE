@@ -3,35 +3,8 @@ var util = require('/utils/util.js');
 var md5 = require('/utils/MD5.js');
 var bMap = require('/pages/lib/baidu/bmap-wx.min.js');
 var apiDomain = "https://api.900here.com";
-/**
- * 登录服务器
- * 返回 Promise 
- */
-function loginForServer(app, userInfo, callback) {
-  var data = {
-    openid: app.globalData.userOpenId,
-    sitefrom: "weixin",
-    nickname: userInfo.nickName,
-    gtcid: "",
-    from: "miniApp",
-    version: app.globalData.appVersion,
-    mac: "",
-    profile: userInfo.avatarUrl
-  }, data = app.getAPISign(data);
-  wx.request({
-    url: app.globalData.url.api.ologin,
-    method: "GET",
-    data: data,
-    fail: function (res) {
-      typeof callback == "function" && callback(res);
-    },
-    success: function (res) {
-      app.globalData.userToken = res.data.token;
-      app.globalData.userServerOpenId = res.data.data.openid;
-      typeof callback == "function" && callback(res);
-    }
-  });
-}
+
+
 App({
 
   util: util,//注入工具类
@@ -54,13 +27,13 @@ App({
     }
   },
   globalData: {
-    constant:{
-      errMsg:{
-        fLocationFail:"getLocation:fail too frequently",
-        ucLocationFail:"getLocation:fail auth deny",
-        unLocationFail:"getLocation:fail 1",//未打开授权
-        cLocationFail:"chooseLocation:fail auth deny",//取消地理位置授权
-        cUserInfo:"getUserInfo:fail auth deny"//取消获得用户信息授权
+    constant: {
+      errMsg: {
+        fLocationFail: "getLocation:fail too frequently",
+        ucLocationFail: "getLocation:fail auth deny",
+        unLocationFail: "getLocation:fail 1",//未打开授权
+        cLocationFail: "chooseLocation:fail auth deny",//取消地理位置授权
+        cUserInfo: "getUserInfo:fail auth deny"//取消获得用户信息授权
       }
     },
     haveNewMessage: false,
@@ -77,9 +50,10 @@ App({
     bMapLocationName: "",//百度地图的位置名称
     url: {
       api: {
-        delFavPartnerByPId:apiDomain + "/memberapi/delfavpartnerbypid",//删除搜藏商家 by 商家id
-        favPartnerList:apiDomain + "/memberapi/favpartnerlist",//搜藏的商家列表
-        addFavPartner:apiDomain + "/memberapi/addfavpartner",//添加搜藏商家
+        otherFavPartnerList: apiDomain + "/memberapi/otherfavpartnerlist",//查看其他人搜藏的商家列表	
+        delFavPartnerByPId: apiDomain + "/memberapi/delfavpartnerbypid",//删除搜藏商家 by 商家id
+        favPartnerList: apiDomain + "/memberapi/favpartnerlist",//搜藏的商家列表
+        addFavPartner: apiDomain + "/memberapi/addfavpartner",//添加搜藏商家
         getBadWords: apiDomain + "/badwordapi/getlist",//敏感词
         setReadMessage: apiDomain + "/noticeapi/settrendstatus",//设置通知动态已读状态
         pInfoList: apiDomain + "/noteapi/pinfolist",//商家纸条列表
@@ -123,6 +97,34 @@ App({
       }
     }
     return str;
+  },
+/**
+ * 登录服务器
+ */
+  loginForServer: function (app, userInfo, callback) {
+    var data = {
+      openid: app.globalData.userOpenId,
+      sitefrom: "weixin",
+      nickname: userInfo.nickName,
+      gtcid: "",
+      from: "miniApp",
+      version: app.globalData.appVersion,
+      mac: "",
+      profile: userInfo.avatarUrl
+    }, data = app.getAPISign(data);
+    wx.request({
+      url: app.globalData.url.api.ologin,
+      method: "GET",
+      data: data,
+      fail: function (res) {
+        typeof callback == "function" && callback(res);
+      },
+      success: function (res) {
+        app.globalData.userToken = res.data.token;
+        app.globalData.userServerOpenId = res.data.data.openid;
+        typeof callback == "function" && callback(res);
+      }
+    });
   },
   //获得接口签名
   getAPISign: function (params) {
@@ -185,7 +187,7 @@ App({
     //判断是否有openid
     else if (that.globalData.userOpenId) {
       //重新向服务器登录
-      loginForServer(that, that.globalData.userInfo, function (res) {
+      this.loginForServer(that, that.globalData.userInfo, function (res) {
         if (typeof callback == "function") callback(that.globalData.userToken);
       });
     }
@@ -212,11 +214,11 @@ App({
                   if (res.userInfo) {
                     that.globalData.userInfo = res.userInfo;
                     //登录服务器
-                    loginForServer(that, res.userInfo, function (res) {
+                    that.loginForServer(that, res.userInfo, function (res) {
                       if (typeof callback == "function") callback(that.globalData.userToken);
                     });
                   }
-                  else{
+                  else {
                     if (typeof callback == "function") callback(res);
                   }
                 }
@@ -349,5 +351,6 @@ App({
         }
       }
     });
-  }
+  } 
+  
 });

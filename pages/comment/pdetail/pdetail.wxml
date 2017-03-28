@@ -26,7 +26,7 @@
       </view>
     </view>
     <template is="lost-network" wx:if="{{!haveNetwork}}" />
-    <scroll-view wx:if="{{haveNetwork}}" animation="{{animationData}}" class="content-main" scroll-y="true" style="height:{{contentMainHeight}};" bindscroll="scroll">
+    <scroll-view wx:if="{{haveNetwork}}" animation="{{animationData}}" class="content-main" scroll-y="true" style="height:{{contentMainHeight}};" bindscroll="scroll"   scroll-into-view	="{{scrollIntoViewId}}" >
       <view class="detail-main">
         <view class="detail-main-header">
           <image class="detail-main-header-head person-header" catchtap="clickHeader" mode="scaleToFill" src="{{message.avatar}}" data-sopenid="{{message.fdNoteOpenID}}">
@@ -66,7 +66,7 @@
       <view class="detail-reply" wx:if="{{message.resp.length>0}}">
         <view class="detail-reply-title">{{message.commentnum}}条回应</view>
         <view class="detail-reply-group">
-          <view class="detail-reply-option" wx:for="{{message.resp}}" catchtap="clickRespItem" data-resp="{{item}}">
+          <view class="detail-reply-option" id="resp_{{item.id}}" wx:for="{{message.resp}}" catchtap="clickRespItem" data-resp="{{item}}">
             <view class="detail-reply-option-header">
               <image class="detail-reply-option-head-holder   person-header {{item.isHeaderLoaded?'detail-reply-option-head-holder-loaded':''}}" mode="scaleToFill" src="/pages/images/default-person.png">
               </image>

@@ -1,7 +1,7 @@
 @import "/pages/template/page/footer-tools.wxss";
 
 .detail-head {
-  background-color: #39383e;
+  background-color: #39383d;
   padding: 0 30rpx;
   box-sizing: border-box;
   height: 360rpx;

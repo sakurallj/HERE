@@ -376,7 +376,7 @@ swiper {
     position: fixed;
     bottom: 0;
     background:#f8f9fb;
-    box-shadow:0 -2rpx 4rpx 0 rgba(184,184,184,0.30);
+    box-shadow:0 -2rpx 6rpx 0 rgba(153,153,153,0.40);
     width:100%;
     height:80rpx;
     padding: 10rpx ;

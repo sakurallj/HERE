@@ -1,70 +1,80 @@
 // pages/message/message.js
 var app = getApp();
-function loadMessage(that, callback) {
+function loadMessage(that, callback, isAgain) {
   wx.hideToast();
-  app.doLogin(function (res) {
-    console.log("doLogin");
-    console.log(res);
-    if (res.errMsg == app.globalData.constant.errMsg.cUserInfo)     {
-      that.setData({
-        isCancelUserInfo: true
-      });
-    }
-    else {
-      that.pageNum += 1;
-      var data = {
-        page: that.pageNum,
-        token: app.globalData.userToken,
-        wxapp: 1
-      }, data = app.getAPISign(data);
 
-      //获得首页数据
-      wx.request({
-        url: app.globalData.url.api.notice,
-        method: "GET",
-        data: data,
-        fail: function (res) {
-          console.log(res);
-        },
-        success: function (res) {
+  that.pageNum += 1;
+  var data = {
+    page: that.pageNum,
+    token: app.globalData.userToken,
+    wxapp: 1
+  }, data = app.getAPISign(data);
 
-          var data = res.data.data, len = data.length ? data.length : 0, messages = [];
-          if (len == 0) {
-            that.setData({
-              isLoadEmpty: true
-            });
-          }
-          for (var i = 0, j = 0; i < len; i++) {
-            var m = data[i];
-            if (m["action"] != 0) {
-              continue;
-            }
-            messages[j++] = {
-              name: m["nickname"] ? m["nickname"] : "",
-              headerImage: m["avatar"] ? m["avatar"] : app.globalData.defaultHeader,
-              type: m["action"] == 0 ? "reply" : "like",//0 回复 1点赞
-              typeText: m["action"] == 0 ? "回应了你的纸条" : "钉住了你的纸条",//0 回复 1点赞,
-              time: app.util.formatShowTimeText(m["addTime"]),
-              contentImage: m["infosrc"],
-              content: m["comment"] ? m["comment"] : "",
-              infoId: m["infoid"],
-              isLoaded: false
-            };
-          }
-
-          var oldMessages = that.data.messages;
-          Array.prototype.push.apply(oldMessages, messages);
-          that.setData({
-            messages: oldMessages,
-            hasMore: res.data.more && res.data.more == 1
+  //获得首页数据
+  wx.request({
+    url: app.globalData.url.api.notice,
+    method: "GET",
+    data: data,
+    fail: function (res) {
+      console.log(res);
+    },
+    success: function (res) {
+      if (res.data && res.data.errcode == 1002) {
+        if (!isAgain) {
+          app.loginForServer(app, app.globalData.userInfo, function () {
+            that.pageNum -= 1;
+            loadMessage(that, callback, true);
           });
-          if (typeof callback == "function") callback(res);
-          wx.hideToast();
-          wx.hideNavigationBarLoading();
         }
-      });
-    }
+        else {
+          wx.showModal({
+            title: '',
+            content: '加载失败，请重试',
+            showCancel: false,
+            confirmText: "我知道了",
+            confirmColor: app.globalData.confirmColor,
+            success: function (res) { }
+          });
+        }
+      }
+      else {
+        var data = res.data.data, len = data.length ? data.length : 0, messages = [];
+        if (len == 0) {
+          that.setData({
+            isLoadEmpty: true
+          });
+        }
+        for (var i = 0, j = 0; i < len; i++) {
+          var m = data[i];
+          if (m["action"] != 0) {
+            continue;
+          }
+          messages[j++] = {
+            name: m["nickname"] ? m["nickname"] : "",
+            headerImage: m["avatar"] ? m["avatar"] : app.globalData.defaultHeader,
+            type: m["action"] == 0 ? "reply" : "like",//0 回复 1点赞
+            typeText: m["action"] == 0 ? "回应了你的纸条" : "钉住了你的纸条",//0 回复 1点赞,
+            time: app.util.formatShowTimeText(m["addTime"]),
+            contentImage: m["infosrc"],
+            content: m["comment"] ? m["comment"] : "",
+            infoId: m["infoid"],
+            isLoaded: false,
+            commentId:m["commentid"] 
+          };
+        }
 
+        var oldMessages = that.data.messages;
+        Array.prototype.push.apply(oldMessages, messages);
+        that.setData({
+          messages: oldMessages,
+          hasMore: res.data.more && res.data.more == 1
+        });
+        if (typeof callback == "function") callback(res);
+        wx.hideToast();
+        wx.hideNavigationBarLoading();
+        console.log(oldMessages);
+      }
+    }
   });
 }
 Page({
@@ -104,11 +114,20 @@ Page({
         }
       }
     });
-    loadMessage(this, function (res) {
-      var len = res.data.data.length;
-      if (len == 0) {
+    app.doLogin(function (res) {
+      if (res.errMsg == app.globalData.constant.errMsg.cUserInfo) {
         that.setData({
-          isFirstLoadEmpty: true
+          isCancelUserInfo: true
+        });
+      }
+      else {
+        loadMessage(that, function (res) {
+          var len = res.data.data.length;
+          if (len == 0) {
+            that.setData({
+              isFirstLoadEmpty: true
+            });
+          }
         });
       }
     });
@@ -149,7 +168,7 @@ Page({
     var item = app.getValueFormCurrentTargetDataSet(event, "item");
 
     wx.navigateTo({
-      url: '/pages/comment/pdetail/pdetail?id=' + item.infoId
+      url: '/pages/comment/pdetail/pdetail?id=' + item.infoId+"&commentId="+item.commentId
     });
   },
   onReachBottom: function () {
@@ -200,5 +219,12 @@ Page({
         }
       }
     });
+  },
+  onShareAppMessage: function () {
+    var options = this.data.onLoadOptions;
+    return {
+      title: 'HERE—在这而贴张纸条吧~',
+      path: 'pages/index/index'
+    }
   }
 })

@@ -155,6 +155,11 @@ function sendMessage(that, message) {
             }
 
           }
+          else if (res.data && res.data.errcode == 1002) {//登录已过期 重新登录
+            app.loginForServer(app, app.globalData.userInfo, function () {
+               sendMessage(that, message);
+            });
+          }
           else {
             console.log(res);
             that.setData({
@@ -265,7 +270,7 @@ Page({
       success: function (res) {
         console.log(res);
         var m = that.data.message;
-        if(!res.name){
+        if (!res.name) {
           res.name = res.address;
         }
         m.address = res;
@@ -280,7 +285,7 @@ Page({
       fail: function (res) {
         console.log("fail");
         console.log(res);
-        if (res.errMsg &&res.errMsg!="chooseLocation:fail cancel") {
+        if (res.errMsg && res.errMsg != "chooseLocation:fail cancel") {
           wx.showModal({
             title: '',
             content: '无法获得地址，如果未打开微信定位权限，请打开后再试；如果未授权给HERE定位权限，请删除HERE并重新进入授权',
@@ -291,7 +296,7 @@ Page({
 
             },
             success: function (res) {//重新加载
-      
+
             }
           });
         }

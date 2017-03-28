@@ -94,7 +94,8 @@ Page({
         itemIndex: options.itemIndex,
         coloumsIndex: options.coloumsIndex,
         rawNotesIndex: options.rawNotesIndex
-      }
+      },
+      commentId: options.commentId//
     });
     var that = this;
     //创建动画
@@ -179,7 +180,8 @@ Page({
                 getResp(that, function (res) {
                   wx.hideToast();
                   that.setData({
-                    isFirstLoadEmpty: res.data.data && res.data.data.length == 0
+                    isFirstLoadEmpty: res.data.data && res.data.data.length == 0,
+                    scrollIntoViewId: "resp_1223"
                   });
                   if (res.data.data && res.data.data.length == 0) {
                     that.setData({
@@ -187,6 +189,13 @@ Page({
                       bodyHeight: app.getSystemInfo().windowHeight + "px"
                     });
                   }
+                  if (that.data.commentId) {
+                    that.setData({
+                      scrollIntoViewId: "resp_"+that.data.commentId,
+                      commentId:null
+                    });
+                  }
+
                 });
               }
               else {//纸条不存在

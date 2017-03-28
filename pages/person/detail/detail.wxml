@@ -71,15 +71,15 @@
             <view class="loading-text">加载中...</view>
           </view>
         </view>
-        <view class="not-more" wx:if="{{!isFirstLoadEmpty&&isLoadEmpty}}">
+        <view class="not-more" wx:if="{{!isFirstLoadEmpty&&isLoadEmpty&&notes.coloums1.length>4}}">
           没有更多纸条了~
         </view>
       </view>
     </view>
     <view class="clear"></view>
   </view>
-  <view wx:if="{{isFirstLoadEmpty&&haveNetwork}}" class="none-resp">
+  <view wx:if="{{haveNetwork&&(isFirstLoadEmpty||isAllDeleted)}}" class="none-resp">
     还没有纸条，贴一张试试~
   </view>
-  <template  wx:if="{{!isFirstLoadEmpty&&haveNetwork&&notes.coloums1.length==0&&notes.coloums2.length==0}}" is="page-loading" data="{{loadingText:'正在努力加载纸条...'}}" />
+  <template  wx:if="{{!isFirstLoadEmpty&&haveNetwork&&notes.coloums1.length==0&&notes.coloums2.length==0&&!isAllDeleted}}" is="page-loading" data="{{loadingText:'正在努力加载纸条...'}}" />
 </view>
