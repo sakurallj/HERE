@@ -16,13 +16,17 @@
   background: rgba(0, 0, 0, 0);
 }
 
-.shop-face {
+.shop-face, .shop-face-cover {
   height: 380rpx;
   width: 100%;
   position: absolute;
   top: 0;
   left: 0;
   z-index: -1;
+}
+
+.shop-face-cover {
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .detail-head-main {
@@ -47,7 +51,7 @@
 }
 
 .shop-header-right {
-  padding-left: 30rpx;
+  padding-left: 15rpx;
   color: #fff;
   font-size: 25rpx;
   box-sizing: border-box;
@@ -61,45 +65,53 @@
   max-width: 370rpx;
   font-size: 34rpx;
   font-weight: 500;
-  line-height: 34rpx;
+  line-height: 50rpx;
+  padding: 0 5rpx;
 }
 
 .shop-header-right-address {
   max-width: 330rpx;
   margin-top: 30rpx;
-  line-height: 25rpx;
+  line-height: 32rpx;
+  opacity: .8;
 }
 
 .shop-header-right-address .position-icon {
   width: 25rpx;
   height: 26rpx;
   display: block;
- 
 }
+
 .shop-header-bottom {
   font-size: 25rpx;
   color: #fff;
   max-width: 687rpx;
-  line-height: 25rpx;
+  line-height: 32rpx;
   margin-top: 30rpx;
   display: inline-block;
-  border-radius: 25rpx;
+}
+
+.box-shadow-round {
+  text-shadow: 0 0 6px rgba(0,0,0,.3);
   padding: 0 5rpx;
 }
 
 .shop-header-right-favorite {
   border: 3rpx solid #fff;
-  width: 116rpx;
-  height: 50rpx;
-  margin-top: 48rpx;
+  width: 90rpx;
+  height: 40rpx;
+  margin-top: 60rpx;
+  margin-right: 2rpx;
   text-align: center;
-  padding-top: 11rpx;
+  box-shadow: 0 0 2px rgba(0,0,0,.1),0 0 2px rgba(0,0,0,.1) inset;
 }
 
 .shop-header-right-favorite.active {
   color: #ffc882;
 }
-
+.shop-header-right-favorite.active.box-shadow-round{
+  text-shadow: 0 0 4px rgba(79,45,5,.5);
+}
 .detail-head-bottom {
   padding: 15rpx 0;
   height: 88rpx;
@@ -178,9 +190,10 @@
 }
 
 .shop-header-right-address-image {
-  margin-right: 15rpx;
+  margin-right: 10rpx;
+  margin-left: 10rpx;
 }
 
-.shop-header-font-color-n-face{
-  color:#333;
+.shop-header-font-color-n-face {
+  color: #333;
 }

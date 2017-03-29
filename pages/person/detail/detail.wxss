@@ -30,6 +30,7 @@
     letter-spacing:0;
     padding-top: 15rpx;
     box-sizing: border-box;
+    line-height: 50rpx;
 }
 .detail-head-main-second-font{
     display: inline-block;

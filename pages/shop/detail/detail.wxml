@@ -7,8 +7,9 @@
   <view class="content shop-detail" bindtouchend="touchend">
     <template is="lost-network" wx:if="{{!haveNetwork}}" />
     <view class="detail-head {{isShowFace?'show-face':''}}" wx:if="{{haveNetwork}}">
-      <image class="shop-face blur" catchtap="clickWarn" mode="aspectFill" src="{{shop.face}}" bindload="bindFaceload">
+      <image class="shop-face  " catchtap="clickWarn" mode="aspectFill" src="{{shop.face}}" bindload="bindFaceload">
       </image>
+    <!--  <view class="shop-face-cover"></view>-->
       <view class="detail-head-main">
         <view class="help" bindtap="clickHelp">
           <image class="help-icon" mode="aspectFill" src="/pages/images/help.png">
@@ -20,7 +21,7 @@
           <view class="shop-header-right left">
             <view class="left">
               <view class="detail-head-main-second-font  {{isShowFace?'detail-head-main-second-font-white':''}}">
-                <view class="{{isShowFace?'box-shadow-round':'shop-header-font-color-n-face'}}  inline-block text-ellipsis" >{{shop.name}}</view>
+                <view class="{{isShowFace?'box-shadow-round':'shop-header-font-color-n-face'}}   text-ellipsis" >{{shop.name}}</view>
               </view>
               <view class="shop-header-right-address">
                 <view class="shop-header-right-address-image left">
@@ -30,10 +31,10 @@
                 <view class=" {{isShowFace?'box-shadow-round':'shop-header-font-color-n-face'}}   text-ellipsis" >{{shop.address}}</view>
               </view>
             </view>
-            <view class="shop-header-right-favorite right" wx:if="{{!isFavorite}}" bindtap="doFavorite">
+            <view class="shop-header-right-favorite  {{isShowFace?'box-shadow-round':'shop-header-font-color-n-face'}} right" wx:if="{{!isFavorite}}" bindtap="doFavorite">
               +收藏
             </view>
-            <view class="shop-header-right-favorite active right" wx:if="{{isFavorite}}" bindtap="doCancelFavorite">
+            <view class="shop-header-right-favorite active  {{isShowFace?'box-shadow-round':'shop-header-font-color-n-face'}} right" wx:if="{{isFavorite}}" bindtap="doCancelFavorite">
               已收藏
             </view>
           </view>

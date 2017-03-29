@@ -48,7 +48,7 @@
 .detail-main-header-name-date{
     line-height: 32rpx;
     float: left;
-    padding-left: 25rpx;
+    padding-left: 15rpx;
 }
 .detail-main-header-name{
     font-size:28rpx;
@@ -148,7 +148,7 @@
 .detail-reply-option-name-date{
     float: left;
     line-height: 24rpx;
-    padding-left: 25rpx;
+    padding-left: 15rpx;
 }
 .detail-reply-option-name{
     font-size:24rpx;

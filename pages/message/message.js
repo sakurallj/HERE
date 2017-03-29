@@ -19,6 +19,11 @@ function loadMessage(that, callback, isAgain) {
       console.log(res);
     },
     success: function (res) {
+      console.log("loadMessage success");
+      console.log("data");
+      console.log(data);
+      console.log("res");
+      console.log(res);
       if (res.data && res.data.errcode == 1002) {
         if (!isAgain) {
           app.loginForServer(app, app.globalData.userInfo, function () {
@@ -59,7 +64,7 @@ function loadMessage(that, callback, isAgain) {
             content: m["comment"] ? m["comment"] : "",
             infoId: m["infoid"],
             isLoaded: false,
-            commentId:m["commentid"] 
+            commentId: m["commentid"]
           };
         }
 
@@ -69,11 +74,14 @@ function loadMessage(that, callback, isAgain) {
           messages: oldMessages,
           hasMore: res.data.more && res.data.more == 1
         });
+        console.log("oldMessages");
+        console.log(oldMessages);
         if (typeof callback == "function") callback(res);
         wx.hideToast();
         wx.hideNavigationBarLoading();
         console.log(oldMessages);
       }
+
     }
   });
 }
@@ -168,7 +176,7 @@ Page({
     var item = app.getValueFormCurrentTargetDataSet(event, "item");
 
     wx.navigateTo({
-      url: '/pages/comment/pdetail/pdetail?id=' + item.infoId+"&commentId="+item.commentId
+      url: '/pages/comment/pdetail/pdetail?id=' + item.infoId + "&commentId=" + item.commentId
     });
   },
   onReachBottom: function () {

@@ -157,10 +157,11 @@ item-body {
 .item-delete-text {
   color: #bbb;
   font-size: 28rpx;
-  width: 80rpx;
+  width: 150rpx;
   margin-left: -17rpx;
   padding-left: 17rpx;
-  margin-top: 18rpx;
+  line-height: 60rpx;
+  margin-bottom: -25rpx;
 }
 
 .item-images {
