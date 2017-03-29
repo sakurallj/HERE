@@ -98,9 +98,9 @@ App({
     }
     return str;
   },
-/**
- * 登录服务器
- */
+  /**
+   * 登录服务器
+   */
   loginForServer: function (app, userInfo, callback) {
     var data = {
       openid: app.globalData.userOpenId,
@@ -317,7 +317,10 @@ App({
     return "";
   },
   onLaunch: function () {
-
+    this.getLocation(function (res) {
+      console.log();
+      console.log(res);
+     });
   },
   showCheckNetworld: function () {
     wx.showModal({
@@ -351,6 +354,6 @@ App({
         }
       }
     });
-  } 
-  
+  }
+
 });

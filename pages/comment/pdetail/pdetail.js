@@ -18,14 +18,15 @@ function getResp(that, callback) {
     },
     success: function (res) {
 
-      var message = that.data.message;
+      var messageList = that.data.messageList, currentMessageListIndex = that.data.currentMessageListIndex, message = messageList[currentMessageListIndex];
       if (!message.resp) {
         message.resp = [];
       }
       Array.prototype.push.apply(message.resp, res.data.data);
       message.commentnum = res.data.commentnum;
+      messageList[currentMessageListIndex] = message;
       that.setData({
-        message: message
+        messageList: messageList
       });
       if (res.data && res.data.more == 1) {
         that.setData({
@@ -47,12 +48,14 @@ Page({
     message: {
 
     },
+    currentMessageListIndex: 0,//当前的messageList、messageIdList下标
+    messageIdList: [],//保存 messages的 id
+    messageList: [],//message list
     isShowWriteResp: false,
     onLoadOptions: {},
     haveNetwork: true,
     contentMainHeight: 0,
     contentMainCoverHeight: 0,
-    animationData: {},//
     currentImageIndex: 1,//当前图片
     totalImage: 0,//图片总数
     scrollLeft: 0,//向左滑动的距离
@@ -82,8 +85,6 @@ Page({
     currentResp: {}//当前被回复的回应
   },
   pageNum: 0,//回应页码
-  animation: {},
-  animation2: {},
   onLoad: function (options) {
     this.pageNum = 0;
     wx.showNavigationBarLoading();
@@ -98,27 +99,19 @@ Page({
       commentId: options.commentId//
     });
     var that = this;
-    //创建动画
-    var animation = wx.createAnimation({
-      transformOrigin: "50% 50%",
-      duration: 100,
-      timingFunction: "linear",
-      delay: 0
-    });
-    var animation2 = wx.createAnimation({
-      transformOrigin: "50% 50%",
-      duration: 100,
-      timingFunction: "linear",
-      delay: 200
-    });
-    this.animation = animation;
-    this.animation2 = animation2;
+
     that.setData({
       id: options.id,
-      animationData: this.animation.export(),
       isShare: options.isShare == 1
     });
     wx.showNavigationBarLoading();
+    //获得缓存中的ids
+    var notesId = wx.getStorageSync("util_notes_id");
+    if (notesId) {
+      this.setData({
+        messageIdList: notesId
+      });
+    }
     //判断是否有网络
     wx.getNetworkType({
       success: function (res) {
@@ -171,8 +164,10 @@ Page({
 
                 res.data.data.nickName = res.data.data.nickName ? res.data.data.nickName : "";
                 res.data.data.avatar = res.data.data.avatar ? res.data.data.avatar : app.globalData.defaultHeader;
+
                 that.setData({
                   message: res.data.data,
+                  messageList: [res.data.data, res.data.data, res.data.data, res.data.data, res.data.data],
                   totalImage: len,
                   images: images,
                   showImages: showImages
@@ -191,8 +186,8 @@ Page({
                   }
                   if (that.data.commentId) {
                     that.setData({
-                      scrollIntoViewId: "resp_"+that.data.commentId,
-                      commentId:null
+                      scrollIntoViewId: "resp_" + that.data.commentId,
+                      commentId: null
                     });
                   }
 
@@ -203,15 +198,12 @@ Page({
                   isDeleted: true
                 });
               }
-
               wx.hideNavigationBarLoading();
             }
           });
         }
       }
     });
-
-
   },
   onReady: function () {
     this.setData({

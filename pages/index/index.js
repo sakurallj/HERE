@@ -316,6 +316,7 @@ Page({
         });
       }
       else {
+        app.util.doStoreNotesId(this.data.rawNotes);
         wx.navigateTo({
           url: '/pages/comment/pdetail/pdetail?id=' + item.id + '&meter=' + item.meter + '&itemIndex=' + item.itemIndex + '&coloumsIndex=' + item.coloumsIndex + '&rawNotesIndex=' + item.rawNotesIndex
         });

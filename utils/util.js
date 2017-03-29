@@ -494,6 +494,17 @@ function doHideDelNote(app, that, delNoteIds) {
   });
   console.log("doHideDelNote end");
 }
+/**
+ * 获得notes的id 然后存储到缓存中
+ */
+function doStoreNotesId(notes){
+  var len = notes.length,notesId=[];
+  for(var i=0;i<len;i++){
+    notesId[i] = notes[i].id;
+  }
+  console.log(notesId);
+  wx.setStorageSync("util_notes_id", notesId);
+}
 module.exports = {
   formatTime: formatTime,
   getRandomKey: getRandomKey,
@@ -513,5 +524,6 @@ module.exports = {
   geBadWords: geBadWords,
   hasBadWord: hasBadWord,
   formatShowText: formatShowText,
-  doHideDelNote:doHideDelNote
+  doHideDelNote:doHideDelNote,
+  doStoreNotesId:doStoreNotesId
 }
