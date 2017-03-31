@@ -24,76 +24,77 @@
       </view>
     </view>
     <template is="lost-network" wx:if="{{!haveNetwork}}" />
-    <swiper  wx:if="{{haveNetwork}}"   indicator-dots="true" interval="5000" duration="500" style="height:{{contentMainHeight}};" >
-      <swiper-item wx:for="{{messageList}}"  wx:for-item="message">
-        <scroll-view class="content-main" scroll-y="true" style="height:{{contentMainHeight}};" bindscroll="scroll" scroll-into-view="{{scrollIntoViewId}}">
+    <swiper  current="{{currentMessageListIndex}}" wx:if="{{haveNetwork}}" indicator-dots="true" interval="5000" duration="500" style="height:{{contentMainHeight}};" bindchange="swiperMessageChange">
+      <swiper-item wx:for="{{messageList}}" wx:for-index="swiperItemIndex" >
+        <scroll-view wx:if="{{!item.isShowLoading&&!item.isDeleted}}" class="content-main" scroll-y="true" style="height:{{contentMainHeight}};" bindscroll="scroll" scroll-into-view="{{scrollIntoViewId}}">
           <view class="detail-main">
             <view class="detail-main-header">
-              <image class="detail-main-header-head person-header" catchtap="clickHeader" mode="scaleToFill" src="{{message.avatar}}" data-sopenid="{{message.fdNoteOpenID}}">
+              <image class="detail-main-header-head person-header" catchtap="clickHeader" mode="scaleToFill" src="{{item.message.avatar}}" data-sopenid="{{item.message.fdNoteOpenID}}">
               </image>
-              <view class="detail-main-header-name-date" catchtap="clickHeader" data-sopenid="{{message.fdNoteOpenID}}">
-                <view class="detail-main-header-name text-ellipsis">{{message.nickName}}</view>
-                <view class="detail-main-header-date">{{message.addTimestr}}</view>
+              <view class="detail-main-header-name-date" catchtap="clickHeader" data-sopenid="{{item.message.fdNoteOpenID}}">
+                <view class="detail-main-header-name text-ellipsis">{{item.message.nickName}}</view>
+                <view class="detail-main-header-date">{{item.message.addTimestr}}</view>
               </view>
-              <view class="detail-main-header-range" wx:if="{{message.meter&&message.meter!='undefined'}}">{{message.meter}}</view>
+              <view class="detail-main-header-range" wx:if="{{item.message.meter&&item.message.meter!='undefined'}}">{{item.message.meter}}</view>
               <view class="clear"></view>
             </view>
-            <view class="detail-main-image-group" wx:if="{{totalImage>0}}">
+            <view class="detail-main-image-group" wx:if="{{item.totalImage>0}}">
               <swiper class="store-main-img-group" interval="500" circular="true" bindchange="swiperChange">
-                <block wx:for="{{showImages}}">
+                <block wx:for="{{item.showImages}}" wx:for-item="siItem" wx:for-index="showImagesIndex" >
                   <swiper-item>
-                    <image binderror="imageError" bindload="loaded" class="store-main-im {{item.isShow?'store-main-im-loaded':''}}" bindtap="previewImages" data-img-index="{{index}}" mode="aspectFill" src="{{item.url}}" style="width:700rpx;height:350rpx;">
+                    <image binderror="imageError" bindload="loaded" class="store-main-im {{siItem.isShow?'store-main-im-loaded':''}}" bindtap="previewImages" data-message-id="{{item.id}}"  data-img-index="{{showImagesIndex}}" mode="aspectFill" src="{{siItem.url}}" style="width:700rpx;height:350rpx;">
                     </image>
-                    <image class="store-main-im-holder {{item.isShow?'store-main-im-holder-loaded':''}}" bindtap="previewImages" data-img-index="{{index}}" mode="aspectFill" src="/pages/images/img_160.jpg" style="width:700rpx;height:350rpx;">
+                    <image class="store-main-im-holder {{siItem.isShow?'store-main-im-holder-loaded':''}}" bindtap="previewImages" data-img-index="{{showImagesIndex}}" mode="aspectFill" src="/pages/images/img_160.jpg" style="width:700rpx;height:350rpx;">
                     </image>
                   </swiper-item>
                 </block>
               </swiper>
-              <view class="swiper-num" wx:if="{{totalImage>1}}">
-                <view class="swiper-num-text">{{currentImageIndex}}/{{totalImage}}</view>
+              <view class="swiper-num" wx:if="{{item.totalImage>1}}">
+                <view class="swiper-num-text">{{currentImageIndex}}/{{item.totalImage}}</view>
               </view>
             </view>
             <text class="detail-main-content">
-              {{message.content}}
+              {{item.message.content}}
             </text>
-            <view bindtap="chooseLocation" wx:if="{{message.address&&message.address!='请选择位置'}}" class="location-text">
+            <view bindtap="chooseLocation" wx:if="{{item.message.address&&item.message.address!='请选择位置'}}" class="location-text">
               <image bindtap="previewImages" class="program-write-local" mode="aspectFill" src="/pages/images/program-local.png">
               </image>
               <view class="program-write-local-text">
-                {{message.address}}
+                {{item.message.address}}
               </view>
               <view class="clear"></view>
             </view>
           </view>
-          <view class="detail-reply" wx:if="{{message.resp.length>0}}">
-            <view class="detail-reply-title">{{message.commentnum}}条回应</view>
+          <view class="detail-reply" wx:if="{{item.resp.length>0}}">
+            <view class="detail-reply-title">{{item.commentnum}}条回应</view>
             <view class="detail-reply-group">
-              <view class="detail-reply-option" id="resp_{{item.id}}" wx:for="{{message.resp}}" catchtap="clickRespItem" data-resp="{{item}}">
+              <view class="detail-reply-option" id="resp_{{rItem.id}}" wx:for="{{item.resp}}" wx:for-index="respIndex"  catchtap="clickRespItem" data-resp="{{rItem}}" wx:for-item="rItem">
                 <view class="detail-reply-option-header">
-                  <image class="detail-reply-option-head-holder   person-header {{item.isHeaderLoaded?'detail-reply-option-head-holder-loaded':''}}" mode="scaleToFill" src="/pages/images/default-person.png">
+                  <image class="detail-reply-option-head-holder   person-header {{rItem.isHeaderLoaded?'detail-reply-option-head-holder-loaded':''}}" mode="scaleToFill" src="/pages/images/default-person.png">
                   </image>
-                  <image class="detail-reply-option-head  person-header {{item.isHeaderLoaded?'detail-reply-option-head-loaded':''}}" mode="scaleToFill" src="{{item.authoravatar?item.authoravatar:app.globalData.defaultHeader}}" bindload="loadedRespHeader" data-resp-index="{{index}}">
+                  <image class="detail-reply-option-head  person-header {{rItem.isHeaderLoaded?'detail-reply-option-head-loaded':''}}" mode="scaleToFill" src="{{rItem.authoravatar?rItem.authoravatar:app.globalData.defaultHeader}}" bindload="loadedRespHeader"  data-message-id="{{item.id}}"  data-resp-index="{{respIndex}}">
                   </image>
                   <view class="detail-reply-option-name-date">
-                    <view class="detail-reply-option-name text-ellipsis">{{item.author&&item.author!='null'?item.author:''}}</view>
-                    <view class="detail-reply-option-date">{{item.addTimestr}}</view>
+                    <view class="detail-reply-option-name text-ellipsis">{{rItem.author&&rItem.author!='null'?rItem.author:''}}</view>
+                    <view class="detail-reply-option-date">{{rItem.addTimestr}}</view>
                   </view>
                   <view class="clear"></view>
                 </view>
                 <view class="reply-content-text-top">
                   <text class="detail-reply-option-content">
-                    <text class="detail-reply-option-content-at" wx:if="{{item.responID}}">{{item.responto ? '@'+item.responto : ""}} </text>{{item.content}}
+                    <text class="detail-reply-option-content-at" wx:if="{{rItem.responID}}">{{rItem.responto ? '@'+rItem.responto : ""}} </text>{{rItem.content}}
                   </text>
                 </view>
               </view>
             </view>
-            <view class="reply-more" bindtap="loadMore" wx:if="{{isShowLoadMore}}">
+            <view class="reply-more" bindtap="loadMore" wx:if="{{item.isShowLoadMore}}">
               点击加载更多
             </view>
           </view>
         </scroll-view>
+        <template wx:if="{{item.isShowLoading&&!item.isDeleted}}" is="page-loading" data="{{loadingText:'正在努力生成纸条...'}}" />
+        <template wx:if="{{item.isDeleted&&!item.isShowLoading}}" is="not-exists" data="{{loadingText:'该纸条已被删除'}}" />
       </swiper-item>
-   
     </swiper>
     <view wx:if="{{haveNetwork&&!isDeleted}}" class="detail-bottom" bindtap="showWriteResp">
       <image class="write-icon write-resp-icon" mode="scaleToFill" src="/pages/images/pinglun.png">
@@ -108,6 +109,4 @@
       <view class="near-text">周围看看</view>
     </view>
   </view>
-  <template wx:if="{{haveNetwork&&!isDeleted}}" is="page-loading" data="{{loadingText:'正在努力生成纸条...'}}" />
-  <template wx:if="{{isDeleted}}" is="not-exists" data="{{loadingText:'该纸条已被删除'}}" />
 </view>

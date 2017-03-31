@@ -3,10 +3,10 @@ var app = getApp();
 /**
  * 获得回应
  */
-function getResp(that, callback) {
+function getResp(that, noteId, messageList, listIndex, callback) {
   that.pageNum += 1;
   var data = {
-    id: that.data.id,
+    id: noteId,
     page: that.pageNum
   }, data = app.getAPISign(data);
   wx.request({
@@ -17,28 +17,118 @@ function getResp(that, callback) {
       console.log(res);
     },
     success: function (res) {
-
-      var messageList = that.data.messageList, currentMessageListIndex = that.data.currentMessageListIndex, message = messageList[currentMessageListIndex];
+      var message = messageList[listIndex];
+      console.log(message);
       if (!message.resp) {
         message.resp = [];
       }
       Array.prototype.push.apply(message.resp, res.data.data);
       message.commentnum = res.data.commentnum;
-      messageList[currentMessageListIndex] = message;
+      if (res.data && res.data.more == 1) {
+        message.isShowLoadMore = true;
+      }
+      else {
+        message.isShowLoadMore = false;
+      }
+      messageList[listIndex] = message;
       that.setData({
         messageList: messageList
       });
-      if (res.data && res.data.more == 1) {
-        that.setData({
-          isShowLoadMore: true
-        });
-      }
-      else {
-        that.setData({
-          isShowLoadMore: false
-        });
-      }
       typeof callback == "function" && callback(res);
+    }
+  });
+}
+function getNoteDetailById(options, app, that, currentIndex) {
+  wx.request({
+    url: app.globalData.url.api.infoDetail,
+    method: "GET",
+    data: {
+      id: options.id
+    },
+    fail: function (res) {
+      console.log(res);
+    },
+    success: function (res) {
+      if (res.data.errcode == 0) {
+        res.data.data.content = app.util.decodeUTF8(res.data.data.content);
+        //
+        var images = [], showImages = [], len = res.data.data.photos ? res.data.data.photos.length : 0;
+        for (var i = 0; i < len; i++) {
+          images[i] = res.data.data.photos[i].fdURL;
+          showImages[i] = {
+            url: res.data.data.photos[i].fdURL,
+            isShow: false
+          }
+        }
+        //判断是否有地理位置
+        res.data.data.meter = options.meter || options.meter == 0 ? options.meter : '';
+        if (res.data.data.meter == '' && app.globalData.location.latitude) {
+          res.data.data.meter = app.util.formatDistance(parseInt(app.util.getPonitToPointDistance(
+            res.data.data.latitude,
+            res.data.data.longitude,
+            app.globalData.location.latitude,
+            app.globalData.location.longitude
+          )));
+        }
+        res.data.data.nickName = res.data.data.nickName ? res.data.data.nickName : "";
+        res.data.data.avatar = res.data.data.avatar ? res.data.data.avatar : app.globalData.defaultHeader;
+        var messageList = that.data.messageList;
+        messageList[currentIndex] = {
+          id: options.id,
+          message: res.data.data,
+          totalImage: len,
+          showImages: showImages,
+          images: images
+        };
+        that.setData({
+          messageList: messageList
+        });
+
+
+        getResp(that, options.id, messageList, currentIndex, function (res) {
+          wx.hideToast();
+          /*
+          messageList[currentIndex].isFirstLoadEmpty = res.data.data && res.data.data.length == 0;
+          if (res.data.data && res.data.data.length == 0) {
+            messageList[currentIndex].bodyBgColor = "#fff";
+            messageList[currentIndex].bodyHeight = app.getSystemInfo().windowHeight + "px";
+          }
+          if (that.data.commentId) {
+            that.setData({
+              scrollIntoViewId: "resp_" + that.data.commentId,
+              commentId: null
+            });
+          }
+          that.setData({
+            messageList: messageList
+          });
+          console.log(messageList);
+          */
+        });
+
+
+        /**
+         * 预加载 规则
+         * messageList不够5条 向后加载满5条
+         * currentMessageListIndex
+         * 1、为0 则判断currentMessageIdListIndex前面是否有纸条，有则至多加载两条，把messageIdList最后的至多两条砍掉
+         * 2、为1 前面加载多一条 
+         * 3、为2 不做任何操作
+         * 4、为3 后面加载多一条
+         * 5、为4 后面加载2条 前面砍掉2条
+         * 6、
+         */
+        if(messageList.length<7){
+
+        }
+      }
+      else {//纸条不存在
+        messageList[currentIndex].isDeleted = true;
+        that.setData({
+          messageList: messageList
+        });
+      }
+      wx.hideNavigationBarLoading();
     }
   });
 }
@@ -48,7 +138,9 @@ Page({
     message: {
 
     },
-    currentMessageListIndex: 0,//当前的messageList、messageIdList下标
+    currentMessageListIndex: 0,//当前的messageList下标
+    currentMessageIdListIndex: 0,//当前的messageIdList下标
+    currentMessageId: 0,//当前message的id
     messageIdList: [],//保存 messages的 id
     messageList: [],//message list
     isShowWriteResp: false,
@@ -101,17 +193,41 @@ Page({
     var that = this;
 
     that.setData({
-      id: options.id,
+      currentMessageId: options.id,
       isShare: options.isShare == 1
     });
     wx.showNavigationBarLoading();
     //获得缓存中的ids
     var notesId = wx.getStorageSync("util_notes_id");
+    notesId = ["2269", "2266", "2264", "2251", "2250", "2244", "2239", "2201", "2166", "2138", "2117", "2005", "1999", "1930", "1871", "1859", "1841", "1834", "1823", "381", "1778"];
     if (notesId) {
       this.setData({
         messageIdList: notesId
       });
     }
+    //获得当前id的位置
+    var mLLen = notesId.length, currentMessageIdListIndex;
+    for (var i = 0; i < mLLen; i++) {
+      if (notesId[i] == options.id) {
+        currentMessageIdListIndex = i;
+        this.setData({
+          currentMessageIdListIndex: currentMessageIdListIndex
+        });
+        break;
+      }
+    }
+    var messageList = [], currentMessageListIndex = 0;
+    if (currentMessageIdListIndex > 0) {
+      messageList[0] = { isShowLoading: true };
+      currentMessageListIndex = 1;
+    }
+    if (currentMessageIdListIndex < mLLen - 1) {
+      messageList[2] = { isShowLoading: true };
+    }
+    this.setData({
+      messageList: messageList,
+      currentMessageListIndex: currentMessageListIndex
+    });
     //判断是否有网络
     wx.getNetworkType({
       success: function (res) {
@@ -128,79 +244,7 @@ Page({
           that.setData({
             haveNetwork: true
           });
-          wx.request({
-            url: app.globalData.url.api.infoDetail,
-            method: "GET",
-            data: {
-              id: options.id
-            },
-            fail: function (res) {
-              console.log(res);
-            },
-            success: function (res) {
-              if (res.data.errcode == 0) {
-                res.data.data.content = app.util.decodeUTF8(res.data.data.content);
-                //
-                var images = [], showImages = [], len = res.data.data.photos ? res.data.data.photos.length : 0;
-                for (var i = 0; i < len; i++) {
-                  images[i] = res.data.data.photos[i].fdURL;
-                  showImages[i] = {
-                    url: res.data.data.photos[i].fdURL,
-                    isShow: false
-                  }
-                }
-                //判断是否有地理位置
-                res.data.data.meter = options.meter || options.meter == 0 ? options.meter : '';
-                if (res.data.data.meter == '' && app.globalData.location.latitude) {
-                  res.data.data.meter = app.util.formatDistance(parseInt(app.util.getPonitToPointDistance(
-                    res.data.data.latitude,
-                    res.data.data.longitude,
-                    app.globalData.location.latitude,
-                    app.globalData.location.longitude
-                  )));
-
-                }
-
-
-                res.data.data.nickName = res.data.data.nickName ? res.data.data.nickName : "";
-                res.data.data.avatar = res.data.data.avatar ? res.data.data.avatar : app.globalData.defaultHeader;
-
-                that.setData({
-                  message: res.data.data,
-                  messageList: [res.data.data, res.data.data, res.data.data, res.data.data, res.data.data],
-                  totalImage: len,
-                  images: images,
-                  showImages: showImages
-                });
-                getResp(that, function (res) {
-                  wx.hideToast();
-                  that.setData({
-                    isFirstLoadEmpty: res.data.data && res.data.data.length == 0,
-                    scrollIntoViewId: "resp_1223"
-                  });
-                  if (res.data.data && res.data.data.length == 0) {
-                    that.setData({
-                      bodyBgColor: "#fff",
-                      bodyHeight: app.getSystemInfo().windowHeight + "px"
-                    });
-                  }
-                  if (that.data.commentId) {
-                    that.setData({
-                      scrollIntoViewId: "resp_" + that.data.commentId,
-                      commentId: null
-                    });
-                  }
-
-                });
-              }
-              else {//纸条不存在
-                that.setData({
-                  isDeleted: true
-                });
-              }
-              wx.hideNavigationBarLoading();
-            }
-          });
+          getNoteDetailById(options, app, that, that.data.currentMessageListIndex);
         }
       }
     });
@@ -210,14 +254,6 @@ Page({
       contentMainHeight: app.getSystemInfo().windowHeight - app.rpxToPx(80) + "px",
       contentMainCoverHeight: app.getSystemInfo().windowHeight + "px"
     });
-  },
-  onShow: function () {
-    // 页面显示
-
-  },
-  onHide: function () {
-    // 页面隐藏
-    console.log("onHide");
   },
   onUnload: function () {
     // 页面关闭
@@ -241,7 +277,7 @@ Page({
       icon: 'loading',
       duration: 10000
     });
-    getResp(this, function () {
+    getResp(this, this.data.currentMessageId, this.data.messageList, this.data.currentMessageListIndex, function () {
       wx.hideToast();
     });
   },
@@ -252,18 +288,11 @@ Page({
 
   },
   sendComment: function () {
-
     var commentInputValue = this.data.commentInputValue;
     if (!commentInputValue) {
       return;
     }
     var that = this;
-    /*
-    wx.showToast({
-      title: '发表中',
-      icon: 'loading',
-      duration: 500
-    });*/
     that.setData({
       isSending: true
     });
@@ -329,8 +358,6 @@ Page({
             sendRespNum: sendRespNum,
             isSending: false
           });
-
-
         }
       });
     });
@@ -371,15 +398,18 @@ Page({
   },
   loaded: function (event) {
     var index = app.getValueFormCurrentTargetDataSet(event, "imgIndex");
-
-    var showImages = this.data.showImages;
-    if (showImages[index]) {
-
-      showImages[index].isShow = true;
-
-      this.setData({
-        showImages: showImages
-      });
+    var messageId = app.getValueFormCurrentTargetDataSet(event, "messageId");
+    var messageList = this.data.messageList, len = messageList.length;
+    for (var i = 0; i < len; i++) {//因为messageList里面的message的顺序是会变得 ，所以用id来寻找message
+      if (messageList[i].id == messageId) {
+        if (messageList[i].showImages && messageList[i].showImages[index]) {
+          messageList[i].showImages[index].isShow = true;
+          this.setData({
+            messageList: messageList
+          });
+        }
+        break;
+      }
     }
   },
   reloadForNotNetwork: function () {
@@ -428,12 +458,18 @@ Page({
     });
   },
   loadedRespHeader: function (event) {
-    var respIndex = app.getValueFormCurrentTargetDataSet(event, "respIndex"), message = this.data.message;
-    if (message.resp[respIndex]) {
-      message.resp[respIndex].isHeaderLoaded = true;
-      this.setData({
-        message: message
-      });
+    var respIndex = app.getValueFormCurrentTargetDataSet(event, "respIndex"), messageId = app.getValueFormCurrentTargetDataSet(event, "messageId"), message = this.data.message;
+    var messageList = this.data.messageList, len = messageList.length;
+    for (var i = 0; i < len; i++) {//因为messageList里面的message的顺序是会变得 ，所以用id来寻找message
+      if (messageList[i].id == messageId) {
+        if (messageList[i].showImages && messageList[i].resp[respIndex]) {
+          messageList[i].resp[respIndex].isHeaderLoaded = true;
+          this.setData({
+            messageList: messageList
+          });
+        }
+        break;
+      }
     }
   },
   onShareAppMessage: function () {
@@ -447,5 +483,17 @@ Page({
     wx.navigateTo({
       url: '/pages/index/index'
     });
+  },
+  swiperMessageChange: function (event) {
+    console.log(event);
+    var messageList = this.data.messageList,len = messageList.length,index =event.detail.current ;
+    if(messageList[index]&&messageList[index].isShowLoading){
+      if(index==0){//前置消息
+          console.log(222);
+      }
+      else{//后置消息
+        console.log(1111);
+      }
+    }
   }
 });

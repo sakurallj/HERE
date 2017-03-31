@@ -14,7 +14,7 @@
     
 }
 .content{
-    padding-bottom: 124rpx;
+    padding-bottom: 80rpx;
 }
 .content-main{
     position: absolute;
@@ -36,9 +36,7 @@
     background-color: #fff;
     box-sizing: border-box;
 }
-.detail-main-header{
-
-}
+ 
 .detail-main-header-head{
     float: left;
     width: 64rpx;
@@ -411,9 +409,7 @@ button[disabled][type="default"], wx-button[disabled]:not([type]){
     background:inherit;
     color: #999999;
 }
-.page-loading {
-    margin-top: 50%;
-}
+ 
 .placeholder-class-unshow{
     display: none;
 }
